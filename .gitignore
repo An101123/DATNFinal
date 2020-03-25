@@ -1,0 +1,11 @@
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/InternDN_RMS/v15/.suo
+api/.vs/config/applicationhost.config
+
+api/.vs/
+
+api_v2/Api/obj/
+api_v2/Api/bin/
+api_v2/Api/Logs
+api_v2/.vs/
