@@ -203,6 +203,16 @@ class UserListPage extends Component {
       }
     }
   };
+  // changePassword = async () => {
+  //   const {
+  //     id,
+  //     oldPassword,
+  //     password,
+  //     passwordConfirm
+  //   } = this.state.item;
+  //   if (oldPassword !== password)
+
+  // }
 
   deleteUser = async () => {
     try {
@@ -412,7 +422,7 @@ class UserListPage extends Component {
                       <Col>
                         <FormGroup>
                           <ValidationInput
-                            name="passwordOld"
+                            name="oldPassword"
                             title="Mật khẩu cũ"
                             type="password"
                             required={true}
@@ -490,6 +500,7 @@ class UserListPage extends Component {
             <Table className="admin-table" responsive bordered>
               <thead>
                 <tr>
+                  <th>STT</th>
                   <th>Username</th>
                   <th>Email</th>
                   <th>Họ và tên</th>
@@ -500,9 +511,10 @@ class UserListPage extends Component {
               </thead>
               <tbody>
                 {hasResults &&
-                  sources.map(item => {
+                  sources.map((item, index) => {
                     return (
                       <tr key={item.id}>
+                        <td>{index + 1}</td>
                         <td>{item.username}</td>
                         <td>{item.email}</td>
                         <td>{item.fullName}</td>

@@ -120,6 +120,7 @@ class LecturerListPage extends Component {
             <Table className="admin-table" responsive bordered>
               <thead>
                 <tr>
+                  <th>STT</th>
                   <th>Tên</th>
                   <th>Ngày sinh</th>
                   <th>Khoa</th>
@@ -128,9 +129,10 @@ class LecturerListPage extends Component {
               </thead>
               <tbody>
                 {hasResults &&
-                  sources.map(item => {
+                  sources.map((item, index) => {
                     return (
                       <tr key={item.id}>
+                        <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>
                           {moment(item.dateOfBirth)

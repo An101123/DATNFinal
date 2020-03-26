@@ -194,9 +194,10 @@ class ScientificWorkListPage extends Component {
               </thead>
               <tbody>
                 {hasResults &&
-                  sources.map(item => {
+                  sources.map((item, index) => {
                     return (
                       <tr key={item.id}>
+                        <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>
                           {moment(item.time)

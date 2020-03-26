@@ -6,7 +6,7 @@ const ModalConfirm = ({ title, isShowModal, clickOk, toggleModal }) => {
     <div>
       <Modal isOpen={isShowModal} toggle={toggleModal}>
         <ModalBody>
-          {title || "example chắc chắn muốn xoá trường dữ liệu này?"}
+          {title || "Bạn chắc chắn muốn xoá trường dữ liệu này?"}
         </ModalBody>
         <ModalFooter>
           <Button color="danger" onClick={clickOk}>

@@ -42,7 +42,7 @@ class Logo extends Component {
         <Row>
           <CardBody>
             <img
-              className="logokinhte"
+              // className="logokinhte"
               src="https://due.udn.vn/portals/_default/skins/dhkt/img/front/logo.png"
               alt="logochichido"
             />

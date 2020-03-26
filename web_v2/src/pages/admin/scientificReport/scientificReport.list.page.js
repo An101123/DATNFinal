@@ -141,6 +141,7 @@ class ScientificReportListPage extends Component {
             <Table className="admin-table" responsive bordered>
               <thead>
                 <tr>
+                  <th>STT</th>
                   <th>Bài báo - Báo cáo khoa học</th>
                   <th>Thời gian</th>
                   <td>Nội dung</td>
@@ -150,9 +151,10 @@ class ScientificReportListPage extends Component {
               </thead>
               <tbody>
                 {hasResults &&
-                  sources.map(item => {
+                  sources.map((item, index) => {
                     return (
                       <tr key={item.id}>
+                        <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>
                           {moment(item.time)

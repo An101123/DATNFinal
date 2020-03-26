@@ -47,8 +47,6 @@ class LecturerDetailPage extends Component {
     }));
   };
 
-  
-
   onModelChange = el => {
     let inputName = el.target.name;
     let inputValue = el.target.value;
@@ -98,15 +96,11 @@ class LecturerDetailPage extends Component {
     this.props.getLecturerList(params);
   };
 
-  
-
   onSubmit(e) {
     e.preventDefault();
     this.form.validateAll();
     this.saveLecturer();
   }
-
-  
 
   componentDidMount() {
     this.getLecturerList();
@@ -126,8 +120,6 @@ class LecturerDetailPage extends Component {
           isShowModal={isShowDeleteModal}
           toggleModal={this.toggleDeleteModal}
         />
-
-      
 
         <Row>
           <Col xs="12">
@@ -156,9 +148,10 @@ class LecturerDetailPage extends Component {
               </thead>
               <tbody>
                 {hasResults &&
-                  sources.map(item => {
+                  sources.map((item, index) => {
                     return (
                       <tr key={item.id}>
+                        <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>
                           {moment(item.dateOfBirth)

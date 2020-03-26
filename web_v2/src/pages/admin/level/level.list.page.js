@@ -261,6 +261,7 @@ class LevelListPage extends Component {
             <Table className="admin-table" responsive bordered>
               <thead>
                 <tr>
+                  <th>STT</th>
                   <th>Tên cấp</th>
                   <th>Điểm</th>
                   <th>Thao tác</th>
@@ -268,9 +269,10 @@ class LevelListPage extends Component {
               </thead>
               <tbody>
                 {hasResults &&
-                  sources.map(item => {
+                  sources.map((item, index) => {
                     return (
                       <tr key={item.id}>
+                        <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>{item.score}</td>
                         <td>

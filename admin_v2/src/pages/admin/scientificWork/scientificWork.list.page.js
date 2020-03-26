@@ -403,6 +403,7 @@ class ScientificWorkListPage extends Component {
             <Table className="admin-table" responsive bordered>
               <thead>
                 <tr>
+                  <th>STT</th>
                   <th>Công trình khoa học</th>
                   <th>Thời gian</th>
                   <th>Nội dung</th>
@@ -413,9 +414,10 @@ class ScientificWorkListPage extends Component {
               </thead>
               <tbody>
                 {hasResults &&
-                  sources.map(item => {
+                  sources.map((item, index) => {
                     return (
                       <tr key={item.id}>
+                        <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>
                           {moment(item.time)

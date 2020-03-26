@@ -2,16 +2,22 @@ import React, { Component } from "react";
 import Logo from "../Dashboard/components/logo";
 import Home from "./components/Home";
 import ListNews from "./components/ListNews";
+import ListNews2 from "./components/ListNews2";
 
+import { Row, Col } from "reactstrap";
 class Dashboard extends Component {
   render() {
     return (
       <div className="app">
         <Logo />
-        <Home />
-        <ListNews imageUrl="https://icdn8.digitaltrends.com/image/razor-e200s-electric-scooter-1-640x640.jpg">
-          <p>Hihi</p>
-        </ListNews>
+        <Row>
+          <Col xs="8">
+            <Home />
+          </Col>
+          <Col xs="4">
+            <ListNews2 />
+          </Col>
+        </Row>
       </div>
     );
   }

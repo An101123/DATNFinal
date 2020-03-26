@@ -259,6 +259,7 @@ class NewsListPage extends Component {
             <Table className="admin-table" responsive bordered>
               <thead>
                 <tr>
+                  <th>STT</th>
                   <th>Chủ đề</th>
                   <th>Tóm tắt</th>
                   <th>Nội dung</th>
@@ -267,9 +268,10 @@ class NewsListPage extends Component {
               </thead>
               <tbody>
                 {hasResults &&
-                  sources.map(item => {
+                  sources.map((item, index) => {
                     return (
                       <tr key={item.id}>
+                        <td>{index + 1}</td>
                         <td>{item.title}</td>
                         <td>{item.summary}</td>
                         <td>{item.content}</td>
