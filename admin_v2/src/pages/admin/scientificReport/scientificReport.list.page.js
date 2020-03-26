@@ -1,6 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Row, Col, Button, FormGroup, Table, Label } from "reactstrap";
+import {
+  Row,
+  Col,
+  Button,
+  FormGroup,
+  Table,
+  Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
+} from "reactstrap";
 import Form from "react-validation/build/form";
 import Datetime from "react-datetime";
 import moment from "moment";
@@ -16,6 +27,7 @@ import { pagination } from "../../../constant/app.constant";
 import ApiScientificReportType from "../../../api/api.scientificReportType";
 import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
+import ScientificReportDetail from "./scientificReport.detail";
 
 class ScientificReportListPage extends Component {
   constructor(props) {
@@ -23,10 +35,13 @@ class ScientificReportListPage extends Component {
     this.state = {
       isShowDeleteModal: false,
       isShowInfoModal: false,
+      isShowContentModal: false,
+      isShowDetail: false,
       item: {},
       itemId: null,
       scientificReportTypes: [],
       lecturers: [],
+      content: null,
       params: {
         skip: pagination.initialPage,
         take: pagination.defaultTake
@@ -35,6 +50,19 @@ class ScientificReportListPage extends Component {
     };
     this.delayedCallback = lodash.debounce(this.search, 300);
   }
+
+  backToAdminPage = () => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail
+    }));
+  };
+
+  toggleDetailPage = item => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail,
+      item: item
+    }));
+  };
 
   toggleDeleteModal = () => {
     this.setState(prevState => ({
@@ -46,6 +74,14 @@ class ScientificReportListPage extends Component {
     this.setState(prevState => ({
       isShowInfoModal: !prevState.isShowInfoModal,
       item: item || {},
+      formTitle: title
+    }));
+  };
+
+  toggleContentModal = (item, title) => {
+    this.setState(prevState => ({
+      isShowContentModal: !prevState.isShowContentModal,
+      content: item.content || null,
       formTitle: title
     }));
   };
@@ -74,6 +110,11 @@ class ScientificReportListPage extends Component {
   showUpdateModal = item => {
     let title = "Chỉnh sửa bài báo, báo cáo khoa học";
     this.toggleModalInfo(item, title);
+  };
+
+  showContentModal = item => {
+    let title = item.name;
+    this.toggleContentModal(item, title);
   };
 
   onModelChange = el => {
@@ -237,9 +278,12 @@ class ScientificReportListPage extends Component {
     const {
       isShowDeleteModal,
       isShowInfoModal,
+      isShowContentModal,
+      isShowDetail,
       item,
       scientificReportTypes,
-      lecturers
+      lecturers,
+      content
     } = this.state;
     const {
       scientificReportPagedList
@@ -255,6 +299,17 @@ class ScientificReportListPage extends Component {
           isShowModal={isShowDeleteModal}
           toggleModal={this.toggleDeleteModal}
         />
+
+        <Modal isOpen={isShowContentModal}>
+          <ModalHeader>{this.state.formTitle}</ModalHeader>
+          <ModalBody>{content}</ModalBody>
+
+          <ModalFooter className="justify-content-center">
+            <Button color="secondary" onClick={this.toggleContentModal}>
+              Đóng
+            </Button>
+          </ModalFooter>
+        </Modal>
 
         <ModalInfo
           title={this.state.formTitle}
@@ -420,81 +475,108 @@ class ScientificReportListPage extends Component {
           </div>
         </ModalInfo>
 
-        <Row>
-          <Col xs="12">
-            <div className="flex-container header-table">
-              <Button
-                onClick={this.showAddNew}
-                className="btn btn-pill btn-success btn-sm"
-              >
-                Tạo mới
-              </Button>
-              <input
-                onChange={this.onSearchChange}
-                className="form-control form-control-sm"
-                placeholder="Tìm kiếm..."
-              />
-            </div>
-            <Table className="admin-table" responsive bordered>
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Bài báo - Báo cáo khoa học</th>
-                  <th>Thời gian</th>
-                  <th>Nội dung</th>
-                  <th>Loại</th>
-                  <th>Giảng viên</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hasResults &&
-                  sources.map((item, index) => {
-                    return (
-                      <tr key={item.id}>
-                        <td>{index + 1}</td>
-                        <td>{item.name}</td>
-                        <td>
-                          {moment(item.time)
-                            .add(7, "h")
-                            .format("DD-MM-YYYY")}
-                        </td>
-                        <td>{item.content}</td>
-                        <td>{item.scientificReportType.name}</td>
-                        <td>{item.lecturer.name}</td>
+        {!isShowDetail ? (
+          <Row>
+            <Col xs="12">
+              <div className="flex-container header-table">
+                <Button
+                  onClick={this.showAddNew}
+                  className="btn btn-pill btn-success btn-sm"
+                >
+                  Tạo mới
+                </Button>
+                <input
+                  onChange={this.onSearchChange}
+                  className="form-control form-control-sm"
+                  placeholder="Tìm kiếm..."
+                />
+              </div>
+              <Table className="admin-table" responsive bordered>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Bài báo - Báo cáo khoa học</th>
+                    <th>Thời gian</th>
+                    <th>Loại</th>
+                    <th>Giảng viên</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hasResults &&
+                    sources.map((item, index) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td onClick={() => this.toggleDetailPage(item)}>
+                            {item.name.length > 100 ? (
+                              <span>
+                                {item.name.substr(0, 100)}{" "}
+                                <span style={{ fontWeight: "bolder" }}>
+                                  {" "}
+                                  ...
+                                </span>
+                              </span>
+                            ) : (
+                              item.name
+                            )}
+                          </td>
+                          <td>
+                            {moment(item.time)
+                              .add(7, "h")
+                              .format("DD-MM-YYYY")}
+                          </td>
+                          {/* <td>
+                          {item.content.length > 50 ? (
+                            <span onClick={() => this.showContentModal(item)}>
+                              {item.content.substr(0, 50)}{" "}
+                              <span style={{ fontWeight: "bolder" }}> ...</span>
+                            </span>
+                          ) : (
+                            item.content
+                          )}
+                        </td> */}
+                          <td>{item.scientificReportType.name}</td>
+                          <td>{item.lecturer.name}</td>
 
-                        <td>
-                          <Button
-                            className="btn-sm"
-                            color="secondary"
-                            onClick={() => this.showUpdateModal(item)}
-                          >
-                            Sửa
-                          </Button>
-                          <Button
-                            className="btn-sm"
-                            color="danger"
-                            onClick={() => this.showConfirmDelete(item.id)}
-                          >
-                            Xóa
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </Table>
-            {hasResults && totalPages > 1 && (
-              <Pagination
-                initialPage={0}
-                totalPages={totalPages}
-                forcePage={pageIndex - 1}
-                pageRangeDisplayed={2}
-                onPageChange={this.handlePageClick}
-              />
-            )}
-          </Col>
-        </Row>
+                          <td>
+                            <Button
+                              className="btn-sm"
+                              color="secondary"
+                              onClick={() => this.showUpdateModal(item)}
+                            >
+                              Sửa
+                            </Button>
+                            <Button
+                              className="btn-sm"
+                              color="danger"
+                              onClick={() => this.showConfirmDelete(item.id)}
+                            >
+                              Xóa
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+              {hasResults && totalPages > 1 && (
+                <Pagination
+                  initialPage={0}
+                  totalPages={totalPages}
+                  forcePage={pageIndex - 1}
+                  pageRangeDisplayed={2}
+                  onPageChange={this.handlePageClick}
+                />
+              )}
+            </Col>
+          </Row>
+        ) : (
+          <ScientificReportDetail
+            ScientificReport={item}
+            backToAdminPage={this.backToAdminPage}
+          />
+        )}
       </div>
     );
   }

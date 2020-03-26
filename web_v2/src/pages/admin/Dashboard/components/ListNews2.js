@@ -38,7 +38,24 @@ class ListNews2 extends Component {
               <div key={index}>
                 <img
                   key={index}
-                  style={{ width: "80%", marginLeft: "40px", marginTop: "6px" }}
+                  style={{
+                    display: "flex",
+                    flex: "1",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    transition: "all 0.2s",
+                    borderLeft: "solid 1px #cccccc",
+
+                    "&:hover": {
+                      background: "#efefef"
+                    },
+                    "&:last-child": {
+                      borderRight: "solid 1px #cccccc"
+                    },
+                    width: "80%",
+                    marginLeft: "40px",
+                    marginTop: "6px"
+                  }}
                   src={item.image}
                 />
                 <a href={item.href}>

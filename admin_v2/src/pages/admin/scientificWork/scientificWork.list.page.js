@@ -1,6 +1,17 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Row, Col, Button, FormGroup, Table, Label } from "reactstrap";
+import {
+  Row,
+  Col,
+  Button,
+  FormGroup,
+  Table,
+  Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter
+} from "reactstrap";
 import Form from "react-validation/build/form";
 import Datetime from "react-datetime";
 import moment from "moment";
@@ -16,6 +27,7 @@ import { pagination } from "../../../constant/app.constant";
 import ApiLevel from "../../../api/api.level";
 import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
+import ScientificWorkDetail from "./scientificWork.detail";
 
 class ScientificWorkListPage extends Component {
   constructor(props) {
@@ -23,10 +35,13 @@ class ScientificWorkListPage extends Component {
     this.state = {
       isShowDeleteModal: false,
       isShowInfoModal: false,
+      isShowContentModal: false,
+      isShowDetail: false,
       item: {},
       itemId: null,
       levels: [],
       lecturers: [],
+      content: null,
       params: {
         skip: pagination.initialPage,
         take: pagination.defaultTake
@@ -35,6 +50,19 @@ class ScientificWorkListPage extends Component {
     };
     this.delayedCallback = lodash.debounce(this.search, 300);
   }
+
+  backToAdminPage = () => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail
+    }));
+  };
+
+  toggleDetailPage = item => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail,
+      item: item
+    }));
+  };
 
   toggleDeleteModal = () => {
     this.setState(prevState => ({
@@ -50,6 +78,13 @@ class ScientificWorkListPage extends Component {
     }));
   };
 
+  toggleContentModal = (item, title) => {
+    this.setState(prevState => ({
+      isShowContentModal: !prevState.isShowContentModal,
+      content: item.content || null,
+      formTitle: title
+    }));
+  };
   showConfirmDelete = itemId => {
     this.setState(
       {
@@ -74,6 +109,10 @@ class ScientificWorkListPage extends Component {
   showUpdateModal = item => {
     let title = "Chỉnh sửa công trình khoa học";
     this.toggleModalInfo(item, title);
+  };
+  showContentModal = item => {
+    let title = item.name;
+    this.toggleContentModal(item, title);
   };
 
   onModelChange = el => {
@@ -210,9 +249,12 @@ class ScientificWorkListPage extends Component {
     const {
       isShowDeleteModal,
       isShowInfoModal,
+      isShowContentModal,
+      isShowDetail,
       item,
       levels,
-      lecturers
+      lecturers,
+      content
     } = this.state;
     const {
       scientificWorkPagedList
@@ -228,6 +270,16 @@ class ScientificWorkListPage extends Component {
           isShowModal={isShowDeleteModal}
           toggleModal={this.toggleDeleteModal}
         />
+        <Modal isOpen={isShowContentModal}>
+          <ModalHeader>{this.state.formTitle}</ModalHeader>
+          <ModalBody>{content}</ModalBody>
+
+          <ModalFooter className="justify-content-center">
+            <Button color="secondary" onClick={this.toggleContentModal}>
+              Đóng
+            </Button>
+          </ModalFooter>
+        </Modal>
 
         <ModalInfo
           title={this.state.formTitle}
@@ -384,82 +436,100 @@ class ScientificWorkListPage extends Component {
             </div>
           </div>
         </ModalInfo>
+        {!isShowDetail ? (
+          <Row>
+            <Col xs="12">
+              <div className="flex-container header-table">
+                <Button
+                  onClick={this.showAddNew}
+                  className="btn btn-pill btn-success btn-sm"
+                >
+                  Tạo mới
+                </Button>
+                <input
+                  onChange={this.onSearchChange}
+                  className="form-control form-control-sm"
+                  placeholder="Tìm kiếm..."
+                />
+              </div>
+              <Table className="admin-table" responsive bordered>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Công trình khoa học</th>
+                    <th>Thời gian</th>
+                    {/* <th>Nội dung</th> */}
+                    <th>Cấp</th>
+                    <th>Giảng viên</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hasResults &&
+                    sources.map((item, index) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td onClick={() => this.toggleDetailPage(item)}>
+                            {item.name.length > 100 ? (
+                              <span>
+                                {item.name.substr(0, 100)}{" "}
+                                <span style={{ fontWeight: "bolder" }}>
+                                  {" "}
+                                  ...
+                                </span>
+                              </span>
+                            ) : (
+                              item.name
+                            )}
+                          </td>
+                          <td>
+                            {moment(item.time)
+                              .add(7, "h")
+                              .format("DD-MM-YYYY")}
+                          </td>
 
-        <Row>
-          <Col xs="12">
-            <div className="flex-container header-table">
-              <Button
-                onClick={this.showAddNew}
-                className="btn btn-pill btn-success btn-sm"
-              >
-                Tạo mới
-              </Button>
-              <input
-                onChange={this.onSearchChange}
-                className="form-control form-control-sm"
-                placeholder="Tìm kiếm..."
-              />
-            </div>
-            <Table className="admin-table" responsive bordered>
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Công trình khoa học</th>
-                  <th>Thời gian</th>
-                  <th>Nội dung</th>
-                  <th>Cấp</th>
-                  <th>Giảng viên</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hasResults &&
-                  sources.map((item, index) => {
-                    return (
-                      <tr key={item.id}>
-                        <td>{index + 1}</td>
-                        <td>{item.name}</td>
-                        <td>
-                          {moment(item.time)
-                            .add(7, "h")
-                            .format("DD-MM-YYYY")}
-                        </td>
-                        <td>{item.content}</td>
-                        <td>{item.level.name}</td>
-                        <td>{item.lecturer.name}</td>
+                          <td>{item.level.name}</td>
+                          <td>{item.lecturer.name}</td>
 
-                        <td>
-                          <Button
-                            className="btn-sm"
-                            color="secondary"
-                            onClick={() => this.showUpdateModal(item)}
-                          >
-                            Sửa
-                          </Button>
-                          <Button
-                            className="btn-sm"
-                            color="danger"
-                            onClick={() => this.showConfirmDelete(item.id)}
-                          >
-                            Xóa
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </Table>
-            {hasResults && totalPages > 1 && (
-              <Pagination
-                initialPage={0}
-                totalPages={totalPages}
-                forcePage={pageIndex - 1}
-                pageRangeDisplayed={2}
-                onPageChange={this.handlePageClick}
-              />
-            )}
-          </Col>
-        </Row>
+                          <td>
+                            <Button
+                              className="btn-sm"
+                              color="secondary"
+                              onClick={() => this.showUpdateModal(item)}
+                            >
+                              Sửa
+                            </Button>
+                            <Button
+                              className="btn-sm"
+                              color="danger"
+                              onClick={() => this.showConfirmDelete(item.id)}
+                            >
+                              Xóa
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+              {hasResults && totalPages > 1 && (
+                <Pagination
+                  initialPage={0}
+                  totalPages={totalPages}
+                  forcePage={pageIndex - 1}
+                  pageRangeDisplayed={2}
+                  onPageChange={this.handlePageClick}
+                />
+              )}
+            </Col>
+          </Row>
+        ) : (
+          <ScientificWorkDetail
+            ScientificWork={item}
+            backToAdminPage={this.backToAdminPage}
+          />
+        )}
       </div>
     );
   }

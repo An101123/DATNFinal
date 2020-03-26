@@ -49,6 +49,9 @@ class DefaultHeader extends Component {
         //   alt: "CoreUI Logo"
         // }}
         />
+        <AppNavbarBrand>
+          <h1>Admin</h1>
+        </AppNavbarBrand>
 
         {/* <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">

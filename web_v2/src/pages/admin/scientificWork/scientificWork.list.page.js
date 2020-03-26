@@ -31,6 +31,8 @@ import {
   Input,
   Table
 } from "reactstrap";
+import ScientificWorkDetail from "./scientificWork.detail";
+import { is } from "redux-saga/utils";
 
 class ScientificWorkListPage extends Component {
   constructor(props) {
@@ -38,6 +40,7 @@ class ScientificWorkListPage extends Component {
     this.state = {
       isShowDeleteModal: false,
       isShowInfoModal: false,
+      isShowDetail: false,
       item: {},
       itemId: null,
       levels: [],
@@ -52,6 +55,18 @@ class ScientificWorkListPage extends Component {
     this.delayedCallback = lodash.debounce(this.search, 300);
   }
 
+  backToAdminPage = () => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail
+    }));
+  };
+
+  toggleDetailPage = item => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail,
+      item: item
+    }));
+  };
   toggleDeleteModal = () => {
     this.setState(prevState => ({
       isShowDeleteModal: !prevState.isShowDeleteModal
@@ -129,15 +144,7 @@ class ScientificWorkListPage extends Component {
   }
 
   render() {
-    const {
-      isShowDeleteModal,
-      isShowInfoModal,
-      item,
-      itemId,
-      levels,
-      lecturers,
-      scientificWorks
-    } = this.state;
+    const { isShowDetail, item } = this.state;
     const {
       scientificWorkPagedList
     } = this.props.scientificWorkPagedListReducer;
@@ -155,74 +162,82 @@ class ScientificWorkListPage extends Component {
             />
           </CardBody>
         </Row>
-        {/* <Row className="gioithieu">
-          {levels.length > 0 &&
-            levels.map(level => {
-              return (
-                <Col xs="12" sm="6" lg="3">
-                  <Card className="text-white bg-primary">
-                    <CardBody className="pb-0">
-                      <h4 className="mb-0">.823</h4>
-                      <p> NCKH Cấp {level.name}</p>
-                    </CardBody>
-                  </Card>
-                </Col>
-              );
-            })}
-        </Row> */}
-        <Row className="nckh">
-          <Col xs="12">
-            <div className="flex-container header-table">
-              <Label className="label label-default">
-                NGHIÊN CỨU KHOA HỌC CÁC CẤP
-              </Label>
-              <input
-                onChange={this.onSearchChange}
-                className="form-control form-control-sm"
-                placeholder="Tìm kiếm..."
-              />
-            </div>
-            <Table className="admin-table" responsive bordered>
-              <thead>
-                <tr>
-                  <th>Công trình khoa học</th>
-                  <th>Thời gian</th>
-                  <th>Nội dung</th>
-                  <th>Cấp</th>
-                  <th>Giảng viên</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hasResults &&
-                  sources.map((item, index) => {
-                    return (
-                      <tr key={item.id}>
-                        <td>{index + 1}</td>
-                        <td>{item.name}</td>
-                        <td>
-                          {moment(item.time)
-                            .add(7, "h")
-                            .format("DD-MM-YYYY")}
-                        </td>
-                        <td>{item.content}</td>
-                        <td>{item.level.name}</td>
-                        <td>{item.lecturer.name}</td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </Table>
-            {hasResults && totalPages > 1 && (
-              <Pagination
-                initialPage={0}
-                totalPages={totalPages}
-                forcePage={pageIndex - 1}
-                pageRangeDisplayed={2}
-                onPageChange={this.handlePageClick}
-              />
-            )}
-          </Col>
-        </Row>
+        {!isShowDetail ? (
+          <Row className="nckh">
+            <Col xs="12">
+              <div className="flex-container header-table">
+                <Label
+                  className="label label-default"
+                  style={{ fontWeight: "bolder" }}
+                >
+                  NGHIÊN CỨU KHOA HỌC CÁC CẤP
+                </Label>
+                <input
+                  onChange={this.onSearchChange}
+                  className="form-control form-control-sm"
+                  placeholder="Tìm kiếm..."
+                />
+              </div>
+              <Table className="admin-table" responsive bordered>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Công trình khoa học</th>
+                    <th>Thời gian</th>
+
+                    <th>Cấp</th>
+                    <th>Giảng viên</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hasResults &&
+                    sources.map((item, index) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td onClick={() => this.toggleDetailPage(item)}>
+                            {item.name.length > 100 ? (
+                              <span>
+                                {item.name.substr(0, 100)}{" "}
+                                <span style={{ fontWeight: "bolder" }}>
+                                  {" "}
+                                  ...
+                                </span>
+                              </span>
+                            ) : (
+                              item.name
+                            )}
+                          </td>
+                          <td>
+                            {moment(item.time)
+                              .add(7, "h")
+                              .format("DD-MM-YYYY")}
+                          </td>
+
+                          <td>{item.level.name}</td>
+                          <td>{item.lecturer.name}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+              {hasResults && totalPages > 1 && (
+                <Pagination
+                  initialPage={0}
+                  totalPages={totalPages}
+                  forcePage={pageIndex - 1}
+                  pageRangeDisplayed={2}
+                  onPageChange={this.handlePageClick}
+                />
+              )}
+            </Col>
+          </Row>
+        ) : (
+          <ScientificWorkDetail
+            ScientificWork={item}
+            backToAdminPage={this.backToAdminPage}
+          />
+        )}
       </div>
     );
   }

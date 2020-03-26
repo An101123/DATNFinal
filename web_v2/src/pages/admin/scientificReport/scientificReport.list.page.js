@@ -31,6 +31,7 @@ import {
   Input,
   Table
 } from "reactstrap";
+import ScientificReportDetail from "./scientificReport.detail";
 
 class ScientificReportListPage extends Component {
   constructor(props) {
@@ -38,6 +39,7 @@ class ScientificReportListPage extends Component {
     this.state = {
       isShowDeleteModal: false,
       isShowInfoModal: false,
+      isShowDetail: false,
       item: {},
       itemId: null,
       scientificReportTypes: [],
@@ -50,6 +52,18 @@ class ScientificReportListPage extends Component {
     };
     this.delayedCallback = lodash.debounce(this.search, 300);
   }
+  backToAdminPage = () => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail
+    }));
+  };
+
+  toggleDetailPage = item => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail,
+      item: item
+    }));
+  };
 
   search = e => {
     this.setState(
@@ -109,6 +123,7 @@ class ScientificReportListPage extends Component {
   }
 
   render() {
+    const { isShowDetail, item } = this.state;
     const {
       scientificReportPagedList
     } = this.props.scientificReportPagedListReducer;
@@ -126,60 +141,82 @@ class ScientificReportListPage extends Component {
             />
           </CardBody>
         </Row>
-        <Row className="nckh">
-          <Col xs="12">
-            <div className="flex-container header-table">
-              <Label className="label label-default">
-                BÀI BÁO, BÁO CÁO KHOA HỌC{" "}
-              </Label>
-              <input
-                onChange={this.onSearchChange}
-                className="form-control form-control-sm"
-                placeholder="Tìm kiếm..."
-              />
-            </div>
-            <Table className="admin-table" responsive bordered>
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Bài báo - Báo cáo khoa học</th>
-                  <th>Thời gian</th>
-                  <td>Nội dung</td>
-                  <td>Loại</td>
-                  <td>Giảng viên</td>
-                </tr>
-              </thead>
-              <tbody>
-                {hasResults &&
-                  sources.map((item, index) => {
-                    return (
-                      <tr key={item.id}>
-                        <td>{index + 1}</td>
-                        <td>{item.name}</td>
-                        <td>
-                          {moment(item.time)
-                            .add(7, "h")
-                            .format("DD-MM-YYYY")}
-                        </td>
-                        <td>{item.content}</td>
-                        <td>{item.scientificReportType.name}</td>
-                        <td>{item.lecturer.name}</td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </Table>
-            {hasResults && totalPages > 1 && (
-              <Pagination
-                initialPage={0}
-                totalPages={totalPages}
-                forcePage={pageIndex - 1}
-                pageRangeDisplayed={2}
-                onPageChange={this.handlePageClick}
-              />
-            )}
-          </Col>
-        </Row>
+        {!isShowDetail ? (
+          <Row className="nckh">
+            <Col xs="12">
+              <div className="flex-container header-table">
+                <Label
+                  className="label label-default"
+                  style={{ fontWeight: "bolder" }}
+                >
+                  BÀI BÁO, BÁO CÁO KHOA HỌC{" "}
+                </Label>
+                <input
+                  onChange={this.onSearchChange}
+                  className="form-control form-control-sm"
+                  placeholder="Tìm kiếm..."
+                />
+              </div>
+              <Table className="admin-table" responsive bordered>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Bài báo - Báo cáo khoa học</th>
+                    <th>Thời gian</th>
+
+                    <td>Loại</td>
+                    <td>Giảng viên</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hasResults &&
+                    sources.map((item, index) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td onClick={() => this.toggleDetailPage(item)}>
+                            {item.name.length > 100 ? (
+                              <span>
+                                {item.name.substr(0, 100)}{" "}
+                                <span style={{ fontWeight: "bolder" }}>
+                                  {" "}
+                                  ...
+                                </span>
+                              </span>
+                            ) : (
+                              item.name
+                            )}
+                          </td>
+                          <td>
+                            {moment(item.time)
+                              .add(7, "h")
+                              .format("DD-MM-YYYY")}
+                          </td>
+
+                          <td>{item.scientificReportType.name}</td>
+                          <td>{item.lecturer.name}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+              {hasResults && totalPages > 1 && (
+                <Pagination
+                  initialPage={0}
+                  totalPages={totalPages}
+                  forcePage={pageIndex - 1}
+                  pageRangeDisplayed={2}
+                  onPageChange={this.handlePageClick}
+                />
+              )}
+            </Col>
+          </Row>
+        ) : (
+          <ScientificReportDetail
+            ScientificReport={item}
+            backToAdminPage={this.backToAdminPage}
+          />
+        )}
       </div>
     );
   }

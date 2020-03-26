@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import moment from "moment";
-import ModalConfirm from "../../../components/modal/modal-confirm";
 import Pagination from "../../../components/pagination/Pagination";
 import lodash from "lodash";
 import { getScientificWorkList } from "../../../actions/scientificWork.list.action";
@@ -32,13 +31,13 @@ import {
   Input,
   Table
 } from "reactstrap";
+import ScientificWorkDetail from "./scientificWork.detail";
 
 class ScientificWorkListPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowDeleteModal: false,
-      isShowInfoModal: false,
+      isShowDetail: false,
       item: {},
       itemId: null,
       levels: [],
@@ -51,6 +50,19 @@ class ScientificWorkListPage extends Component {
     };
     this.delayedCallback = lodash.debounce(this.search, 300);
   }
+
+  backToAdminPage = () => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail
+    }));
+  };
+
+  toggleDetailPage = item => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail,
+      item: item
+    }));
+  };
 
   search = e => {
     this.setState(
@@ -116,7 +128,7 @@ class ScientificWorkListPage extends Component {
   }
 
   render() {
-    const { isShowDeleteModal } = this.state;
+    const { isShowContentModal, isShowDetail, item, content } = this.state;
     const {
       scientificWorkPagedList
     } = this.props.scientificWorkPagedListReducer;
@@ -134,67 +146,89 @@ class ScientificWorkListPage extends Component {
             />
           </CardBody>
         </Row>
-        <Row className="nckh">
-          <Col xs="12">
-            <div className="flex-container header-table">
-              <Label className="label label-default">
-                NGHIÊN CỨU KHOA HỌC CẤP TRƯỜNG
-              </Label>
-              <input
-                onChange={this.onSearchChange}
-                className="form-control form-control-sm"
-                placeholder="Tìm kiếm..."
-              />
-            </div>
-            <Table className="admin-table" responsive bordered>
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Công trình khoa học</th>
-                  <th>Thời gian</th>
-                  <th>Nội dung</th>
-                  <th>Cấp</th>
-                  <th>Giảng viên</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hasResults &&
-                  sources
-                    .filter(value => {
-                      if (value.level.name === "Trường") {
-                        return true;
-                      }
-                      return false;
-                    })
-                    .map((item, index) => {
-                      return (
-                        <tr key={item.id}>
-                          <td>{index + 1}</td>
-                          <td>{item.name}</td>
-                          <td>
-                            {moment(item.time)
-                              .add(7, "h")
-                              .format("DD-MM-YYYY")}
-                          </td>
-                          <td>{item.content}</td>
-                          <td>{item.level.name}</td>
-                          <td>{item.lecturer.name}</td>
-                        </tr>
-                      );
-                    })}
-              </tbody>
-            </Table>
-            {hasResults && totalPages > 1 && (
-              <Pagination
-                initialPage={0}
-                totalPages={totalPages}
-                forcePage={pageIndex - 1}
-                pageRangeDisplayed={2}
-                onPageChange={this.handlePageClick}
-              />
-            )}
-          </Col>
-        </Row>
+        {!isShowDetail ? (
+          <Row className="nckh">
+            <Col xs="12">
+              <div className="flex-container header-table">
+                <Label
+                  className="label label-default"
+                  style={{ fontWeight: "bolder" }}
+                >
+                  NGHIÊN CỨU KHOA HỌC CẤP TRƯỜNG
+                </Label>
+                <input
+                  onChange={this.onSearchChange}
+                  className="form-control form-control-sm"
+                  placeholder="Tìm kiếm..."
+                />
+              </div>
+              <Table className="admin-table" responsive bordered>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Công trình khoa học</th>
+                    <th>Thời gian</th>
+
+                    <th>Cấp</th>
+                    <th>Giảng viên</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hasResults &&
+                    sources
+                      .filter(value => {
+                        if (value.level.name === "Trường") {
+                          return true;
+                        }
+                        return false;
+                      })
+                      .map((item, index) => {
+                        return (
+                          <tr key={item.id}>
+                            <td>{index + 1}</td>
+                            <td onClick={() => this.toggleDetailPage(item)}>
+                              {item.name.length > 100 ? (
+                                <span>
+                                  {item.name.substr(0, 100)}{" "}
+                                  <span style={{ fontWeight: "bolder" }}>
+                                    {" "}
+                                    ...
+                                  </span>
+                                </span>
+                              ) : (
+                                item.name
+                              )}
+                            </td>
+                            <td>
+                              {moment(item.time)
+                                .add(7, "h")
+                                .format("DD-MM-YYYY")}
+                            </td>
+
+                            <td>{item.level.name}</td>
+                            <td>{item.lecturer.name}</td>
+                          </tr>
+                        );
+                      })}
+                </tbody>
+              </Table>
+              {hasResults && totalPages > 1 && (
+                <Pagination
+                  initialPage={0}
+                  totalPages={totalPages}
+                  forcePage={pageIndex - 1}
+                  pageRangeDisplayed={2}
+                  onPageChange={this.handlePageClick}
+                />
+              )}
+            </Col>
+          </Row>
+        ) : (
+          <ScientificWorkDetail
+            ScientificWork={item}
+            backToAdminPage={this.backToAdminPage}
+          />
+        )}
       </div>
     );
   }
