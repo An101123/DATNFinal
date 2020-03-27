@@ -2,6 +2,8 @@ import React, { Component } from "react";
 // import { Link } from 'react-router-dom'
 import {
   Badge,
+  ButtonGroup,
+  Button,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
@@ -18,6 +20,8 @@ import {
 } from "@coreui/react";
 import logo from "../../../assets/img/brand/logo.svg";
 import sygnet from "../../../assets/img/brand/sygnet.svg";
+import Nav_Header from "./navs";
+import NavbarHeader from "./navs";
 const propTypes = {
   children: PropTypes.node
 };
@@ -33,11 +37,11 @@ class DefaultHeader extends Component {
       <React.Fragment>
         {/* <AppSidebarToggler className="d-lg-none" display="md" mobile /> */}
         {/* <AppSidebarToggler className="d-md-down-none" display="lg" /> */}
-        <AppNavbarBrand
+        {/* <AppNavbarBrand
         // full={{
         //   src:
-        //     "https://due.udn.vn/portals/_default/skins/dhkt/img/front/logo.png",
-        //   width: 153,
+        //     "https://cdn.shopify.com/s/files/1/0097/1643/2943/files/logo2_800x.png?v=1564483220",
+        //   width: 200,
         //   height: 50,
 
         //   alt: "CoreUI Logo"
@@ -48,11 +52,25 @@ class DefaultHeader extends Component {
         //   height: 30,
         //   alt: "CoreUI Logo"
         // }}
-        />
+        /> */}
         <AppNavbarBrand>
-          <h1>Admin</h1>
+          <h1 style={{ color: "white" }}>DUE</h1>
         </AppNavbarBrand>
-
+        {/* <div className="buttonHeader">
+          <Button outline color="secondary">
+            Giới thiệu
+          </Button>{" "}
+          <Button outline color="secondary">
+            secondary
+          </Button>{" "}
+          <Button outline color="secondary">
+            secondary
+          </Button>{" "}
+          <Button style={{ marginRight: "10px" }} outline color="secondary">
+            secondary
+          </Button>{" "}
+        </div> */}
+        <Nav_Header />
         {/* <Nav className="d-md-down-none" navbar>
           <NavItem className="px-3">
             <NavLink href="/">Dashboard</NavLink>

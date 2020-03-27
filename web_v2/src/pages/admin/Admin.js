@@ -4,7 +4,6 @@ import { Container } from "reactstrap";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import cookie from "react-cookies";
-
 import {
   AppAside,
   AppBreadcrumb,
@@ -26,7 +25,7 @@ import { connect } from "react-redux";
 
 const DefaultAside = React.lazy(() => import("./DefaultLayout/DefaultAside"));
 const DefaultFooter = React.lazy(() => import("./DefaultLayout/DefaultFooter"));
-// const DefaultHeader = React.lazy(() => import("./DefaultLayout/DefaultHeader"));
+const DefaultHeader = React.lazy(() => import("./DefaultLayout/DefaultHeader"));
 
 class DefaultLayout extends Component {
   loading = () => (
@@ -50,12 +49,11 @@ class DefaultLayout extends Component {
       <>
         <div className="app">
           {/* <ToastContainer /> */}
-          {/* <AppHeader fixed>
+          <AppHeader style={{ backgroundColor: "rgb(56,56,56)" }} fixed>
             <Suspense fallback={this.loading()}>
               <DefaultHeader onLogout={e => this.signOut(e)} />
             </Suspense>
-          </AppHeader> */}
-
+          </AppHeader>
           <div className="app-body">
             <AppSidebar fixed display="lg">
               <AppSidebarHeader />

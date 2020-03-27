@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Row, Col, Button, FormGroup, Table, Label } from "reactstrap";
+import ReactHtmlParser from "react-html-parser";
 
 export default class ScientificReportDetail extends Component {
   constructor(props) {
@@ -25,7 +26,12 @@ export default class ScientificReportDetail extends Component {
             <Row className="nckh">
               <Col xs="12">
                 <div className="flex-container header-table">
-                  <Label className="label label-default">{item.name} </Label>
+                  <Label
+                    className="label label-default"
+                    style={{ fontWeight: "bold" }}
+                  >
+                    {item.name}{" "}
+                  </Label>
                   <Button
                     className="fa fa-window-close"
                     style={{ backgroundColor: "white" }}
@@ -34,7 +40,7 @@ export default class ScientificReportDetail extends Component {
                 </div>
                 <Table className="admin-table" responsive bordered>
                   <tbody>
-                    <td>{item.content}</td>
+                    <td>{ReactHtmlParser(item.content)}</td>
                   </tbody>
                 </Table>
               </Col>

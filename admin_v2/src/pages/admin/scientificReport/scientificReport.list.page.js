@@ -28,6 +28,7 @@ import ApiScientificReportType from "../../../api/api.scientificReportType";
 import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
 import ScientificReportDetail from "./scientificReport.detail";
+import CKEditorInput from "../../../components/common/ckeditor-input";
 
 class ScientificReportListPage extends Component {
   constructor(props) {
@@ -145,6 +146,12 @@ class ScientificReportListPage extends Component {
         this.getScientificReportList();
       }
     );
+  };
+
+  onContentChange = e => {
+    let item = Object.assign({}, this.state.item);
+    item.content = e.editor.getData();
+    this.setState({ item });
   };
 
   onSearchChange = e => {
@@ -342,13 +349,12 @@ class ScientificReportListPage extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                      <ValidationInput
-                        name="content"
+                      <CKEditorInput
                         title="Nội dung"
-                        type="text"
+                        name="content"
+                        data={item.content}
                         required={true}
-                        value={item.content}
-                        onChange={this.onModelChange}
+                        onChange={this.onContentChange}
                       />
                     </FormGroup>
                   </Col>

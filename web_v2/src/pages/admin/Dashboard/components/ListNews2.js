@@ -1,80 +1,35 @@
-import React, { Component } from "react";
-import { List, Card, Col } from "antd";
+import React from "react";
+import {
+  Card,
+  CardImg,
+  CardText,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  Button
+} from "reactstrap";
 
-const data = [
-  {
-    title:
-      "Sinh viên Kinh tế giành giải nhất Nghiên cứu khoa học EURÉKA lần thứ 21",
-    image:
-      "https://due.udn.vn/Portals/0/Editor/TruyenThong_DUE/Nam%202019%202/Quy%204/SV%20Giai%201%20Eureka%202019/GiaiNhatEureka1.jpg",
-    href:
-      "https://due.udn.vn/vi-vn/nghiencuukhoahoc/nghiencuukhoahocchitiet/id/10756/cid/186"
-  },
-  {
-    title:
-      "Đề tài nghiên cứu khoa học của giảng viên đại học Đà Nẵng được ứng dụng thực tiễn",
-    image:
-      "http://www.udn.vn/app/webroot/upload/images/images1551065_4_chuy_n___i_n_ng_l__ng.jpg",
-    href:
-      "https://due.udn.vn/vi-vn/nghiencuukhoahoc/nghiencuukhoahocchitiet/id/10838/cid/186"
-  }
-];
-class ListNews2 extends Component {
-  render() {
-    return (
-      <div>
-        <Col>
-          <Card>
-            {" "}
-            {/* {images.map((each, index) => (
-            <img
-              key={index}
-              style={{ width: "80%", marginLeft: "40px" }}
-              src={each}
-            />
-          ))}
-          ; */}
-            {data.map((item, index) => (
-              <div key={index}>
-                <img
-                  key={index}
-                  style={{
-                    display: "flex",
-                    flex: "1",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    transition: "all 0.2s",
-                    borderLeft: "solid 1px #cccccc",
-
-                    "&:hover": {
-                      background: "#efefef"
-                    },
-                    "&:last-child": {
-                      borderRight: "solid 1px #cccccc"
-                    },
-                    width: "80%",
-                    marginLeft: "40px",
-                    marginTop: "6px"
-                  }}
-                  src={item.image}
-                />
-                <a href={item.href}>
-                  <h4
-                    style={{
-                      marginLeft: "40px",
-                      marginRight: "40px"
-                    }}
-                  >
-                    {item.title}
-                  </h4>
-                </a>{" "}
-              </div>
-            ))}
-          </Card>
-        </Col>
-      </div>
-    );
-  }
-}
+const ListNews2 = props => {
+  return (
+    <div className="slide-container">
+      <Card>
+        <CardImg
+          top
+          width="100%"
+          src="https://due.udn.vn/Portals/0/Editor/TruyenThong_DUE/Nam%202019%202/Quy%204/Giai%203%20NCKH%20TP/Giai3NCKHcapTP2019.jpg"
+          alt="Card image cap"
+        />
+        <CardBody>
+          <CardTitle>
+            <a href="https://due.udn.vn/vi-vn/nghiencuukhoahoc/nghiencuukhoahocchitiet/id/10838/cid/186">
+              Đề tài của sinh viên trường Đại học Kinh tế giành giải cao tại
+              cuộc thi nghiên cứu khoa học thành phố Đà Nẵng 2019
+            </a>
+          </CardTitle>
+        </CardBody>
+      </Card>
+    </div>
+  );
+};
 
 export default ListNews2;

@@ -28,6 +28,7 @@ import ApiLevel from "../../../api/api.level";
 import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
 import ScientificWorkDetail from "./scientificWork.detail";
+import CKEditorInput from "../../../components/common/ckeditor-input";
 
 class ScientificWorkListPage extends Component {
   constructor(props) {
@@ -144,6 +145,11 @@ class ScientificWorkListPage extends Component {
         this.getScientificWorkList();
       }
     );
+  };
+  onContentChange = e => {
+    let item = Object.assign({}, this.state.item);
+    item.content = e.editor.getData();
+    this.setState({ item });
   };
 
   onSearchChange = e => {
@@ -309,7 +315,7 @@ class ScientificWorkListPage extends Component {
                   </Col>
                 </Row>
 
-                <Row>
+                {/* <Row>
                   <Col>
                     <FormGroup>
                       <ValidationInput
@@ -319,6 +325,19 @@ class ScientificWorkListPage extends Component {
                         required={true}
                         value={item.content}
                         onChange={this.onModelChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row> */}
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <CKEditorInput
+                        title="Nội dung"
+                        name="content"
+                        data={item.content}
+                        required={true}
+                        onChange={this.onContentChange}
                       />
                     </FormGroup>
                   </Col>
@@ -458,7 +477,6 @@ class ScientificWorkListPage extends Component {
                     <th>STT</th>
                     <th>Công trình khoa học</th>
                     <th>Thời gian</th>
-                    {/* <th>Nội dung</th> */}
                     <th>Cấp</th>
                     <th>Giảng viên</th>
                     <th>Thao tác</th>

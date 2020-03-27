@@ -28,12 +28,12 @@ class Home extends Component {
             <img key={index} style={{ width: "100%" }} src={each} />
           ))}
         </Zoom>
-        <a href="https://due.udn.vn/vi-vn/nghiencuukhoahoc">
+        {/* <a href="https://due.udn.vn/vi-vn/nghiencuukhoahoc">
           <h3 style={{ marginRight: "0%" }}>
             Một số hoạt động nghiên cứu khoa học của giảng viên, sinh viên đại
             học Kinh tế
           </h3>
-        </a>
+        </a> */}
       </div>
     );
   }

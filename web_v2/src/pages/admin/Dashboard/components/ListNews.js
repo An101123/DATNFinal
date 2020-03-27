@@ -1,38 +1,35 @@
-import React, { Component } from "react";
-import "../../Dashboard/dashboard.css";
-import { List, Card, Avatar } from "antd";
-import { MessageOutlined, LikeOutlined, StarOutlined } from "@ant-design/icons";
+import React from "react";
+import {
+  Card,
+  CardImg,
+  CardText,
+  CardBody,
+  CardTitle,
+  CardSubtitle,
+  Button
+} from "reactstrap";
 
-const listData = [
-  {
-    href: "https://due.udn.vn/vi-vn/tintuc/tintucchitiet/id/10756",
-    title: `Sinh viên Kinh tế giành giải nhất giải thưởng Nghiên cứu khoa học EURÉKA lần thứ 21 - Năm 2019`
-  }
-];
-
-class ListNews extends Component {
-  render() {
-    return (
-      <List
-        style={{ marginLeft: "0%", listStyleType: "" }}
-        dataSource={listData}
-        renderItem={item => (
-          <List.Item
-            key={item.title}
-            extra={
-              <img
-                width={272}
-                alt="logo"
-                src="https://due.udn.vn/Portals/0/Editor/TruyenThong_DUE/Nam%202019%202/Quy%204/SV%20Giai%201%20Eureka%202019/GiaiNhatEureka1.jpg"
-              />
-            }
-          >
-            <List.Item.Meta title={<a href={item.href}>{item.title}</a>} />
-          </List.Item>
-        )}
-      />
-    );
-  }
-}
+const ListNews = props => {
+  return (
+    <div className="slide-container">
+      <Card>
+        <CardImg
+          top
+          width="100%"
+          src="https://due.udn.vn/Portals/0/Editor/TruyenThong_DUE/Nam%202019%202/Quy%204/Giai%203%20NCKH%20TP/Giai3NCKHcapTP2019.jpg"
+          alt="Card image cap"
+        />
+        <CardBody>
+          <CardTitle>
+            <a href="https://due.udn.vn/vi-vn/nghiencuukhoahoc/nghiencuukhoahocchitiet/id/10838/cid/186">
+              Đề tài của sinh viên trường Đại học Kinh tế giành giải cao tại
+              cuộc thi nghiên cứu khoa học thành phố Đà Nẵng 2019
+            </a>
+          </CardTitle>
+        </CardBody>
+      </Card>
+    </div>
+  );
+};
 
 export default ListNews;
