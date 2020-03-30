@@ -16,14 +16,14 @@ const ListNews2 = props => {
         <CardImg
           top
           width="100%"
-          src="https://due.udn.vn/Portals/0/Editor/TruyenThong_DUE/Nam%202019%202/Quy%204/Giai%203%20NCKH%20TP/Giai3NCKHcapTP2019.jpg"
+          src="https://due.udn.vn/Portals/0/Editor/TruyenThong_DUE/Nam%202019%202/Quy%204/SV%20Giai%201%20Eureka%202019/GiaiNhatEureka1.jpg"
           alt="Card image cap"
         />
         <CardBody>
           <CardTitle>
             <a href="https://due.udn.vn/vi-vn/nghiencuukhoahoc/nghiencuukhoahocchitiet/id/10838/cid/186">
-              Đề tài của sinh viên trường Đại học Kinh tế giành giải cao tại
-              cuộc thi nghiên cứu khoa học thành phố Đà Nẵng 2019
+              Sinh viên Kinh tế giành giải nhất giải thưởng nghiên cứu khoa học
+              EURÉKA lần thứ 21- Năm 2019
             </a>
           </CardTitle>
         </CardBody>

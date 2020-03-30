@@ -10,8 +10,13 @@ import { toastSuccess, toastError } from "../../../helpers/toast.helper";
 import lodash from "lodash";
 import { getNewsList } from "../../../actions/news.list.action";
 import ApiNews from "../../../api/api.news";
+import ImagePicker from "../../../components/common/image-picker";
 import { pagination } from "../../../constant/app.constant";
 import "../../../pages/admin/select-custom.css";
+import { uploadFile } from "../../../helpers/upload_file.helper";
+import CKEditorInput from "../../../components/common/ckeditor-input";
+import NewsDetail from "./news.detail";
+import ReactHtmlParser from "react-html-parser";
 
 class NewsListPage extends Component {
   constructor(props) {
@@ -19,7 +24,10 @@ class NewsListPage extends Component {
     this.state = {
       isShowDeleteModal: false,
       isShowInfoModal: false,
+      isShowDetail: false,
+
       item: {},
+      image: null,
       itemId: null,
       params: {
         skip: pagination.initialPage,
@@ -43,6 +51,12 @@ class NewsListPage extends Component {
       formTitle: title
     }));
   };
+  toggleDetailPage = item => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail,
+      item: item
+    }));
+  };
 
   showConfirmDelete = itemId => {
     this.setState(
@@ -53,12 +67,18 @@ class NewsListPage extends Component {
     );
   };
 
+  backToAdminPage = () => {
+    this.setState(prevState => ({
+      isShowDetail: !prevState.isShowDetail
+    }));
+  };
+
   showAddNew = () => {
     let title = "Tạo cấp công trình khoa học";
     let news = {
       title: "",
-      summary: "",
-      content: ""
+      content: "",
+      image: null
     };
     this.toggleModalInfo(news, title);
   };
@@ -69,6 +89,18 @@ class NewsListPage extends Component {
     let item = Object.assign({}, this.state.item);
     item[inputName] = inputValue;
     this.setState({ item });
+  };
+
+  onImageChange = file => {
+    this.setState({ image: file });
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      document.getElementById("itemImage").src = reader.result;
+    };
+    reader.onerror = function(error) {
+      console.log("Error: ", error);
+    };
   };
 
   search = e => {
@@ -113,9 +145,10 @@ class NewsListPage extends Component {
   addNews = async () => {
     console.log("state ==================");
     console.log(this.state);
-    const { title, summary, content } = this.state.item;
-    const news = { title, summary, title, content };
+    const { title, link, content } = this.state.item;
     try {
+      var image = await uploadFile("Image", this.state.image);
+      const news = { title, link, title, content, image };
       await ApiNews.postNews(news);
       this.toggleModalInfo();
       this.getNewsList();
@@ -144,6 +177,11 @@ class NewsListPage extends Component {
       this.addNews();
     }
   };
+  onContentChange = e => {
+    let item = Object.assign({}, this.state.item);
+    item.content = e.editor.getData();
+    this.setState({ item });
+  };
 
   onSubmit(e) {
     e.preventDefault();
@@ -156,10 +194,15 @@ class NewsListPage extends Component {
   }
 
   render() {
-    const { isShowDeleteModal, isShowInfoModal, item } = this.state;
+    const {
+      isShowDeleteModal,
+      isShowInfoModal,
+      item,
+      image,
+      isShowDetail
+    } = this.state;
     const { newsPagedList } = this.props.newsPagedListReducer;
     const { sources, pageIndex, totalPages } = newsPagedList;
-    console.log(sources);
     const hasResults =
       newsPagedList.sources && newsPagedList.sources.length > 0;
     return (
@@ -201,30 +244,39 @@ class NewsListPage extends Component {
                 <Row>
                   <Col>
                     <FormGroup>
-                      <ValidationInput
-                        name="summary"
-                        title="Tóm tắt"
-                        type="text"
+                      <CKEditorInput
+                        title="Nội dung"
+                        name="content"
+                        data={item.content}
                         required={true}
-                        value={item.summary}
-                        onChange={this.onModelChange}
+                        onChange={this.onContentChange}
                       />
                     </FormGroup>
                   </Col>
                 </Row>
 
                 <Row>
-                  <Col>
-                    <FormGroup>
-                      <ValidationInput
-                        name="content"
-                        title="Nội dung"
-                        type="text"
-                        required={true}
-                        value={item.content}
-                        onChange={this.onModelChange}
-                      />
-                    </FormGroup>
+                  <Col style={{ position: "relative" }}>
+                    <ImagePicker
+                      title="Image"
+                      onImageChange={this.onImageChange}
+                    />
+                    {(item.image || image) && (
+                      <span>
+                        <img
+                          id="itemImage"
+                          alt=""
+                          src={item.image && item.image}
+                          width="100"
+                          height="80"
+                        />
+                        <span
+                          style={{ position: "absolute", left: 100 }}
+                          className="fa fa-times"
+                          onClick={() => this.setState({ image: null })}
+                        />
+                      </span>
+                    )}
                   </Col>
                 </Row>
 
@@ -241,72 +293,67 @@ class NewsListPage extends Component {
           </div>
         </ModalInfo>
 
-        <Row>
-          <Col xs="12">
-            <div className="flex-container header-table">
-              <Button
-                onClick={this.showAddNew}
-                className="btn btn-pill btn-success btn-sm"
-              >
-                Tạo mới
-              </Button>
-              <input
-                onChange={this.onSearchChange}
-                className="form-control form-control-sm"
-                placeholder="Tìm kiếm..."
-              />
-            </div>
-            <Table className="admin-table" responsive bordered>
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Chủ đề</th>
-                  <th>Tóm tắt</th>
-                  <th>Nội dung</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hasResults &&
-                  sources.map((item, index) => {
-                    return (
-                      <tr key={item.id}>
-                        <td>{index + 1}</td>
-                        <td>{item.title}</td>
-                        <td>{item.summary}</td>
-                        <td>{item.content}</td>
-                        <td>
-                          <Button
-                            className="btn-sm"
-                            color="secondary"
-                            onClick={() => this.showUpdateModal(item)}
-                          >
-                            Sửa
-                          </Button>
-                          <Button
-                            className="btn-sm"
-                            color="danger"
-                            onClick={() => this.showConfirmDelete(item.id)}
-                          >
-                            Xóa
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </Table>
-            {hasResults && totalPages > 1 && (
-              <Pagination
-                initialPage={0}
-                totalPages={totalPages}
-                forcePage={pageIndex - 1}
-                pageRangeDisplayed={2}
-                onPageChange={this.handlePageClick}
-              />
-            )}
-          </Col>
-        </Row>
+        {!isShowDetail ? (
+          <Row>
+            <Col xs="12">
+              <div className="flex-container header-table">
+                <Button
+                  onClick={this.showAddNew}
+                  className="btn btn-pill btn-success btn-sm"
+                >
+                  Tạo mới
+                </Button>
+                <input
+                  onChange={this.onSearchChange}
+                  className="form-control form-control-sm"
+                  placeholder="Tìm kiếm..."
+                />
+              </div>
+              <Table className="admin-table" responsive bordered>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Chủ đề</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hasResults &&
+                    sources.map((item, index) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td onClick={() => this.toggleDetailPage(item)}>
+                            {item.title}
+                          </td>
+                          <td>
+                            <Button
+                              className="btn-sm"
+                              color="danger"
+                              onClick={() => this.showConfirmDelete(item.id)}
+                            >
+                              Xóa
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+              {hasResults && totalPages > 1 && (
+                <Pagination
+                  initialPage={0}
+                  totalPages={totalPages}
+                  forcePage={pageIndex - 1}
+                  pageRangeDisplayed={2}
+                  onPageChange={this.handlePageClick}
+                />
+              )}
+            </Col>
+          </Row>
+        ) : (
+          <NewsDetail News={item} backToAdminPage={this.backToAdminPage} />
+        )}
       </div>
     );
   }

@@ -141,6 +141,7 @@ class ScientificReportListPage extends Component {
             />
           </CardBody>
         </Row>
+        <hr />
         {!isShowDetail ? (
           <Row className="nckh">
             <Col xs="12">

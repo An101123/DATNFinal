@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Row, Col, Button, FormGroup, Table, Label } from "reactstrap";
 import ReactHtmlParser from "react-html-parser";
 
-export default class ScientificWorkDetail extends Component {
+export default class NewsDetail extends Component {
   constructor(props) {
     super(props);
     this.state = { item: {} };
@@ -13,15 +13,15 @@ export default class ScientificWorkDetail extends Component {
   };
 
   componentDidMount() {
-    this.setState({ item: this.props.ScientificWork });
+    this.setState({ item: this.props.News });
   }
 
   render() {
     const { item } = this.state;
-    const hasResult = item !== null;
+    const hasResults = item !== null;
     return (
       <div>
-        {hasResult && (
+        {hasResults && (
           <div>
             <Row className="nckh">
               <Col xs="12">
@@ -30,7 +30,7 @@ export default class ScientificWorkDetail extends Component {
                     className="label label-default"
                     style={{ fontWeight: "bold" }}
                   >
-                    {item.name}{" "}
+                    {item.title}{" "}
                   </Label>
                   <Button
                     className="fa fa-window-close"
@@ -40,7 +40,19 @@ export default class ScientificWorkDetail extends Component {
                 </div>
                 <Table className="admin-table" responsive bordered>
                   <tbody>
-                    <td>{ReactHtmlParser(item.content)}</td>
+                    <td>
+                      {" "}
+                      <div>
+                        <td style={{ textAlign: "center" }}>
+                          <img
+                            style={{ width: "100%" }}
+                            src={item.image}
+                            alt=""
+                          />
+                        </td>
+                      </div>
+                      {ReactHtmlParser(item.content)}
+                    </td>
                   </tbody>
                 </Table>
               </Col>

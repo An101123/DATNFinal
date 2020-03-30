@@ -315,20 +315,7 @@ class ScientificWorkListPage extends Component {
                   </Col>
                 </Row>
 
-                {/* <Row>
-                  <Col>
-                    <FormGroup>
-                      <ValidationInput
-                        name="content"
-                        title="Nội dung"
-                        type="text"
-                        required={true}
-                        value={item.content}
-                        onChange={this.onModelChange}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row> */}
+                
                 <Row>
                   <Col>
                     <FormGroup>

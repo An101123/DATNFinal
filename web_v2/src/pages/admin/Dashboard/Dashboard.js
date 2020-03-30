@@ -6,12 +6,14 @@ import ListNews2 from "./components/ListNews2";
 
 import { Row, Col } from "reactstrap";
 import AboutUs from "./components/Aboutus";
+import Lecturer from "../lecturer/lecturer.image";
 class Dashboard extends Component {
   render() {
     return (
       <div className="app">
         <div className="news">
           <Logo />
+          <hr />
           <Row>
             <Col xs="8">
               <Home />
@@ -21,10 +23,16 @@ class Dashboard extends Component {
               <ListNews2 />
             </Col>
           </Row>
+          <hr />
         </div>
-        <div className="aboutus">
+        {/* <div className="aboutus">
           <Row>
             <AboutUs />
+          </Row>
+        </div> */}
+        <div>
+          <Row>
+            <Lecturer />
           </Row>
         </div>
       </div>

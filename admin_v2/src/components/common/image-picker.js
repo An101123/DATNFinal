@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FormGroup, Label } from "reactstrap";
+import { FormGroup, Label, Button } from "reactstrap";
 import { FilePicker } from "react-file-picker";
 
 class ImagePicker extends Component {
@@ -16,18 +16,18 @@ class ImagePicker extends Component {
         <FilePicker
           extensions={["jpg", "jpeg", "png"]}
           onChange={file => onImageChange(file)}
-          onError={err => { }}
+          onError={err => {}}
         >
-          <div>Thêm ảnh</div>
+          <Button>Thêm ảnh</Button>
         </FilePicker>
-        {image &&
+        {image && (
           <img
             alt=""
             src={image.id ? image.thumb : URL.createObjectURL(image)}
             width="100"
             height="100"
           />
-        }
+        )}
       </FormGroup>
     );
   };

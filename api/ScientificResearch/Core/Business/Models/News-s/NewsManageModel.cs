@@ -12,11 +12,15 @@ namespace ScientificResearch.Core.Business.Models.News_s
 
         public string Content { get; set; }
 
+        public string Image { get; set; }
+
+
         public void GetNewsFromModel(News news)
         {
             news.Title = Title;
             news.Summary = Summary;
             news.Content = Content;
+            news.Image = Image;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

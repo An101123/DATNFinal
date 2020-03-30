@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Row, Col, Button, FormGroup, Table } from "reactstrap";
-import Form from "react-validation/build/form";
-import ModalConfirm from "../../../components/modal/modal-confirm";
-import Pagination from "../../../components/pagination/Pagination";
-import ModalInfo from "../../../components/modal/modal-info";
-import ValidationInput from "../../../components/common/validation-input";
-import { toastSuccess, toastError } from "../../../helpers/toast.helper";
 import lodash from "lodash";
 import { getNewsList } from "../../../actions/news.list.action";
-import ApiNews from "../../../api/api.news";
 import { pagination } from "../../../constant/app.constant";
 import "../../../pages/admin/select-custom.css";
+import { Row, Card, CardImg, CardBody, CardTitle } from "reactstrap";
+import { List } from "antd";
+import "antd/dist/antd.css";
+import { MessageOutlined, LikeOutlined, StarOutlined } from "@ant-design/icons";
+import ReactHtmlParser from "react-html-parser";
 
 class NewsListPage extends Component {
   constructor(props) {
@@ -19,7 +16,10 @@ class NewsListPage extends Component {
     this.state = {
       isShowDeleteModal: false,
       isShowInfoModal: false,
+      isShowDetail: false,
+
       item: {},
+      image: null,
       itemId: null,
       params: {
         skip: pagination.initialPage,
@@ -29,28 +29,6 @@ class NewsListPage extends Component {
     };
     this.delayedCallback = lodash.debounce(this.search, 1000);
   }
-
-  toggleDeleteModal = () => {
-    this.setState(prevState => ({
-      isShowDeleteModal: !prevState.isShowDeleteModal
-    }));
-  };
-
-  toggleModalInfo = (item, title) => {
-    this.setState(prevState => ({
-      isShowInfoModal: !prevState.isShowInfoModal,
-      item: item || {},
-      formTitle: title
-    }));
-  };
-
-  onModelChange = el => {
-    let inputName = el.target.name;
-    let inputValue = el.target.value;
-    let item = Object.assign({}, this.state.item);
-    item[inputName] = inputValue;
-    this.setState({ item });
-  };
 
   search = e => {
     this.setState(
@@ -72,18 +50,6 @@ class NewsListPage extends Component {
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
-    this.setState(
-      {
-        params: {
-          ...this.state.params,
-          skip: e.selected + 1
-        }
-      },
-      () => this.getNewsList()
-    );
-  };
-
   getNewsList = () => {
     let params = Object.assign({}, this.state.params, {
       query: this.state.query
@@ -102,13 +68,56 @@ class NewsListPage extends Component {
   }
 
   render() {
-    const { isShowDeleteModal, isShowInfoModal, item } = this.state;
+    const { item } = this.state;
     const { newsPagedList } = this.props.newsPagedListReducer;
-    const { sources, pageIndex, totalPages } = newsPagedList;
-    console.log(sources);
+    const { sources } = newsPagedList;
     const hasResults =
       newsPagedList.sources && newsPagedList.sources.length > 0;
-    return <div className="animated fadeIn"></div>;
+
+    return (
+      <div>
+        <Row>
+          <CardBody>
+            <img
+              src="https://due.udn.vn/portals/_default/skins/dhkt/img/front/logo.png"
+              alt="logochichido"
+            />
+          </CardBody>
+        </Row>
+        <hr />
+        {hasResults && (
+          <List
+            itemLayout="vertical"
+            size="large"
+            pagination={{
+              onChange: page => {
+                console.log(page);
+              },
+              pageSize: 3
+            }}
+            dataSource={sources}
+            renderItem={item => (
+              <List.Item
+                key={item.title}
+                // actions={[
+                //   <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
+                //   <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
+                //   <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+                // ]}
+                extra={<img width={272} alt="logo" src={item.image} />}
+              >
+                <List.Item.Meta
+                  // avatar={<Avatar src={item.avatar} />}
+                  title={item.title}
+                  description={item.summary}
+                />
+                {ReactHtmlParser(item.content)}
+              </List.Item>
+            )}
+          />
+        )}
+      </div>
+    );
   }
 }
 

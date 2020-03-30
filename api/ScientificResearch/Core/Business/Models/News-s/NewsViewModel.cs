@@ -21,6 +21,8 @@ namespace ScientificResearch.Core.Business.Models.News_s
                 Title = news.Title;
                 Summary = news.Summary;
                 Content = news.Content;
+                Image = news.Image;
+
             }
         }
         public Guid Id { get; set; }
@@ -30,5 +32,6 @@ namespace ScientificResearch.Core.Business.Models.News_s
         public string Summary { get; set; }
 
         public string Content { get; set; }
+        public string Image { get; set; }
     }
 }
