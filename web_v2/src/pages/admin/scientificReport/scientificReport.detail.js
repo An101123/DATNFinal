@@ -21,30 +21,31 @@ export default class ScientificReportDetail extends Component {
     const hasResult = item !== null;
     return (
       <div>
+        <hr />
         {hasResult && (
           <div>
-            <Row className="nckh">
-              <Col xs="12">
-                <div className="flex-container header-table">
-                  <Label
-                    className="label label-default"
-                    style={{ fontWeight: "bold" }}
-                  >
-                    {item.name}{" "}
-                  </Label>
+            <div>
+              {" "}
+              <Row>
+                <Col md="10">
+                  {" "}
+                  <h5 style={{ marginLeft: "50px", marginBottom: "50px" }}>
+                    {item.name}
+                  </h5>
+                </Col>
+                <Col md="2">
                   <Button
                     className="fa fa-window-close"
-                    style={{ backgroundColor: "white" }}
+                    style={{ float: "right", backgroundColor: "white" }}
                     onClick={this.backToAdminPage}
                   />
-                </div>
-                <Table className="admin-table" responsive bordered>
-                  <tbody>
-                    <td>{ReactHtmlParser(item.content)}</td>
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
+                </Col>
+              </Row>
+            </div>
+
+            <p style={{ marginLeft: "50px", marginRight: "50px" }}>
+              {ReactHtmlParser(item.content)}
+            </p>
           </div>
         )}
       </div>

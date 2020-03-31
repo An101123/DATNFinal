@@ -35,9 +35,11 @@ export default class NewsDetail extends Component {
               />
               <h2
                 style={{
-                  textTransform: "uppercase",
                   color: "#0473b3",
-                  marginLeft: "50px"
+                  textTransform: "uppercase",
+                  marginLeft: "50px",
+                  marginTop: "30px",
+                  fontFamily: "Arial"
                 }}
               >
                 {item.title}{" "}
@@ -48,7 +50,7 @@ export default class NewsDetail extends Component {
               style={{
                 marginLeft: "100px",
                 marginRight: "100px",
-                marginTop: "40px",
+                marginTop: "30px",
                 marginBottom: "50px",
                 width: "80%"
               }}

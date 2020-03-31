@@ -127,82 +127,81 @@ class ScientificWorkListPage extends Component {
         </Row>
         <hr />
         {!isShowDetail ? (
-          <Row className="nckh">
-            <Col xs="12">
-              <div className="flex-container header-table">
-                <Label
-                  className="label label-default"
-                  style={{ fontWeight: "bolder" }}
-                >
-                  NGHIÊN CỨU KHOA HỌC CẤP ĐẠI HỌC ĐÀ NẴNG
-                </Label>
-                <input
-                  onChange={this.onSearchChange}
-                  className="form-control form-control-sm"
-                  placeholder="Tìm kiếm..."
-                />
-              </div>
-              <Table className="admin-table" responsive bordered>
-                <thead>
-                  <tr>
-                    <th>STT</th>
-                    <th>Công trình khoa học</th>
-                    <th>Thời gian</th>
+          <div>
+            <h3 style={{ color: "#0473b3" }}> NGHIÊN CỨU KHOA HỌC CẤP ĐHĐN</h3>
 
-                    <th>Cấp</th>
-                    <th>Giảng viên</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {hasResults &&
-                    sources
-                      .filter(value => {
-                        if (value.level.name === "ĐHĐN") {
-                          return true;
-                        }
-                        return false;
-                      })
-                      .map((item, index) => {
-                        return (
-                          <tr key={item.id}>
-                            <td>{index + 1}</td>
-                            <td onClick={() => this.toggleDetailPage(item)}>
-                              {item.name.length > 100 ? (
-                                <span>
-                                  {item.name.substr(0, 100)}{" "}
-                                  <span style={{ fontWeight: "bolder" }}>
-                                    {" "}
-                                    ...
+            <Row className="nckh">
+              <Col xs="12">
+                <div className="flex-container header-table">
+                  <Label className="label label-default"></Label>
+                  <input
+                    onChange={this.onSearchChange}
+                    className="form-control form-control-sm"
+                    placeholder="Tìm kiếm..."
+                  />
+                </div>
+                <Table className="admin-table" responsive bordered>
+                  <thead>
+                    <tr>
+                      <th>STT</th>
+                      <th>Công trình khoa học</th>
+                      <th>Thời gian</th>
+
+                      <th>Cấp</th>
+                      <th>Giảng viên</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {hasResults &&
+                      sources
+                        .filter(value => {
+                          if (value.level.name === "ĐHĐN") {
+                            return true;
+                          }
+                          return false;
+                        })
+                        .map((item, index) => {
+                          return (
+                            <tr key={item.id}>
+                              <td>{index + 1}</td>
+                              <td onClick={() => this.toggleDetailPage(item)}>
+                                {item.name.length > 100 ? (
+                                  <span>
+                                    {item.name.substr(0, 100)}{" "}
+                                    <span style={{ fontWeight: "bolder" }}>
+                                      {" "}
+                                      ...
+                                    </span>
                                   </span>
-                                </span>
-                              ) : (
-                                item.name
-                              )}
-                            </td>
-                            <td>
-                              {moment(item.time)
-                                .add(7, "h")
-                                .format("DD-MM-YYYY")}
-                            </td>
+                                ) : (
+                                  item.name
+                                )}
+                              </td>
+                              <td>
+                                {moment(item.time)
+                                  .add(7, "h")
+                                  .format("DD-MM-YYYY")}
+                              </td>
 
-                            <td>{item.level.name}</td>
-                            <td>{item.lecturer.name}</td>
-                          </tr>
-                        );
-                      })}
-                </tbody>
-              </Table>
-              {hasResults && totalPages > 1 && (
-                <Pagination
-                  initialPage={0}
-                  totalPages={totalPages}
-                  forcePage={pageIndex - 1}
-                  pageRangeDisplayed={2}
-                  onPageChange={this.handlePageClick}
-                />
-              )}
-            </Col>
-          </Row>
+                              <td>{item.level.name}</td>
+                              <td>{item.lecturer.name}</td>
+                            </tr>
+                          );
+                        })}
+                  </tbody>
+                </Table>
+                {hasResults && totalPages > 1 && (
+                  <Pagination
+                    initialPage={0}
+                    totalPages={totalPages}
+                    forcePage={pageIndex - 1}
+                    pageRangeDisplayed={2}
+                    onPageChange={this.handlePageClick}
+                  />
+                )}
+              </Col>
+            </Row>
+          </div>
         ) : (
           <ScientificWorkDetail
             ScientificWork={item}

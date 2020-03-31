@@ -28,7 +28,7 @@ export default class ScientificWorkDetail extends Component {
                 <div className="flex-container header-table">
                   <Label
                     className="label label-default"
-                    style={{ fontWeight: "bold" }}
+                    // style={{ fontWeight: "bold" }}
                   >
                     {item.name}{" "}
                   </Label>

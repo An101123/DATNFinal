@@ -86,56 +86,60 @@ class LecturerListPage extends Component {
             />
           </CardBody>
         </Row>
-        <Row className="nckh">
-          <Col xs="12">
-            <div className="flex-container header-table">
-              <Label className="label label-default">GIẢNG VIÊN </Label>
-              <input
-                onChange={this.onSearchChange}
-                className="form-control form-control-sm"
-                placeholder="Tìm kiếm..."
-              />
-            </div>
-            <Table className="admin-table" responsive bordered>
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Tên</th>
-                  <th>Ngày sinh</th>
-                  <th>Khoa</th>
-                  <th>Tổng điểm</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hasResults &&
-                  sources.map((item, index) => {
-                    return (
-                      <tr key={item.id}>
-                        <td>{index + 1}</td>
-                        <td>{item.name}</td>
-                        <td>
-                          {moment(item.dateOfBirth)
-                            .add(7, "h")
-                            .format("DD-MM-YYYY")}
-                        </td>
-                        <td>{item.faculty}</td>
-                        <td>{item.total}</td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </Table>
-            {hasResults && totalPages > 1 && (
-              <Pagination
-                initialPage={0}
-                totalPages={totalPages}
-                forcePage={pageIndex - 1}
-                pageRangeDisplayed={2}
-                onPageChange={this.handlePageClick}
-              />
-            )}
-          </Col>
-        </Row>
+        <hr />
+        <div>
+          <h3 style={{ color: "#0473b3" }}>GIẢNG VIÊN</h3>
+          <Row className="nckh">
+            <Col xs="12">
+              <div className="flex-container header-table">
+                <Label className="label label-default"></Label>
+                <input
+                  onChange={this.onSearchChange}
+                  className="form-control form-control-sm"
+                  placeholder="Tìm kiếm..."
+                />
+              </div>
+              <Table className="admin-table" responsive bordered>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Tên</th>
+                    <th>Ngày sinh</th>
+                    <th>Khoa</th>
+                    <th>Tổng điểm</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hasResults &&
+                    sources.map((item, index) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td>{item.name}</td>
+                          <td>
+                            {moment(item.dateOfBirth)
+                              .add(7, "h")
+                              .format("DD-MM-YYYY")}
+                          </td>
+                          <td>{item.faculty}</td>
+                          <td>{item.total}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+              {hasResults && totalPages > 1 && (
+                <Pagination
+                  initialPage={0}
+                  totalPages={totalPages}
+                  forcePage={pageIndex - 1}
+                  pageRangeDisplayed={2}
+                  onPageChange={this.handlePageClick}
+                />
+              )}
+            </Col>
+          </Row>
+        </div>
       </div>
     );
   }
