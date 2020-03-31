@@ -10,28 +10,7 @@ import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
 import "../Dashboard/dashboard.css";
 import ScientificReportDetail from "./scientificReport.detail";
-import {
-  Badge,
-  Row,
-  Col,
-  Progress,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardTitle,
-  Button,
-  ButtonToolbar,
-  ButtonGroup,
-  ButtonDropdown,
-  Label,
-  Input,
-  Table
-} from "reactstrap";
+import { Row, Col, CardBody, Label, Table } from "reactstrap";
 
 class ScientificReportListPage extends Component {
   constructor(props) {

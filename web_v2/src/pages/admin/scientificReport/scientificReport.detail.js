@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Button, FormGroup, Table, Label } from "reactstrap";
+import { Row, Col, Button, Table, Label } from "reactstrap";
 import ReactHtmlParser from "react-html-parser";
 
 export default class ScientificReportDetail extends Component {

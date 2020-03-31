@@ -1,8 +1,4 @@
 import React, { Component } from "react";
-import { getNewsList } from "../../../../actions/news.list.action";
-import Pagination from "../../../../components/pagination/Pagination";
-import lodash from "lodash";
-import ApiNews from "../../../../api/api.news";
 import { Zoom } from "react-slideshow-image";
 import "../../Dashboard/dashboard.css";
 

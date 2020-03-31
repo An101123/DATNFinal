@@ -35,6 +35,7 @@ namespace ScientificResearch.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Faculty")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -50,10 +51,10 @@ namespace ScientificResearch.Migrations
                     b.Property<int>("RecordOrder")
                         .HasColumnType("int");
 
-                    b.Property<string>("ScientificReportName")
+                    b.Property<string>("ScientificReportId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ScientificWorkName")
+                    b.Property<string>("ScientificWorkId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Total")
@@ -110,6 +111,7 @@ namespace ScientificResearch.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreateOn")
@@ -121,6 +123,9 @@ namespace ScientificResearch.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("RecordActive")
                         .HasColumnType("bit");
 
@@ -130,10 +135,8 @@ namespace ScientificResearch.Migrations
                     b.Property<int>("RecordOrder")
                         .HasColumnType("int");
 
-                    b.Property<string>("Summary")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedOn")
@@ -151,6 +154,7 @@ namespace ScientificResearch.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreateOn")
@@ -163,6 +167,7 @@ namespace ScientificResearch.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("RecordActive")
@@ -205,6 +210,7 @@ namespace ScientificResearch.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("RecordActive")
@@ -234,6 +240,7 @@ namespace ScientificResearch.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("CreateOn")
@@ -249,6 +256,7 @@ namespace ScientificResearch.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("RecordActive")

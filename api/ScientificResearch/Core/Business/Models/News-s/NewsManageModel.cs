@@ -8,19 +8,19 @@ namespace ScientificResearch.Core.Business.Models.News_s
     {
         public string Title { get; set; }
 
-        public string Summary { get; set; }
-
         public string Content { get; set; }
 
         public string Image { get; set; }
+
+        public string Link { get; set; }
 
 
         public void GetNewsFromModel(News news)
         {
             news.Title = Title;
-            news.Summary = Summary;
             news.Content = Content;
             news.Image = Image;
+            news.Link = Link;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

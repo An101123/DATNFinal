@@ -1,27 +1,7 @@
 import React, { Component } from "react";
-// import { Link } from 'react-router-dom'
-import {
-  Badge,
-  ButtonGroup,
-  Button,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown
-} from "reactstrap";
 import PropTypes from "prop-types";
-import {
-  AppAsideToggler,
-  AppNavbarBrand,
-  AppSidebarToggler
-} from "@coreui/react";
-import logo from "../../../assets/img/brand/logo.svg";
-import sygnet from "../../../assets/img/brand/sygnet.svg";
+import { AppNavbarBrand } from "@coreui/react";
 import Nav_Header from "./navs";
-import NavbarHeader from "./navs";
 const propTypes = {
   children: PropTypes.node
 };
@@ -31,7 +11,7 @@ const defaultProps = {};
 class DefaultHeader extends Component {
   render() {
     // eslint-disable-next-line
-    const { children, ...attributes } = this.props;
+    const { children } = this.props;
 
     return (
       <React.Fragment>

@@ -16,7 +16,6 @@ import "../../../pages/admin/select-custom.css";
 import { uploadFile } from "../../../helpers/upload_file.helper";
 import CKEditorInput from "../../../components/common/ckeditor-input";
 import NewsDetail from "./news.detail";
-import ReactHtmlParser from "react-html-parser";
 
 class NewsListPage extends Component {
   constructor(props) {
@@ -78,6 +77,7 @@ class NewsListPage extends Component {
     let news = {
       title: "",
       content: "",
+      link: "",
       image: null
     };
     this.toggleModalInfo(news, title);
@@ -148,7 +148,7 @@ class NewsListPage extends Component {
     const { title, link, content } = this.state.item;
     try {
       var image = await uploadFile("Image", this.state.image);
-      const news = { title, link, title, content, image };
+      const news = { title, link, content, image };
       await ApiNews.postNews(news);
       this.toggleModalInfo();
       this.getNewsList();
@@ -235,6 +235,21 @@ class NewsListPage extends Component {
                         type="text"
                         required={true}
                         value={item.title}
+                        onChange={this.onModelChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <ValidationInput
+                        name="link"
+                        title="Liên kết"
+                        type="text"
+                        required={true}
+                        value={item.link}
                         onChange={this.onModelChange}
                       />
                     </FormGroup>

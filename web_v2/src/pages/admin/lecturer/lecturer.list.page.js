@@ -7,28 +7,7 @@ import { getLecturerList } from "../../../actions/lecturer.list.action";
 import { pagination } from "../../../constant/app.constant";
 import "../../../pages/admin/select-custom.css";
 import "../Dashboard/dashboard.css";
-import {
-  Badge,
-  Row,
-  Col,
-  Progress,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardTitle,
-  Button,
-  ButtonToolbar,
-  ButtonGroup,
-  ButtonDropdown,
-  Label,
-  Input,
-  Table
-} from "reactstrap";
+import { Row, Col, CardBody, Label, Table } from "reactstrap";
 
 class LecturerListPage extends Component {
   constructor(props) {

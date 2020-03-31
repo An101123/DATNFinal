@@ -28,7 +28,7 @@ export default class NewsDetail extends Component {
                 <div className="flex-container header-table">
                   <Label
                     className="label label-default"
-                    style={{ fontWeight: "bold" }}
+                    // style={{ fontWeight: "bold" }}
                   >
                     {item.title}{" "}
                   </Label>
@@ -42,15 +42,12 @@ export default class NewsDetail extends Component {
                   <tbody>
                     <td>
                       {" "}
-                      <div>
-                        <td style={{ textAlign: "center" }}>
-                          <img
-                            style={{ width: "100%" }}
-                            src={item.image}
-                            alt=""
-                          />
-                        </td>
-                      </div>
+                      <img
+                        style={{ textAlign: "center", width: "80%" }}
+                        src={item.image}
+                        alt=""
+                      />
+                      <hr />
                       {ReactHtmlParser(item.content)}
                     </td>
                   </tbody>

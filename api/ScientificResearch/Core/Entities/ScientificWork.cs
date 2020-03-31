@@ -12,10 +12,13 @@ namespace ScientificResearch.Entities
         {
 
         }
+        [Required]
         public string Name { get; set; }
 
+        [Required]
         public string Content { get; set; }
 
+        [Required]
         public DateTime Time { get; set; }
 
         public Guid LevelId { get; set; }

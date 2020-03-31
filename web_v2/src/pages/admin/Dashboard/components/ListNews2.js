@@ -1,15 +1,7 @@
 import React from "react";
-import {
-  Card,
-  CardImg,
-  CardText,
-  CardBody,
-  CardTitle,
-  CardSubtitle,
-  Button
-} from "reactstrap";
+import { Card, CardImg, CardBody, CardTitle } from "reactstrap";
 
-const ListNews2 = props => {
+const ListNews2 = () => {
   return (
     <div className="slide-container">
       <Card>

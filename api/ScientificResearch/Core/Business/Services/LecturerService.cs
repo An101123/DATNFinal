@@ -126,14 +126,14 @@ namespace ScientificResearch.Core.Business.Services
 
             if (string.IsNullOrEmpty(matchedPropertyName))
             {
-                matchedPropertyName = "Name";
+                matchedPropertyName = "Total";
             }
 
             var type = typeof(LecturerViewModel);
 
             var sortProperty = type.GetProperty(matchedPropertyName);
 
-            list = requestListViewModel.IsDesc ? list.OrderByDescending(x => sortProperty.GetValue(x, null)).ToList() : list.OrderBy(x => sortProperty.GetValue(x, null)).ToList();
+            list = requestListViewModel.IsDesc ? list.OrderBy(x => sortProperty.GetValue(x, null)).ToList() : list.OrderByDescending(x => sortProperty.GetValue(x, null)).ToList();
 
             return new PagedList<LecturerViewModel>(list, requestListViewModel.Offset ?? CommonConstants.Config.DEFAULT_SKIP, requestListViewModel.Limit ?? CommonConstants.Config.DEFAULT_TAKE);
         }

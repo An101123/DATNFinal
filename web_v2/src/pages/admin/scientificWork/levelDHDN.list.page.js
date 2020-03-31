@@ -9,28 +9,7 @@ import ApiLevel from "../../../api/api.level";
 import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
 import "../Dashboard/dashboard.css";
-import {
-  Badge,
-  Row,
-  Col,
-  Progress,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  CardTitle,
-  Button,
-  ButtonToolbar,
-  ButtonGroup,
-  ButtonDropdown,
-  Label,
-  Input,
-  Table
-} from "reactstrap";
+import { Row, Col, CardBody, Label, Table } from "reactstrap";
 import ScientificWorkDetail from "./scientificWork.detail";
 
 class ScientificWorkListPage extends Component {
@@ -128,7 +107,7 @@ class ScientificWorkListPage extends Component {
   }
 
   render() {
-    const { isShowContentModal, isShowDetail, item, content } = this.state;
+    const { isShowDetail, item } = this.state;
     const {
       scientificWorkPagedList
     } = this.props.scientificWorkPagedListReducer;

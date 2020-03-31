@@ -1,18 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import {
-  Row,
-  Col,
-  Button,
-  FormGroup,
-  Table,
-  Label,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  CardBody,
-  ModalFooter
-} from "reactstrap";
+import { Row, Col, Table, Label, CardBody } from "reactstrap";
 import moment from "moment";
 import Pagination from "../../../components/pagination/Pagination";
 import lodash from "lodash";
@@ -101,7 +89,7 @@ class ScientificReportListPage extends Component {
   }
 
   render() {
-    const { isShowContentModal, isShowDetail, item, content } = this.state;
+    const { isShowDetail, item } = this.state;
     const {
       scientificReportPagedList
     } = this.props.scientificReportPagedListReducer;

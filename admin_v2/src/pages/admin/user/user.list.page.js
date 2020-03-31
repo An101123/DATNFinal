@@ -1,6 +1,6 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Row, Col, Button, FormGroup, Label, Input, Table } from "reactstrap";
+import { Row, Col, Button, FormGroup, Label, Table } from "reactstrap";
 import Form from "react-validation/build/form";
 import Datetime from "react-datetime";
 import moment from "moment";

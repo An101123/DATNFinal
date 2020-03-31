@@ -18,6 +18,7 @@ namespace ScientificResearch.Entities
         [Required]
         public string Name { get; set; }
 
+        [Required]
         public int Score { get; set; }
 
         public virtual ICollection<ScientificWork> ScientificWorks { get; set; }

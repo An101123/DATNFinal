@@ -16,7 +16,6 @@ import {
   AppNavbarBrand,
   AppSidebarToggler
 } from "@coreui/react";
-import sygnet from "../../../assets/img/brand/sygnet.svg";
 
 const propTypes = {
   children: PropTypes.node
@@ -27,7 +26,7 @@ const defaultProps = {};
 class DefaultHeader extends Component {
   render() {
     // eslint-disable-next-line
-    const { children, ...attributes } = this.props;
+    const { children } = this.props;
 
     return (
       <React.Fragment>

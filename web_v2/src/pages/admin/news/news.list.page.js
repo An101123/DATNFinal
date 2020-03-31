@@ -4,10 +4,9 @@ import lodash from "lodash";
 import { getNewsList } from "../../../actions/news.list.action";
 import { pagination } from "../../../constant/app.constant";
 import "../../../pages/admin/select-custom.css";
-import { Row, Card, CardImg, CardBody, CardTitle } from "reactstrap";
+import { Row, CardBody } from "reactstrap";
 import { List } from "antd";
 import "antd/dist/antd.css";
-import { MessageOutlined, LikeOutlined, StarOutlined } from "@ant-design/icons";
 import ReactHtmlParser from "react-html-parser";
 
 class NewsListPage extends Component {
@@ -68,7 +67,6 @@ class NewsListPage extends Component {
   }
 
   render() {
-    const { item } = this.state;
     const { newsPagedList } = this.props.newsPagedListReducer;
     const { sources } = newsPagedList;
     const hasResults =
@@ -108,8 +106,7 @@ class NewsListPage extends Component {
               >
                 <List.Item.Meta
                   // avatar={<Avatar src={item.avatar} />}
-                  title={item.title}
-                  description={item.summary}
+                  title={<a href={item.link}> {item.title} </a>}
                 />
                 {ReactHtmlParser(item.content)}
               </List.Item>

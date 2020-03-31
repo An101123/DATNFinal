@@ -2,21 +2,21 @@
 
 namespace ScientificResearch.Migrations
 {
-    public partial class addfaculty : Migration
+    public partial class CreateDB1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "Faculty",
-                table: "Lecturers",
+                name: "Link",
+                table: "Newss",
                 nullable: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Faculty",
-                table: "Lecturers");
+                name: "Link",
+                table: "Newss");
         }
     }
 }
