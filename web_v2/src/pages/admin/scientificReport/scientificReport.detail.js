@@ -1,35 +1,47 @@
 import React, { Component } from "react";
 import { Row, Col, Button, Table, Label } from "reactstrap";
 import ReactHtmlParser from "react-html-parser";
+import ApiLecturer from "../../../api/api.lecturer";
 
 export default class ScientificReportDetail extends Component {
   constructor(props) {
     super(props);
-    this.state = { item: {} };
+    this.state = { item: {}, lecturers: [] };
   }
 
   backToAdminPage = () => {
     this.props.backToAdminPage();
   };
 
+  getLecturerList = () => {
+    ApiLecturer.getAllLecturer().then(values => {
+      this.setState({ lecturers: values });
+    });
+  };
   componentDidMount() {
     this.setState({ item: this.props.ScientificReport });
+    this.getLecturerList();
   }
 
   render() {
     const { item } = this.state;
-    const hasResult = item !== null;
+    const hasResults = item !== null;
     return (
       <div>
-        <hr />
-        {hasResult && (
+        {hasResults && (
           <div>
             <div>
               {" "}
               <Row>
                 <Col md="10">
                   {" "}
-                  <h5 style={{ marginLeft: "50px", marginBottom: "50px" }}>
+                  <h5
+                    style={{
+                      textTransform: "uppercase",
+                      marginLeft: "50px",
+                      marginBottom: "50px"
+                    }}
+                  >
                     {item.name}
                   </h5>
                 </Col>

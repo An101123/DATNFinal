@@ -126,10 +126,11 @@ class ScientificWorkListPage extends Component {
           </CardBody>
         </Row>
         <hr />
-        {!isShowDetail ? (
-          <div>
-            <h3 style={{ color: "#0473b3" }}> NGHIÊN CỨU KHOA HỌC CẤP ĐHĐN</h3>
 
+        <div>
+          <h3 style={{ color: "#0473b3" }}> NGHIÊN CỨU KHOA HỌC CẤP ĐHĐN</h3>
+          <hr />
+          {!isShowDetail ? (
             <Row className="nckh">
               <Col xs="12">
                 <div className="flex-container header-table">
@@ -201,13 +202,13 @@ class ScientificWorkListPage extends Component {
                 )}
               </Col>
             </Row>
-          </div>
-        ) : (
-          <ScientificWorkDetail
-            ScientificWork={item}
-            backToAdminPage={this.backToAdminPage}
-          />
-        )}
+          ) : (
+            <ScientificWorkDetail
+              ScientificWork={item}
+              backToAdminPage={this.backToAdminPage}
+            />
+          )}
+        </div>
       </div>
     );
   }

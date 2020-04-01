@@ -1,50 +1,64 @@
 import React, { Component } from "react";
 import { Row, Col, Button, Table, Label } from "reactstrap";
 import ReactHtmlParser from "react-html-parser";
+import ApiLecturer from "../../../api/api.lecturer";
 
 export default class ScientificReportDetail extends Component {
   constructor(props) {
     super(props);
-    this.state = { item: {} };
+    this.state = { item: {}, lecturers: [] };
   }
 
   backToAdminPage = () => {
     this.props.backToAdminPage();
   };
 
+  getLecturerList = () => {
+    ApiLecturer.getAllLecturer().then(values => {
+      this.setState({ lecturers: values });
+    });
+  };
   componentDidMount() {
     this.setState({ item: this.props.ScientificReport });
+    this.getLecturerList();
   }
 
   render() {
     const { item } = this.state;
-    const hasResult = item !== null;
+    const hasResults = item !== null;
     return (
       <div>
-        {hasResult && (
+        {hasResults && (
           <div>
-            <Row className="nckh">
-              <Col xs="12">
-                <div className="flex-container header-table">
-                  <Label
-                    className="label label-default"
-                    // style={{ fontWeight: "bold" }}
+            <div>
+              {" "}
+              <Row>
+                <Col md="10">
+                  {" "}
+                  <h5
+                    style={{
+                      textTransform: "uppercase",
+                      marginLeft: "50px",
+                      marginBottom: "50px",
+                      marginTop: "50px"
+                    }}
                   >
-                    {item.name}{" "}
-                  </Label>
+                    {item.name}
+                  </h5>
+                </Col>
+                <Col md="2">
                   <Button
                     className="fa fa-window-close"
-                    style={{ backgroundColor: "white" }}
+                    style={{ float: "right", backgroundColor: "white" }}
                     onClick={this.backToAdminPage}
                   />
-                </div>
-                <Table className="admin-table" responsive bordered>
-                  <tbody>
-                    <td>{ReactHtmlParser(item.content)}</td>
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
+                </Col>
+              </Row>
+            </div>
+
+            <p style={{ marginLeft: "50px", marginRight: "50px" }}>
+              {ReactHtmlParser(item.content)}
+            </p>
           </div>
         )}
       </div>

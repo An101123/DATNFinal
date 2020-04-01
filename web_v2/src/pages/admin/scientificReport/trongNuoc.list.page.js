@@ -121,11 +121,12 @@ class ScientificReportListPage extends Component {
           </CardBody>
         </Row>
         <hr />
-        {!isShowDetail ? (
-          <div>
-            <h3 style={{ color: "#0473b3" }}>
-              BÀI BÁO - BÁO CÁO KHOA HỌC TRONG NƯỚC
-            </h3>
+
+        <div>
+          <h3 style={{ color: "#0473b3" }}>
+            BÀI BÁO - BÁO CÁO KHOA HỌC TRONG NƯỚC
+          </h3>
+          {!isShowDetail ? (
             <Row className="nckh">
               <Col xs="12">
                 <div className="flex-container header-table">
@@ -147,9 +148,8 @@ class ScientificReportListPage extends Component {
                       <th>STT</th>
                       <th>Bài báo - Báo cáo khoa học</th>
                       <th>Thời gian</th>
-
-                      <td>Loại</td>
-                      <td>Giảng viên</td>
+                      <th>Loại</th>
+                      <th>Giảng viên</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -204,13 +204,13 @@ class ScientificReportListPage extends Component {
                 )}
               </Col>
             </Row>
-          </div>
-        ) : (
-          <ScientificReportDetail
-            ScientificReport={item}
-            backToAdminPage={this.backToAdminPage}
-          />
-        )}
+          ) : (
+            <ScientificReportDetail
+              ScientificReport={item}
+              backToAdminPage={this.backToAdminPage}
+            />
+          )}
+        </div>
       </div>
     );
   }

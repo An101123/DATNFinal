@@ -65,6 +65,8 @@ namespace ScientificResearch.Core.Business.Services
             && (string.IsNullOrEmpty(requestListViewModel.Query)
                 || (x.Name.Contains(requestListViewModel.Query)
                 || (x.Content.Equals(requestListViewModel.Query))
+                 || (x.ScientificReportType.Name.Contains(requestListViewModel.Query))
+                || (x.Lecturer.Name.Contains(requestListViewModel.Query))
                 )))
             .Select(x => new ScientificReportViewModel(x)).ToListAsync();
 
