@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import ApiLecturer from "../../../api/api.lecturer";
 import { Row, Col, Button, Table, Label } from "reactstrap";
-
+import ScientificWorkDetail from "../scientificWork/scientificWork.detail";
+import ScientificReportDetail from "../scientificReport/scientificReport.detail";
 class LecturerDetail extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +17,19 @@ class LecturerDetail extends Component {
     this.props.backToAdminPage();
   };
 
+  toggleDetailWorkPage = item => {
+    this.setState(prevState => ({
+      isShowDetailWork: !prevState.isShowDetailWork,
+      item: item
+    }));
+  };
+
+  toggleDetailReportPage = item => {
+    this.setState(prevState => ({
+      isShowDetailReport: !prevState.isShowDetailReport,
+      item: item
+    }));
+  };
   GetScientificWork = async id => {
     let scientificWorks = await ApiLecturer.GetAllScientificWorkByLecturerId(
       id
@@ -37,8 +51,14 @@ class LecturerDetail extends Component {
   }
 
   render() {
-    const { lecturer, scientificWorks, scientificReports } = this.state;
-    console.log(scientificWorks);
+    const {
+      isShowDetailWork,
+      isShowDetailReport,
+      item,
+      lecturer,
+      scientificWorks,
+      scientificReports
+    } = this.state;
 
     return (
       <div>
@@ -59,6 +79,7 @@ class LecturerDetail extends Component {
             />
           </Col>
         </Row>
+
         <Row className="nckh">
           <Col xs="12">
             <div className="flex-container header-table">
@@ -80,7 +101,9 @@ class LecturerDetail extends Component {
                   return (
                     <tr key={item.id}>
                       <td>{index + 1}</td>
-                      <td>{item.name}</td>
+                      <td onClick={() => this.toggleDetailWorkPage(item)}>
+                        {item.name}
+                      </td>
                       <td>{item.level.name}</td>
                     </tr>
                   );
@@ -111,7 +134,9 @@ class LecturerDetail extends Component {
                   return (
                     <tr key={item.id}>
                       <td>{index + 1}</td>
-                      <td>{item.name}</td>
+                      <td onClick={() => this.toggleDetailReportPage(item)}>
+                        {item.name}
+                      </td>
                       <td>{item.scientificReportType.name}</td>
                     </tr>
                   );
