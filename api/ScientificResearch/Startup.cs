@@ -62,6 +62,12 @@ namespace ScientificResearch
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IScientificReportService, ScientificReportService>();
             services.AddScoped<IScientificReportTypeService, ScientificReportTypeService>();
+            services.AddScoped<IBookCategoryService, BookCategoryService>();
+            services.AddScoped<IPublishBookService, PublishBookService>();
+            services.AddScoped<ILevelStudyGuideService, LevelStudyGuideService>();
+            services.AddScoped<IStudyGuideService, StudyGuideService>();
+            services.AddScoped<IOtherScientificWorkService, OtherScientificWorkService>();
+            services.AddScoped<IClassificationOfScientificWorkService, ClassificationOfScientificWorkService>();
 
             //Register Repository
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));

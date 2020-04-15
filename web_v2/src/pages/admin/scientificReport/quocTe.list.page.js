@@ -23,34 +23,34 @@ class ScientificReportListPage extends Component {
       lecturers: [],
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 300);
   }
 
   backToAdminPage = () => {
-    this.setState(prevState => ({
-      isShowDetail: !prevState.isShowDetail
-    }));
-  };
-
-  toggleDetailPage = item => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowDetail: !prevState.isShowDetail,
-      item: item
     }));
   };
 
-  search = e => {
+  toggleDetailPage = (item) => {
+    this.setState((prevState) => ({
+      isShowDetail: !prevState.isShowDetail,
+      item: item,
+    }));
+  };
+
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getScientificReportList();
@@ -58,26 +58,26 @@ class ScientificReportListPage extends Component {
     );
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
   getScientificReportList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     this.props.getScientificReportList(params);
   };
 
   getScientificReportTypeList = () => {
-    ApiScientificReportType.getAllScientificReportType().then(values => {
+    ApiScientificReportType.getAllScientificReportType().then((values) => {
       this.setState({ scientificReportTypes: values });
     });
   };
 
   getLecturerList = () => {
-    ApiLecturer.getAllLecturer().then(values => {
+    ApiLecturer.getAllLecturer().then((values) => {
       this.setState({ lecturers: values });
     });
   };
@@ -91,7 +91,7 @@ class ScientificReportListPage extends Component {
   render() {
     const { isShowDetail, item } = this.state;
     const {
-      scientificReportPagedList
+      scientificReportPagedList,
     } = this.props.scientificReportPagedListReducer;
     const { sources, pageIndex, totalPages } = scientificReportPagedList;
     const hasResults =
@@ -140,8 +140,13 @@ class ScientificReportListPage extends Component {
                   <tbody>
                     {hasResults &&
                       sources
-                        .filter(value => {
-                          if (value.scientificReportType.name === "Quốc tế") {
+                        .filter((value) => {
+                          if (
+                            value.scientificReportType.name === "Tạp chí ISI" ||
+                            value.scientificReportType.name === "Tạp chí SCI" ||
+                            value.scientificReportType.name ===
+                              "Tạp chí quốc tế/Kỷ yếu hội nghị quốc tế có ISSN"
+                          ) {
                             return true;
                           }
                           return false;
@@ -199,10 +204,10 @@ class ScientificReportListPage extends Component {
 }
 
 export default connect(
-  state => ({
-    scientificReportPagedListReducer: state.scientificReportPagedListReducer
+  (state) => ({
+    scientificReportPagedListReducer: state.scientificReportPagedListReducer,
   }),
   {
-    getScientificReportList
+    getScientificReportList,
   }
 )(ScientificReportListPage);

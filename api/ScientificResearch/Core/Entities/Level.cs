@@ -19,7 +19,9 @@ namespace ScientificResearch.Entities
         public string Name { get; set; }
 
         [Required]
-        public int Score { get; set; }
+        public float Score { get; set; }
+
+        public int HoursConverted { get; set; }
 
         public virtual ICollection<ScientificWork> ScientificWorks { get; set; }
     }

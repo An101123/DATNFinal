@@ -6,6 +6,10 @@ import { watchScientificReportTypeListSagasAsync } from "./scientificReportType.
 import { watchLecturerListSagasAsync } from "./lecturer.list.saga";
 import { watchScientificWorkListSagasAsync } from "./scientificWork.list.saga";
 import { watchScientificReportListSagasAsync } from "./scientificReport.list.saga";
+import { watchPublishBookListSagasAsync } from "./publishBook.list.saga";
+import { watchBookCategoryListSagasAsync } from "./bookCategory.list.saga";
+import { watchLevelStudyGuideListSagasAsync } from "./levelStudyGuide.list.saga";
+import { watchStudyGuideListSagasAsync } from "./studyGuide.list.saga";
 import { watchNewsListSagasAsync } from "./news.list.saga";
 
 export default function* sagas() {
@@ -16,7 +20,11 @@ export default function* sagas() {
     fork(watchLecturerListSagasAsync),
     fork(watchScientificWorkListSagasAsync),
     fork(watchScientificReportListSagasAsync),
+    fork(watchPublishBookListSagasAsync),
+    fork(watchBookCategoryListSagasAsync),
+    fork(watchLevelStudyGuideListSagasAsync),
+    fork(watchStudyGuideListSagasAsync),
     fork(watchNewsListSagasAsync),
-    fork(watchProfileSagasAsync)
+    fork(watchProfileSagasAsync),
   ]);
 }

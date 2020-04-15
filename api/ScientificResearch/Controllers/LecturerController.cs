@@ -77,5 +77,17 @@ namespace ScientificResearch.Controllers
             var scientificReports = await _lecturerService.GetScientificReportByLecturerIdAsync(id);
             return Ok(scientificReports);
         }
+        [HttpGet("{id}/publishBooks")]
+        public async Task<IActionResult> GetAllPublishBookByLecturerId(Guid id)
+        {
+            var publishBooks = await _lecturerService.GetPublishBookByLecturerIdAsync(id);
+            return Ok(publishBooks);
+        }
+        [HttpGet("{id}/studyGuides")]
+        public async Task<IActionResult> GetAllStudyGuideByLecturerId(Guid id)
+        {
+            var studyGuides = await _lecturerService.GetStudyGuideByLecturerIdAsync(id);
+            return Ok(studyGuides);
+        }
     }
 }

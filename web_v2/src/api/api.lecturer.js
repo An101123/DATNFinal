@@ -36,4 +36,14 @@ export default class ApiLecturer {
       appConfig.apiUrl + `lecturers/${lecturerId}/scientificReports`
     );
   }
+  static GetAllPublishBookByLecturerId(lecturerId) {
+    return RequestHelper.get(
+      appConfig.apiUrl + `lecturers/${lecturerId}/publishBooks`
+    );
+  }
+  static GetAllStudyGuideByLecturerId(lecturerId) {
+    return RequestHelper.get(
+      appConfig.apiUrl + `lecturers/${lecturerId}/studyGuides`
+    );
+  }
 }

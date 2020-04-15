@@ -10,7 +10,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
 } from "reactstrap";
 import Form from "react-validation/build/form";
 import Datetime from "react-datetime";
@@ -45,51 +45,51 @@ class ScientificWorkListPage extends Component {
       content: null,
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 300);
   }
 
   backToAdminPage = () => {
-    this.setState(prevState => ({
-      isShowDetail: !prevState.isShowDetail
+    this.setState((prevState) => ({
+      isShowDetail: !prevState.isShowDetail,
     }));
   };
 
-  toggleDetailPage = item => {
-    this.setState(prevState => ({
+  toggleDetailPage = (item) => {
+    this.setState((prevState) => ({
       isShowDetail: !prevState.isShowDetail,
-      item: item
+      item: item,
     }));
   };
 
   toggleDeleteModal = () => {
-    this.setState(prevState => ({
-      isShowDeleteModal: !prevState.isShowDeleteModal
+    this.setState((prevState) => ({
+      isShowDeleteModal: !prevState.isShowDeleteModal,
     }));
   };
 
   toggleModalInfo = (item, title) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowInfoModal: !prevState.isShowInfoModal,
       item: item || {},
-      formTitle: title
+      formTitle: title,
     }));
   };
 
   toggleContentModal = (item, title) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowContentModal: !prevState.isShowContentModal,
       content: item.content || null,
-      formTitle: title
+      formTitle: title,
     }));
   };
-  showConfirmDelete = itemId => {
+  showConfirmDelete = (itemId) => {
     this.setState(
       {
-        itemId: itemId
+        itemId: itemId,
       },
       () => this.toggleDeleteModal()
     );
@@ -102,21 +102,21 @@ class ScientificWorkListPage extends Component {
       time: "",
       content: "",
       level: "",
-      lecturer: ""
+      lecturer: "",
     };
     this.toggleModalInfo(scientificWork, title);
   };
 
-  showUpdateModal = item => {
+  showUpdateModal = (item) => {
     let title = "Chỉnh sửa công trình khoa học";
     this.toggleModalInfo(item, title);
   };
-  showContentModal = item => {
+  showContentModal = (item) => {
     let title = item.name;
     this.toggleContentModal(item, title);
   };
 
-  onModelChange = el => {
+  onModelChange = (el) => {
     let inputName = el.target.name;
     let inputValue = el.target.value;
     let item = Object.assign({}, this.state.item);
@@ -125,45 +125,45 @@ class ScientificWorkListPage extends Component {
     console.log(item);
   };
 
-  onTimeChange = el => {
+  onTimeChange = (el) => {
     let inputValue = el._d;
     let item = Object.assign({}, this.state.item);
     item["time"] = inputValue;
     this.setState({ item });
   };
 
-  search = e => {
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getScientificWorkList();
       }
     );
   };
-  onContentChange = e => {
+  onContentChange = (e) => {
     let item = Object.assign({}, this.state.item);
     item.content = e.editor.getData();
     this.setState({ item });
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
+  handlePageClick = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: e.selected + 1
-        }
+          skip: e.selected + 1,
+        },
       },
       () => this.getScientificWorkList()
     );
@@ -171,19 +171,19 @@ class ScientificWorkListPage extends Component {
 
   getScientificWorkList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     this.props.getScientificWorkList(params);
   };
 
   getLevelList = () => {
-    ApiLevel.getAllLevel().then(values => {
+    ApiLevel.getAllLevel().then((values) => {
       this.setState({ levels: values });
     });
   };
 
   getLecturerList = () => {
-    ApiLecturer.getAllLecturer().then(values => {
+    ApiLecturer.getAllLecturer().then((values) => {
       this.setState({ lecturers: values });
     });
   };
@@ -260,10 +260,10 @@ class ScientificWorkListPage extends Component {
       item,
       levels,
       lecturers,
-      content
+      content,
     } = this.state;
     const {
-      scientificWorkPagedList
+      scientificWorkPagedList,
     } = this.props.scientificWorkPagedListReducer;
     const { sources, pageIndex, totalPages } = scientificWorkPagedList;
     const hasResults =
@@ -295,8 +295,8 @@ class ScientificWorkListPage extends Component {
           <div className="modal-wrapper">
             <div className="form-wrapper">
               <Form
-                onSubmit={e => this.onSubmit(e)}
-                ref={c => {
+                onSubmit={(e) => this.onSubmit(e)}
+                ref={(c) => {
                   this.form = c;
                 }}
               >
@@ -315,7 +315,6 @@ class ScientificWorkListPage extends Component {
                   </Col>
                 </Row>
 
-                
                 <Row>
                   <Col>
                     <FormGroup>
@@ -339,12 +338,10 @@ class ScientificWorkListPage extends Component {
                         className="select-custom"
                         defaultValue={
                           item.time
-                            ? moment(item.time)
-                                .add(7, "h")
-                                .format("DD-MM-YYYY")
+                            ? moment(item.time).add(7, "h").format("YYYY")
                             : ""
                         }
-                        dateFormat="DD-MM-YYYY"
+                        dateFormat="YYYY"
                         timeFormat=""
                         onChange={this.onTimeChange}
                       />
@@ -419,7 +416,7 @@ class ScientificWorkListPage extends Component {
                         style={{
                           marginLeft: 20,
                           fontWeight: "bold",
-                          opacity: "0"
+                          opacity: "0",
                         }}
                       >
                         <span className="text-danger">
@@ -489,9 +486,7 @@ class ScientificWorkListPage extends Component {
                             )}
                           </td>
                           <td>
-                            {moment(item.time)
-                              .add(7, "h")
-                              .format("DD-MM-YYYY")}
+                            {moment(item.time).add(7, "h").format("YYYY")}
                           </td>
 
                           <td>{item.level.name}</td>
@@ -541,10 +536,10 @@ class ScientificWorkListPage extends Component {
 }
 
 export default connect(
-  state => ({
-    scientificWorkPagedListReducer: state.scientificWorkPagedListReducer
+  (state) => ({
+    scientificWorkPagedListReducer: state.scientificWorkPagedListReducer,
   }),
   {
-    getScientificWorkList
+    getScientificWorkList,
   }
 )(ScientificWorkListPage);

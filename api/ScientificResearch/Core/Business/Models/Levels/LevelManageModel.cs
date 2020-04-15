@@ -11,11 +11,14 @@ namespace ScientificResearch.Core.Business.Models.Levels
     {
         public string Name { get; set; }
 
-        public int Score { get; set; }
+        public float Score { get; set; }
+        public int HoursConverted { get; set; }
+
         public void GetLevelFromModel(Level level)
         {
             level.Name = Name;
             level.Score = Score;
+            level.HoursConverted = HoursConverted;
         }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

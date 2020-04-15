@@ -26,47 +26,47 @@ class ScientificWorkListPage extends Component {
       scientificWorks: [],
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 300);
   }
 
   backToAdminPage = () => {
-    this.setState(prevState => ({
-      isShowDetail: !prevState.isShowDetail
+    this.setState((prevState) => ({
+      isShowDetail: !prevState.isShowDetail,
     }));
   };
 
-  toggleDetailPage = item => {
-    this.setState(prevState => ({
+  toggleDetailPage = (item) => {
+    this.setState((prevState) => ({
       isShowDetail: !prevState.isShowDetail,
-      item: item
+      item: item,
     }));
   };
   toggleDeleteModal = () => {
-    this.setState(prevState => ({
-      isShowDeleteModal: !prevState.isShowDeleteModal
+    this.setState((prevState) => ({
+      isShowDeleteModal: !prevState.isShowDeleteModal,
     }));
   };
 
   toggleModalInfo = (item, title) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowInfoModal: !prevState.isShowInfoModal,
       item: item || {},
-      formTitle: title
+      formTitle: title,
     }));
   };
 
-  search = e => {
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getScientificWorkList();
@@ -74,18 +74,18 @@ class ScientificWorkListPage extends Component {
     );
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
+  handlePageClick = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: e.selected + 1
-        }
+          skip: e.selected + 1,
+        },
       },
       () => this.getScientificWorkList()
     );
@@ -93,24 +93,24 @@ class ScientificWorkListPage extends Component {
 
   getScientificWorkList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     this.props.getScientificWorkList(params);
   };
 
   getLevelList = () => {
-    ApiLevel.getAllLevel().then(values => {
+    ApiLevel.getAllLevel().then((values) => {
       this.setState({ levels: values });
     });
   };
 
   getLecturerList = () => {
-    ApiLecturer.getAllLecturer().then(values => {
+    ApiLecturer.getAllLecturer().then((values) => {
       this.setState({ lecturers: values });
     });
   };
 
-  getScientificWorksListById = async levelId => {
+  getScientificWorksListById = async (levelId) => {
     var list = await ApiLevel.getScientificWorksByLevel(levelId);
     this.setState({ scientificWorks: list });
   };
@@ -124,7 +124,7 @@ class ScientificWorkListPage extends Component {
   render() {
     const { isShowDetail, item } = this.state;
     const {
-      scientificWorkPagedList
+      scientificWorkPagedList,
     } = this.props.scientificWorkPagedListReducer;
     const { sources, pageIndex, totalPages } = scientificWorkPagedList;
     const hasResults =
@@ -163,7 +163,7 @@ class ScientificWorkListPage extends Component {
                   <thead>
                     <tr>
                       <th>STT</th>
-                      <th>Công trình khoa học</th>
+                      <th>Đề tài NCKH</th>
                       <th>Thời gian</th>
                       <th>Cấp</th>
                       <th>Giảng viên</th>
@@ -225,10 +225,10 @@ class ScientificWorkListPage extends Component {
 }
 
 export default connect(
-  state => ({
-    scientificWorkPagedListReducer: state.scientificWorkPagedListReducer
+  (state) => ({
+    scientificWorkPagedListReducer: state.scientificWorkPagedListReducer,
   }),
   {
-    getScientificWorkList
+    getScientificWorkList,
   }
 )(ScientificWorkListPage);

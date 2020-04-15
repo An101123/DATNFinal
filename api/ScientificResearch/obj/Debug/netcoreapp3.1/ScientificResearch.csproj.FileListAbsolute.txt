@@ -658,7 +658,6 @@ C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\bin\Debug\netcor
 C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\obj\Debug\netcoreapp3.1\ScientificResearch.csprojAssemblyReference.cache
 C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\obj\Debug\netcoreapp3.1\ScientificResearch.csproj.CoreCompileInputs.cache
 C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\obj\Debug\netcoreapp3.1\ScientificResearch.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\obj\Debug\netcoreapp3.1\ScientificResearch.MvcApplicationPartsAssemblyInfo.cache
@@ -671,3 +670,4 @@ C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\obj\Debug\netcor
 C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\obj\Debug\netcoreapp3.1\ScientificResearch.dll
 C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\obj\Debug\netcoreapp3.1\ScientificResearch.pdb
 C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\obj\Debug\netcoreapp3.1\ScientificResearch.genruntimeconfig.cache
+C:\Users\Administrator\Desktop\DATNFinal\api\ScientificResearch\obj\Debug\netcoreapp3.1\ScientificResearch.csprojAssemblyReference.cache

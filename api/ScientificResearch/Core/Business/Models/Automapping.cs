@@ -1,11 +1,18 @@
 ﻿using AutoMapper;
+using ScientificResearch.Core.Business.Models.BookCategorys;
+using ScientificResearch.Core.Business.Models.ClassificationOfScientificWorks;
 using ScientificResearch.Core.Business.Models.Lecturers;
 using ScientificResearch.Core.Business.Models.Levels;
+using ScientificResearch.Core.Business.Models.LevelStudyGuides;
 using ScientificResearch.Core.Business.Models.News_s;
+using ScientificResearch.Core.Business.Models.OtherScientificWorks;
+using ScientificResearch.Core.Business.Models.PublishBooks;
 using ScientificResearch.Core.Business.Models.ScientificReports;
 using ScientificResearch.Core.Business.Models.ScientificReportTypes;
 using ScientificResearch.Core.Business.Models.ScientificWorks;
+using ScientificResearch.Core.Business.Models.StudyGuides;
 using ScientificResearch.Core.Business.Models.Users;
+using ScientificResearch.Core.Entities;
 using ScientificResearch.Entities;
 using System;
 using System.Collections.Generic;
@@ -22,19 +29,29 @@ namespace ScientificResearch.Core.Business.Models
 
             CreateMap<ScientificWorkManageModel, ScientificWork>();
 
+            CreateMap<ScientificReportTypeManageModel, ScientificReportType>();
+
             CreateMap<ScientificReportManageModel, ScientificReport>();
 
             CreateMap<LecturerManageModel, Lecturer>();
-
-            CreateMap<ScientificReportTypeManageModel, ScientificReportType>();
 
             CreateMap<UserManageModel, User>();
 
             CreateMap<NewsManageModel, News>();
 
-            CreateMap<ScientificReportManageModel, ScientificReport>();
+            CreateMap<BookCategoryManageModel, BookCategory>();
 
-            CreateMap<ScientificReportTypeManageModel, ScientificReportType>();
+            CreateMap<PublishBookManageModel, PublishBook>();
+
+            CreateMap<LevelStudyGuideManageModel, LevelStudyGuide>();
+
+            CreateMap<StudyGuideManageModel, StudyGuide>();
+
+            CreateMap<ClassificationOfScientificWorkManageModel, ClassificationOfScientificWork>();
+
+            CreateMap<OtherScientificWorkManageModel, OtherScientificWork>();
+
+            
         }
     }
 }

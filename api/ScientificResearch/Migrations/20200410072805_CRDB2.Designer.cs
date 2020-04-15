@@ -10,8 +10,8 @@ using ScientificResearch.Core.DataAccess;
 namespace ScientificResearch.Migrations
 {
     [DbContext(typeof(ScientificResearchDbContext))]
-    [Migration("20200331034620_CreateDB")]
-    partial class CreateDB
+    [Migration("20200410072805_CRDB2")]
+    partial class CRDB2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,190 @@ namespace ScientificResearch.Migrations
                 .HasAnnotation("ProductVersion", "3.1.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("ScientificResearch.Core.Entities.BookCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HoursConverted")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("RecordActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecordDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RecordOrder")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Score")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BookCategory");
+                });
+
+            modelBuilder.Entity("ScientificResearch.Core.Entities.LevelStudyGuide", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HoursConverted")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("RecordActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecordDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RecordOrder")
+                        .HasColumnType("int");
+
+                    b.Property<float>("Score")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("LevelStudyGuide");
+                });
+
+            modelBuilder.Entity("ScientificResearch.Core.Entities.PublishBook", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BookCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LecturerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlaceOfPublication")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("RecordActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecordDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RecordOrder")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Time")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookCategoryId");
+
+                    b.HasIndex("LecturerId");
+
+                    b.ToTable("PublishBooks");
+                });
+
+            modelBuilder.Entity("ScientificResearch.Core.Entities.StudyGuide", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("GraduationTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("InstructionTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LecturerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LevelStudyGuideId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Literacy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PlaceOfTraining")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("RecordActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("RecordDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("RecordOrder")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LecturerId");
+
+                    b.HasIndex("LevelStudyGuideId");
+
+                    b.ToTable("StudyGuides");
+                });
 
             modelBuilder.Entity("ScientificResearch.Entities.Lecturer", b =>
                 {
@@ -44,6 +228,9 @@ namespace ScientificResearch.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("PublishBookId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("RecordActive")
                         .HasColumnType("bit");
 
@@ -53,14 +240,17 @@ namespace ScientificResearch.Migrations
                     b.Property<int>("RecordOrder")
                         .HasColumnType("int");
 
-                    b.Property<string>("ScientificReportId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("ScientificReportId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ScientificWorkId")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("ScientificWorkId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Total")
-                        .HasColumnType("int");
+                    b.Property<Guid>("StudyGuideId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("Total")
+                        .HasColumnType("real");
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -82,6 +272,9 @@ namespace ScientificResearch.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("HoursConverted")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -95,8 +288,8 @@ namespace ScientificResearch.Migrations
                     b.Property<int>("RecordOrder")
                         .HasColumnType("int");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
+                    b.Property<float>("Score")
+                        .HasColumnType("real");
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -123,6 +316,9 @@ namespace ScientificResearch.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Link")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("RecordActive")
@@ -208,6 +404,9 @@ namespace ScientificResearch.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("HoursConverted")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -221,8 +420,8 @@ namespace ScientificResearch.Migrations
                     b.Property<int>("RecordOrder")
                         .HasColumnType("int");
 
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
+                    b.Property<float>("Score")
+                        .HasColumnType("real");
 
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
@@ -339,6 +538,36 @@ namespace ScientificResearch.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("ScientificResearch.Core.Entities.PublishBook", b =>
+                {
+                    b.HasOne("ScientificResearch.Core.Entities.BookCategory", "BookCategory")
+                        .WithMany("PublishBooks")
+                        .HasForeignKey("BookCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScientificResearch.Entities.Lecturer", "Lecturer")
+                        .WithMany("PublishBooks")
+                        .HasForeignKey("LecturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ScientificResearch.Core.Entities.StudyGuide", b =>
+                {
+                    b.HasOne("ScientificResearch.Entities.Lecturer", "Lecturer")
+                        .WithMany("StudyGuides")
+                        .HasForeignKey("LecturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScientificResearch.Core.Entities.LevelStudyGuide", "LevelStudyGuide")
+                        .WithMany("StudyGuides")
+                        .HasForeignKey("LevelStudyGuideId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ScientificResearch.Entities.ScientificReport", b =>

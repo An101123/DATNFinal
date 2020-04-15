@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using ScientificResearch.Core.Business.Models.Base;
 using ScientificResearch.Core.Business.Models.Lecturers;
+using ScientificResearch.Core.Business.Models.PublishBooks;
 using ScientificResearch.Core.Business.Models.ScientificReports;
 using ScientificResearch.Core.Business.Models.ScientificWorks;
+using ScientificResearch.Core.Business.Models.StudyGuides;
 using ScientificResearch.Core.Business.Reflections;
 using ScientificResearch.Core.Common.Constants;
 using ScientificResearch.Core.DataAccess.Repository.Base;
@@ -26,6 +28,9 @@ namespace ScientificResearch.Core.Business.Services
         Task<ResponseModel> DeleteLecturerAsync(Guid id);
         Task<ResponseModel> GetScientificWorkByLecturerIdAsync(Guid? id);
         Task<ResponseModel> GetScientificReportByLecturerIdAsync(Guid? id);
+        Task<ResponseModel> GetPublishBookByLecturerIdAsync(Guid? id);
+        Task<ResponseModel> GetStudyGuideByLecturerIdAsync(Guid? id);
+
     }
 
     public class LecturerService : ILecturerService
@@ -51,7 +56,7 @@ namespace ScientificResearch.Core.Business.Services
                 .Include(x => x.ScientificReports)
                     .ThenInclude(x => x.ScientificReportType)
                 .Include(x => x.ScientificWorks)
-                    .ThenInclude(x => x.Level);
+                    .ThenInclude(x => x.Level).Include(x => x.PublishBooks).ThenInclude(x=>x.BookCategory).Include(x=>x.StudyGuides).ThenInclude(x=>x.LevelStudyGuide);
         }
 
         private List<string> GetAllPropertyNameOfLecturerViewModel()
@@ -68,7 +73,7 @@ namespace ScientificResearch.Core.Business.Services
             var list = await GetAll().ToListAsync();
             foreach (var lecturer in list)
             {
-                var sum = 0;
+                float sum = 0;
                 if (lecturer.ScientificReports.Count > 0)
                 {
                     foreach (var scientificReport in lecturer.ScientificReports)
@@ -232,5 +237,51 @@ namespace ScientificResearch.Core.Business.Services
                 };
             }
         }
+
+        public async Task<ResponseModel> GetPublishBookByLecturerIdAsync(Guid? id)
+        {
+            var lecturer = await GetAll().FirstAsync(x => x.Id == id);
+            if (lecturer.PublishBooks == null)
+            {
+                return new ResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.NotFound,
+                    Message = "This lecturer has no publishBook"
+                };
+            }
+            else
+            {
+                List<PublishBookViewModel> publishBooks = lecturer.PublishBooks.Select(x => new PublishBookViewModel(x)).ToList();
+                return new ResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.OK,
+                    Data = publishBooks
+                };
+            }
+        }
+        public async Task<ResponseModel> GetStudyGuideByLecturerIdAsync(Guid? id)
+        {
+            var lecturer = await GetAll().FirstAsync(x => x.Id == id);
+            if (lecturer.StudyGuides == null)
+            {
+                return new ResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.NotFound,
+                    Message = "This lecturer has no studyGuide"
+                };
+            }
+            else
+            {
+                List<StudyGuideViewModel> studyGuides = lecturer.StudyGuides.Select(x => new StudyGuideViewModel(x)).ToList();
+                return new ResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.OK,
+                    Data = studyGuides
+                };
+            }
+        }
+
     }
+    
+
 }

@@ -20,6 +20,7 @@ namespace ScientificResearch.Core.Business.Models.ScientificReportTypes
                 Id = scientificReportType.Id;
                 Name = scientificReportType.Name;
                 Score = scientificReportType.Score;
+                HoursConverted = scientificReportType.HoursConverted;
             }
         }
 
@@ -27,6 +28,9 @@ namespace ScientificResearch.Core.Business.Models.ScientificReportTypes
 
         public string Name { get; set; }
 
-        public int Score { get; set; }
+        public float Score { get; set; }
+
+        public int HoursConverted { get; set; }
+
     }
 }

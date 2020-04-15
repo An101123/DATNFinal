@@ -33,13 +33,16 @@ const LevelNhaNuocListPage = React.lazy(() =>
 const LevelBoListPage = React.lazy(() =>
   import("./pages/admin/scientificWork/levelBo.list.page")
 );
-
-const LevelDHDNListPage = React.lazy(() =>
-  import("./pages/admin/scientificWork/levelDHDN.list.page")
+const LevelTinhListPage = React.lazy(() =>
+  import("./pages/admin/scientificWork/levelTinh.list.page")
 );
 
-const LevelTruongListPage = React.lazy(() =>
-  import("./pages/admin/scientificWork/levelTruong.list.page")
+const LevelThanhPhoListPage = React.lazy(() =>
+  import("./pages/admin/scientificWork/levelThanhPho.list.page")
+);
+
+const LevelCoSoListPage = React.lazy(() =>
+  import("./pages/admin/scientificWork/levelCoSo.list.page")
 );
 
 const TrongNuocListPage = React.lazy(() =>
@@ -49,6 +52,33 @@ const TrongNuocListPage = React.lazy(() =>
 const QuocTeListPage = React.lazy(() =>
   import("./pages/admin/scientificReport/quocTe.list.page")
 );
+
+const PublishBookListPage = React.lazy(() =>
+  import("./pages/admin/publishBook/publishBook.list.page")
+);
+const ChuyenKhaoListPage = React.lazy(() =>
+  import("./pages/admin/publishBook/chuyenkhao.list.page")
+);
+const GiaoTrinhListPage = React.lazy(() =>
+  import("./pages/admin/publishBook/giaotrinh.list.page")
+);
+const HuongDanListPage = React.lazy(() =>
+  import("./pages/admin/publishBook/huongdan.list.page")
+);
+const ThamKhaoListPage = React.lazy(() =>
+  import("./pages/admin/publishBook/thamkhao.list.page")
+);
+const TaiBanListPage = React.lazy(() =>
+  import("./pages/admin/publishBook/taiban.list.page")
+);
+
+const CapTruongListPage = React.lazy(() =>
+  import("./pages/admin/studyGuide/capTruong.list.page")
+);
+const CapKhoaListPage = React.lazy(() =>
+  import("./pages/admin/studyGuide/capKhoa.list.page")
+);
+
 const routes = [
   // {
   //   path: "/",
@@ -62,54 +92,98 @@ const routes = [
   {
     path: "/scientificWorks",
     name: "Công trình khoa học",
-    component: ScientificWorkListPage
+    component: ScientificWorkListPage,
   },
   {
     path: "/NCKHCapNhaNuoc",
     name: "Nghiên cứu khoa học cấp Nhà Nước",
-    component: LevelNhaNuocListPage
+    component: LevelNhaNuocListPage,
   },
   {
     path: "/NCKHCapBo",
     name: "Nghiên cứu khoa học cấp Bộ",
-    component: LevelBoListPage
+    component: LevelBoListPage,
   },
   {
-    path: "/NCKHCapDHDN",
-    name: "Nghiên cứu khoa học cấp ĐHĐN",
-    component: LevelDHDNListPage
+    path: "/NCKHCapTinh",
+    name: "Nghiên cứu khoa học cấp Tỉnh",
+    component: LevelTinhListPage,
   },
   {
-    path: "/NCKHCapTruong",
-    name: "Nghiên cứu khoa học cấp Trường",
-    component: LevelTruongListPage
+    path: "/NCKHCapThanhPho",
+    name: "Nghiên cứu khoa học cấp Thành phố",
+    component: LevelThanhPhoListPage,
+  },
+  {
+    path: "/NCKHCapCoSo",
+    name: "Nghiên cứu khoa học cấp Cơ sở",
+    component: LevelCoSoListPage,
   },
   {
     path: "/scientificReportTypes",
     name: "Loại Bài báo - Báo cáo",
-    component: ScientificReportTypeListPage
+    component: ScientificReportTypeListPage,
   },
   {
     path: "/scientificReports",
     name: "Bài báo - Báo cáo",
-    component: ScientificReportListPage
+    component: ScientificReportListPage,
   },
   {
     path: "/BaoCaoKHTrongNuoc",
     name: "Bài báo, báo cáo khoa học trong nước",
-    component: TrongNuocListPage
+    component: TrongNuocListPage,
   },
   {
     path: "/BaoCaoKHQuocTe",
     name: "Bài báo, báo cáo khoa học quốc tế",
-    component: QuocTeListPage
+    component: QuocTeListPage,
   },
-
+  {
+    path: "/publishBooks",
+    name: "Xuất bản sách",
+    component: PublishBookListPage,
+  },
+  {
+    path: "/chuyenkhao",
+    name: "Chuyên khảo",
+    component: ChuyenKhaoListPage,
+  },
+  {
+    path: "/giaotrinh",
+    name: "Giáo trình",
+    component: GiaoTrinhListPage,
+  },
+  {
+    path: "/huongdan",
+    name: "Hướng dẫn",
+    component: HuongDanListPage,
+  },
+  {
+    path: "/thamkhao",
+    name: "Tham khảo",
+    component: ThamKhaoListPage,
+  },
+  {
+    path: "/taiban",
+    name: "Tái bản có chỉnh sửa",
+    component: TaiBanListPage,
+  },
+  {
+    path: "/captruong",
+    name: "Cấp Trường",
+    component: CapTruongListPage,
+  },
+  {
+    path: "/capkhoa",
+    name: "Cấp Khoa",
+    component: CapKhoaListPage,
+  },
   {
     path: "/news",
     name: "Tin tức",
-    component: NewsListPage
-  }
+    component: NewsListPage,
+  },
 ];
 
 export default routes;

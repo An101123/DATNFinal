@@ -8,6 +8,26 @@ namespace ScientificResearch.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "BookCategory",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    RecordOrder = table.Column<int>(nullable: false),
+                    RecordDeleted = table.Column<bool>(nullable: false),
+                    RecordActive = table.Column<bool>(nullable: false),
+                    CreateOn = table.Column<DateTime>(nullable: true),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Score = table.Column<float>(nullable: false),
+                    HoursConverted = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookCategory", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Lecturers",
                 columns: table => new
                 {
@@ -21,9 +41,10 @@ namespace ScientificResearch.Migrations
                     Name = table.Column<string>(nullable: false),
                     Faculty = table.Column<string>(nullable: false),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
-                    ScientificWorkId = table.Column<string>(nullable: true),
-                    ScientificReportId = table.Column<string>(nullable: true),
-                    Total = table.Column<int>(nullable: false)
+                    ScientificWorkId = table.Column<Guid>(nullable: false),
+                    ScientificReportId = table.Column<Guid>(nullable: false),
+                    PublishBookId = table.Column<Guid>(nullable: false),
+                    Total = table.Column<float>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,11 +63,32 @@ namespace ScientificResearch.Migrations
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(nullable: false),
-                    Score = table.Column<int>(nullable: false)
+                    Score = table.Column<float>(nullable: false),
+                    HoursConverted = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Level", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LevelStudyGuide",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    RecordOrder = table.Column<int>(nullable: false),
+                    RecordDeleted = table.Column<bool>(nullable: false),
+                    RecordActive = table.Column<bool>(nullable: false),
+                    CreateOn = table.Column<DateTime>(nullable: true),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Score = table.Column<float>(nullable: false),
+                    HoursConverted = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LevelStudyGuide", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,7 +104,8 @@ namespace ScientificResearch.Migrations
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Title = table.Column<string>(nullable: false),
                     Content = table.Column<string>(nullable: false),
-                    Image = table.Column<string>(nullable: true)
+                    Image = table.Column<string>(nullable: true),
+                    Link = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -81,7 +124,8 @@ namespace ScientificResearch.Migrations
                     UpdatedOn = table.Column<DateTime>(nullable: true),
                     DeletedOn = table.Column<DateTime>(nullable: true),
                     Name = table.Column<string>(nullable: false),
-                    Score = table.Column<int>(nullable: false)
+                    Score = table.Column<float>(nullable: false),
+                    HoursConverted = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,6 +158,40 @@ namespace ScientificResearch.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PublishBooks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    RecordOrder = table.Column<int>(nullable: false),
+                    RecordDeleted = table.Column<bool>(nullable: false),
+                    RecordActive = table.Column<bool>(nullable: false),
+                    CreateOn = table.Column<DateTime>(nullable: true),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Time = table.Column<DateTime>(nullable: false),
+                    PlaceOfPublication = table.Column<string>(nullable: true),
+                    BookCategoryId = table.Column<Guid>(nullable: false),
+                    LecturerId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PublishBooks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PublishBooks_BookCategory_BookCategoryId",
+                        column: x => x.BookCategoryId,
+                        principalTable: "BookCategory",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PublishBooks_Lecturers_LecturerId",
+                        column: x => x.LecturerId,
+                        principalTable: "Lecturers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ScientificWorks",
                 columns: table => new
                 {
@@ -143,6 +221,42 @@ namespace ScientificResearch.Migrations
                         name: "FK_ScientificWorks_Level_LevelId",
                         column: x => x.LevelId,
                         principalTable: "Level",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StudyGuides",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    RecordOrder = table.Column<int>(nullable: false),
+                    RecordDeleted = table.Column<bool>(nullable: false),
+                    RecordActive = table.Column<bool>(nullable: false),
+                    CreateOn = table.Column<DateTime>(nullable: true),
+                    UpdatedOn = table.Column<DateTime>(nullable: true),
+                    DeletedOn = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    Literacy = table.Column<string>(nullable: false),
+                    PlaceOfTraining = table.Column<string>(nullable: false),
+                    InstructionTime = table.Column<DateTime>(nullable: false),
+                    GraduationTime = table.Column<DateTime>(nullable: false),
+                    LevelStudyGuideId = table.Column<Guid>(nullable: false),
+                    LecturerId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudyGuides", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StudyGuides_Lecturers_LecturerId",
+                        column: x => x.LecturerId,
+                        principalTable: "Lecturers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_StudyGuides_LevelStudyGuide_LevelStudyGuideId",
+                        column: x => x.LevelStudyGuideId,
+                        principalTable: "LevelStudyGuide",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -182,6 +296,16 @@ namespace ScientificResearch.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_PublishBooks_BookCategoryId",
+                table: "PublishBooks",
+                column: "BookCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PublishBooks_LecturerId",
+                table: "PublishBooks",
+                column: "LecturerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ScientificReports_LecturerId",
                 table: "ScientificReports",
                 column: "LecturerId");
@@ -200,6 +324,16 @@ namespace ScientificResearch.Migrations
                 name: "IX_ScientificWorks_LevelId",
                 table: "ScientificWorks",
                 column: "LevelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudyGuides_LecturerId",
+                table: "StudyGuides",
+                column: "LecturerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudyGuides_LevelStudyGuideId",
+                table: "StudyGuides",
+                column: "LevelStudyGuideId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -208,22 +342,34 @@ namespace ScientificResearch.Migrations
                 name: "Newss");
 
             migrationBuilder.DropTable(
+                name: "PublishBooks");
+
+            migrationBuilder.DropTable(
                 name: "ScientificReports");
 
             migrationBuilder.DropTable(
                 name: "ScientificWorks");
 
             migrationBuilder.DropTable(
+                name: "StudyGuides");
+
+            migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "BookCategory");
 
             migrationBuilder.DropTable(
                 name: "ScientificReportTypes");
 
             migrationBuilder.DropTable(
+                name: "Level");
+
+            migrationBuilder.DropTable(
                 name: "Lecturers");
 
             migrationBuilder.DropTable(
-                name: "Level");
+                name: "LevelStudyGuide");
         }
     }
 }

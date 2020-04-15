@@ -32,6 +32,6 @@ namespace ScientificResearch.Core.Business.Models.Lecturers
 
         public DateTime DateOfBirth { get; set; }
 
-        public int Total { get; set; }
+        public float Total { get; set; }
     }
 }

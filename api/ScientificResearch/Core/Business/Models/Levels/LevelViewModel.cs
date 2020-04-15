@@ -20,6 +20,7 @@ namespace ScientificResearch.Core.Business.Models.Levels
                 Id = level.Id;
                 Name = level.Name;
                 Score = level.Score;
+                HoursConverted = level.HoursConverted;
             }
         }
 
@@ -27,7 +28,9 @@ namespace ScientificResearch.Core.Business.Models.Levels
 
         public string Name { get; set; }
 
-        public int Score { get; set; }
+        public float Score { get; set; }
+        public int HoursConverted { get; set; }
+
     }
 }
   

@@ -12,6 +12,7 @@ namespace ScientificResearch.Entities
         {
 
         }
+
         [Required]
         public string Name { get; set; }
 

@@ -23,34 +23,34 @@ class ScientificWorkListPage extends Component {
       lecturers: [],
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 300);
   }
 
   backToAdminPage = () => {
-    this.setState(prevState => ({
-      isShowDetail: !prevState.isShowDetail
-    }));
-  };
-
-  toggleDetailPage = item => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowDetail: !prevState.isShowDetail,
-      item: item
     }));
   };
 
-  search = e => {
+  toggleDetailPage = (item) => {
+    this.setState((prevState) => ({
+      isShowDetail: !prevState.isShowDetail,
+      item: item,
+    }));
+  };
+
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getScientificWorkList();
@@ -58,18 +58,18 @@ class ScientificWorkListPage extends Component {
     );
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
+  handlePageClick = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: e.selected + 1
-        }
+          skip: e.selected + 1,
+        },
       },
       () => this.getScientificWorkList()
     );
@@ -77,19 +77,19 @@ class ScientificWorkListPage extends Component {
 
   getScientificWorkList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     this.props.getScientificWorkList(params);
   };
 
   getLevelList = () => {
-    ApiLevel.getAllLevel().then(values => {
+    ApiLevel.getAllLevel().then((values) => {
       this.setState({ levels: values });
     });
   };
 
   getLecturerList = () => {
-    ApiLecturer.getAllLecturer().then(values => {
+    ApiLecturer.getAllLecturer().then((values) => {
       this.setState({ lecturers: values });
     });
   };
@@ -109,7 +109,7 @@ class ScientificWorkListPage extends Component {
   render() {
     const { isShowDetail, item } = this.state;
     const {
-      scientificWorkPagedList
+      scientificWorkPagedList,
     } = this.props.scientificWorkPagedListReducer;
     const { sources, pageIndex, totalPages } = scientificWorkPagedList;
     const hasResults =
@@ -128,13 +128,16 @@ class ScientificWorkListPage extends Component {
         <hr />
 
         <div>
-          <h3 style={{ color: "#0473b3" }}> NGHIÊN CỨU KHOA HỌC CẤP ĐHĐN</h3>
+          <h3 style={{ color: "#0473b3" }}> NGHIÊN CỨU KHOA HỌC CẤP CƠ SỞ</h3>
           <hr />
           {!isShowDetail ? (
             <Row className="nckh">
               <Col xs="12">
                 <div className="flex-container header-table">
-                  <Label className="label label-default"></Label>
+                  <Label
+                    className="label label-default"
+                    // style={{ fontWeight: "bolder" }}
+                  ></Label>
                   <input
                     onChange={this.onSearchChange}
                     className="form-control form-control-sm"
@@ -147,7 +150,6 @@ class ScientificWorkListPage extends Component {
                       <th>STT</th>
                       <th>Công trình khoa học</th>
                       <th>Thời gian</th>
-
                       <th>Cấp</th>
                       <th>Giảng viên</th>
                     </tr>
@@ -155,8 +157,8 @@ class ScientificWorkListPage extends Component {
                   <tbody>
                     {hasResults &&
                       sources
-                        .filter(value => {
-                          if (value.level.name === "ĐHĐN") {
+                        .filter((value) => {
+                          if (value.level.name === "Cơ sở") {
                             return true;
                           }
                           return false;
@@ -215,10 +217,10 @@ class ScientificWorkListPage extends Component {
 }
 
 export default connect(
-  state => ({
-    scientificWorkPagedListReducer: state.scientificWorkPagedListReducer
+  (state) => ({
+    scientificWorkPagedListReducer: state.scientificWorkPagedListReducer,
   }),
   {
-    getScientificWorkList
+    getScientificWorkList,
   }
 )(ScientificWorkListPage);

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScientificResearch.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace ScientificResearch.Entities
     {
         public Lecturer() : base()
         {
-            Total = 0;
+       
         }
 
         [Required]
@@ -22,14 +23,22 @@ namespace ScientificResearch.Entities
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-        public string ScientificWorkId { get; set; }
+        public Guid ScientificWorkId { get; set; }
 
-        public string ScientificReportId { get; set; }
+        public Guid ScientificReportId { get; set; }
+
+        public Guid PublishBookId { get; set; }
+
+        public Guid StudyGuideId { get; set; }
 
         [Required]
-        public int Total { get; set; }
+        public float Total { get; set; }
         public virtual ICollection<ScientificWork> ScientificWorks { get; set; }
 
         public virtual ICollection<ScientificReport> ScientificReports { get; set; }
+
+        public virtual ICollection<PublishBook> PublishBooks { get; set; }
+
+        public virtual ICollection<StudyGuide> StudyGuides { get; set; }
     }
 }

@@ -6,6 +6,10 @@ import { scientificReportTypeListReducer } from "./scientificReportType.list.red
 import { lecturerListReducer } from "./lecturer.list.reducer";
 import { scientificWorkListReducer } from "./scientificWork.list.reducer";
 import { scientificReportListReducer } from "./scientificReport.list.reducer";
+import { publishBookListReducer } from "./publishBook.list.reducer";
+import { bookCategoryListReducer } from "./bookCategory.list.reducer";
+import { levelStudyGuideListReducer } from "./levelStudyGuide.list.reducer";
+import { studyGuideListReducer } from "./studyGuide.list.reducer";
 import { newsListReducer } from "./news.list.reducer";
 
 export default combineReducers({
@@ -16,5 +20,10 @@ export default combineReducers({
   lecturerPagedListReducer: lecturerListReducer,
   scientificWorkPagedListReducer: scientificWorkListReducer,
   scientificReportPagedListReducer: scientificReportListReducer,
-  newsPagedListReducer: newsListReducer
+  publishBookPagedListReducer: publishBookListReducer,
+  bookCategoryPagedListReducer: bookCategoryListReducer,
+  levelStudyGuidePagedListReducer: levelStudyGuideListReducer,
+  studyGuidePagedListReducer: studyGuideListReducer,
+
+  newsPagedListReducer: newsListReducer,
 });

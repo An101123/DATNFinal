@@ -23,51 +23,52 @@ class ScientificReportTypeListPage extends Component {
       itemId: null,
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 1000);
   }
 
   toggleDeleteModal = () => {
-    this.setState(prevState => ({
-      isShowDeleteModal: !prevState.isShowDeleteModal
+    this.setState((prevState) => ({
+      isShowDeleteModal: !prevState.isShowDeleteModal,
     }));
   };
 
   toggleModalInfo = (item, title) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowInfoModal: !prevState.isShowInfoModal,
       item: item || {},
-      formTitle: title
+      formTitle: title,
     }));
   };
 
-  showConfirmDelete = itemId => {
+  showConfirmDelete = (itemId) => {
     this.setState(
       {
-        itemId: itemId
+        itemId: itemId,
       },
       () => this.toggleDeleteModal()
     );
   };
 
   showAddNew = () => {
-    let title = "Tạo cấp công trình khoa học";
+    let title = "Tạo loại bài báo, báo cáo khoa học";
     let scientificReportType = {
       name: "",
-      score: ""
+      score: "",
+      hoursConverted: "",
     };
     this.toggleModalInfo(scientificReportType, title);
   };
 
-  showUpdateModal = item => {
+  showUpdateModal = (item) => {
     let title = "Chỉnh sửa loại bài báo, báo cáo khoa học";
     this.toggleModalInfo(item, title);
   };
 
-  onModelChange = el => {
+  onModelChange = (el) => {
     let inputName = el.target.name;
     let inputValue = el.target.value;
     let item = Object.assign({}, this.state.item);
@@ -75,14 +76,14 @@ class ScientificReportTypeListPage extends Component {
     this.setState({ item });
   };
 
-  search = e => {
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getScientificReportTypeList();
@@ -90,18 +91,18 @@ class ScientificReportTypeListPage extends Component {
     );
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
+  handlePageClick = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: e.selected + 1
-        }
+          skip: e.selected + 1,
+        },
       },
       () => this.getScientificReportTypeList()
     );
@@ -109,7 +110,7 @@ class ScientificReportTypeListPage extends Component {
 
   getScientificReportTypeList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     this.props.getScientificReportTypeList(params);
   };
@@ -117,8 +118,8 @@ class ScientificReportTypeListPage extends Component {
   addScientificReportType = async () => {
     console.log("state ==================");
     console.log(this.state);
-    const { name, score } = this.state.item;
-    const scientificReportType = { name, score };
+    const { name, score, hoursConverted } = this.state.item;
+    const scientificReportType = { name, score, hoursConverted };
     try {
       await ApiScientificReportType.postScientificReportType(
         scientificReportType
@@ -132,8 +133,8 @@ class ScientificReportTypeListPage extends Component {
   };
 
   updateScientificReportType = async () => {
-    const { id, name, score } = this.state.item;
-    const scientificReportType = { id, name, score };
+    const { id, name, score, hoursConverted } = this.state.item;
+    const scientificReportType = { id, name, score, hoursConverted };
     try {
       await ApiScientificReportType.updateScientificReportType(
         scientificReportType
@@ -181,7 +182,7 @@ class ScientificReportTypeListPage extends Component {
   render() {
     const { isShowDeleteModal, isShowInfoModal, item } = this.state;
     const {
-      scientificReportTypePagedList
+      scientificReportTypePagedList,
     } = this.props.scientificReportTypePagedListReducer;
     const { sources, pageIndex, totalPages } = scientificReportTypePagedList;
     console.log(sources);
@@ -204,8 +205,8 @@ class ScientificReportTypeListPage extends Component {
           <div className="modal-wrapper">
             <div className="form-wrapper">
               <Form
-                onSubmit={e => this.onSubmit(e)}
-                ref={c => {
+                onSubmit={(e) => this.onSubmit(e)}
+                ref={(c) => {
                   this.form = c;
                 }}
               >
@@ -214,7 +215,7 @@ class ScientificReportTypeListPage extends Component {
                     <FormGroup>
                       <ValidationInput
                         name="name"
-                        title="Tên loại bài báo, báo cáo khoa học"
+                        title="Thể loại"
                         type="text"
                         required={true}
                         value={item.name}
@@ -229,10 +230,25 @@ class ScientificReportTypeListPage extends Component {
                     <FormGroup>
                       <ValidationInput
                         name="score"
-                        title="Điểm"
+                        title="Số điểm quy đổi"
                         type="number"
                         required={true}
                         value={item.score}
+                        onChange={this.onModelChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <ValidationInput
+                        name="hoursConverted"
+                        title="Số giờ quy đổi"
+                        type="number"
+                        required={true}
+                        value={item.hoursConverted}
                         onChange={this.onModelChange}
                       />
                     </FormGroup>
@@ -271,8 +287,9 @@ class ScientificReportTypeListPage extends Component {
               <thead>
                 <tr>
                   <th>STT</th>
-                  <th>Tên cấp</th>
-                  <th>Điểm</th>
+                  <th>Thể loại</th>
+                  <th>Số điểm quy đổi</th>
+                  <th>Số giờ quy đổi</th>
                   <th>Thao tác</th>
                 </tr>
               </thead>
@@ -284,6 +301,7 @@ class ScientificReportTypeListPage extends Component {
                         <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>{item.score}</td>
+                        <td>{item.hoursConverted}</td>
                         <td>
                           <Button
                             className="btn-sm"
@@ -322,11 +340,11 @@ class ScientificReportTypeListPage extends Component {
 }
 
 export default connect(
-  state => ({
+  (state) => ({
     scientificReportTypePagedListReducer:
-      state.scientificReportTypePagedListReducer
+      state.scientificReportTypePagedListReducer,
   }),
   {
-    getScientificReportTypeList
+    getScientificReportTypeList,
   }
 )(ScientificReportTypeListPage);

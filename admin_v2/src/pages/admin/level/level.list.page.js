@@ -23,31 +23,31 @@ class LevelListPage extends Component {
       itemId: null,
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 1000);
   }
 
   toggleDeleteModal = () => {
-    this.setState(prevState => ({
-      isShowDeleteModal: !prevState.isShowDeleteModal
+    this.setState((prevState) => ({
+      isShowDeleteModal: !prevState.isShowDeleteModal,
     }));
   };
 
   toggleModalInfo = (item, title) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowInfoModal: !prevState.isShowInfoModal,
       item: item || {},
-      formTitle: title
+      formTitle: title,
     }));
   };
 
-  showConfirmDelete = itemId => {
+  showConfirmDelete = (itemId) => {
     this.setState(
       {
-        itemId: itemId
+        itemId: itemId,
       },
       () => this.toggleDeleteModal()
     );
@@ -57,17 +57,18 @@ class LevelListPage extends Component {
     let title = "Tạo cấp công trình khoa học";
     let level = {
       name: "",
-      score: ""
+      score: "",
+      hoursConverted: "",
     };
     this.toggleModalInfo(level, title);
   };
 
-  showUpdateModal = item => {
+  showUpdateModal = (item) => {
     let title = "Chỉnh sửa cấp công trình khoa học";
     this.toggleModalInfo(item, title);
   };
 
-  onModelChange = el => {
+  onModelChange = (el) => {
     let inputName = el.target.name;
     let inputValue = el.target.value;
     let item = Object.assign({}, this.state.item);
@@ -75,14 +76,14 @@ class LevelListPage extends Component {
     this.setState({ item });
   };
 
-  search = e => {
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getLevelList();
@@ -90,18 +91,18 @@ class LevelListPage extends Component {
     );
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
+  handlePageClick = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: e.selected + 1
-        }
+          skip: e.selected + 1,
+        },
       },
       () => this.getLevelList()
     );
@@ -109,16 +110,14 @@ class LevelListPage extends Component {
 
   getLevelList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     this.props.getLevelList(params);
   };
 
   addLevel = async () => {
-    console.log("state ==================");
-    console.log(this.state);
-    const { name, score } = this.state.item;
-    const level = { name, score };
+    const { name, score, hoursConverted } = this.state.item;
+    const level = { name, score, hoursConverted };
     try {
       await ApiLevel.postLevel(level);
       this.toggleModalInfo();
@@ -130,8 +129,8 @@ class LevelListPage extends Component {
   };
 
   updateLevel = async () => {
-    const { id, name, score } = this.state.item;
-    const level = { id, name, score };
+    const { id, name, score, hoursConverted } = this.state.item;
+    const level = { id, name, score, hoursConverted };
     try {
       await ApiLevel.updateLevel(level);
       this.toggleModalInfo();
@@ -176,7 +175,6 @@ class LevelListPage extends Component {
     const { isShowDeleteModal, isShowInfoModal, item } = this.state;
     const { levelPagedList } = this.props.levelPagedListReducer;
     const { sources, pageIndex, totalPages } = levelPagedList;
-    console.log(sources);
     const hasResults =
       levelPagedList.sources && levelPagedList.sources.length > 0;
     return (
@@ -195,8 +193,8 @@ class LevelListPage extends Component {
           <div className="modal-wrapper">
             <div className="form-wrapper">
               <Form
-                onSubmit={e => this.onSubmit(e)}
-                ref={c => {
+                onSubmit={(e) => this.onSubmit(e)}
+                ref={(c) => {
                   this.form = c;
                 }}
               >
@@ -220,10 +218,25 @@ class LevelListPage extends Component {
                     <FormGroup>
                       <ValidationInput
                         name="score"
-                        title="Điểm"
+                        title="Số điểm quy đổi"
                         type="number"
                         required={true}
                         value={item.score}
+                        onChange={this.onModelChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <ValidationInput
+                        name="hoursConverted"
+                        title="Số giờ quy đổi"
+                        type="number"
+                        required={true}
+                        value={item.hoursConverted}
                         onChange={this.onModelChange}
                       />
                     </FormGroup>
@@ -263,7 +276,8 @@ class LevelListPage extends Component {
                 <tr>
                   <th>STT</th>
                   <th>Tên cấp</th>
-                  <th>Điểm</th>
+                  <th>Số điểm quy đổi</th>
+                  <th>Số giờ chuyển đổi</th>
                   <th>Thao tác</th>
                 </tr>
               </thead>
@@ -275,6 +289,7 @@ class LevelListPage extends Component {
                         <td>{index + 1}</td>
                         <td>{item.name}</td>
                         <td>{item.score}</td>
+                        <td>{item.hoursConverted}</td>
                         <td>
                           <Button
                             className="btn-sm"
@@ -313,10 +328,10 @@ class LevelListPage extends Component {
 }
 
 export default connect(
-  state => ({
-    levelPagedListReducer: state.levelPagedListReducer
+  (state) => ({
+    levelPagedListReducer: state.levelPagedListReducer,
   }),
   {
-    getLevelList
+    getLevelList,
   }
 )(LevelListPage);

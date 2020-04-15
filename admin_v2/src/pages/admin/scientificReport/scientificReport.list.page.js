@@ -10,7 +10,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
-  ModalFooter
+  ModalFooter,
 } from "reactstrap";
 import Form from "react-validation/build/form";
 import Datetime from "react-datetime";
@@ -45,52 +45,52 @@ class ScientificReportListPage extends Component {
       content: null,
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 300);
   }
 
   backToAdminPage = () => {
-    this.setState(prevState => ({
-      isShowDetail: !prevState.isShowDetail
+    this.setState((prevState) => ({
+      isShowDetail: !prevState.isShowDetail,
     }));
   };
 
-  toggleDetailPage = item => {
-    this.setState(prevState => ({
+  toggleDetailPage = (item) => {
+    this.setState((prevState) => ({
       isShowDetail: !prevState.isShowDetail,
-      item: item
+      item: item,
     }));
   };
 
   toggleDeleteModal = () => {
-    this.setState(prevState => ({
-      isShowDeleteModal: !prevState.isShowDeleteModal
+    this.setState((prevState) => ({
+      isShowDeleteModal: !prevState.isShowDeleteModal,
     }));
   };
 
   toggleModalInfo = (item, title) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowInfoModal: !prevState.isShowInfoModal,
       item: item || {},
-      formTitle: title
+      formTitle: title,
     }));
   };
 
   toggleContentModal = (item, title) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowContentModal: !prevState.isShowContentModal,
       content: item.content || null,
-      formTitle: title
+      formTitle: title,
     }));
   };
 
-  showConfirmDelete = itemId => {
+  showConfirmDelete = (itemId) => {
     this.setState(
       {
-        itemId: itemId
+        itemId: itemId,
       },
       () => this.toggleDeleteModal()
     );
@@ -103,22 +103,22 @@ class ScientificReportListPage extends Component {
       time: "",
       content: "",
       scientificReportType: "",
-      lecturer: ""
+      lecturer: "",
     };
     this.toggleModalInfo(scientificReport, title);
   };
 
-  showUpdateModal = item => {
+  showUpdateModal = (item) => {
     let title = "Chỉnh sửa bài báo, báo cáo khoa học";
     this.toggleModalInfo(item, title);
   };
 
-  showContentModal = item => {
+  showContentModal = (item) => {
     let title = item.name;
     this.toggleContentModal(item, title);
   };
 
-  onModelChange = el => {
+  onModelChange = (el) => {
     let inputName = el.target.name;
     let inputValue = el.target.value;
     let item = Object.assign({}, this.state.item);
@@ -126,21 +126,21 @@ class ScientificReportListPage extends Component {
     this.setState({ item });
   };
 
-  onTimeChange = el => {
+  onTimeChange = (el) => {
     let inputValue = el._d;
     let item = Object.assign({}, this.state.item);
     item["time"] = inputValue;
     this.setState({ item });
   };
 
-  search = e => {
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getScientificReportList();
@@ -148,24 +148,24 @@ class ScientificReportListPage extends Component {
     );
   };
 
-  onContentChange = e => {
+  onContentChange = (e) => {
     let item = Object.assign({}, this.state.item);
     item.content = e.editor.getData();
     this.setState({ item });
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
+  handlePageClick = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: e.selected + 1
-        }
+          skip: e.selected + 1,
+        },
       },
       () => this.getScientificReportList()
     );
@@ -173,19 +173,19 @@ class ScientificReportListPage extends Component {
 
   getScientificReportList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     this.props.getScientificReportList(params);
   };
 
   getScientificReportTypeList = () => {
-    ApiScientificReportType.getAllScientificReportType().then(values => {
+    ApiScientificReportType.getAllScientificReportType().then((values) => {
       this.setState({ scientificReportTypes: values });
     });
   };
 
   getLecturerList = () => {
-    ApiLecturer.getAllLecturer().then(values => {
+    ApiLecturer.getAllLecturer().then((values) => {
       this.setState({ lecturers: values });
     });
   };
@@ -198,14 +198,14 @@ class ScientificReportListPage extends Component {
       time,
       content,
       scientificReportTypeId,
-      lecturerId
+      lecturerId,
     } = this.state.item;
     const scientificReport = {
       name,
       time,
       content,
       scientificReportTypeId,
-      lecturerId
+      lecturerId,
     };
     try {
       await ApiScientificReport.postScientificReport(scientificReport);
@@ -227,7 +227,7 @@ class ScientificReportListPage extends Component {
       time,
       content,
       scientificReportTypeId,
-      lecturerId
+      lecturerId,
     };
     if (
       !scientificReportTypeId ||
@@ -290,10 +290,10 @@ class ScientificReportListPage extends Component {
       item,
       scientificReportTypes,
       lecturers,
-      content
+      content,
     } = this.state;
     const {
-      scientificReportPagedList
+      scientificReportPagedList,
     } = this.props.scientificReportPagedListReducer;
     const { sources, pageIndex, totalPages } = scientificReportPagedList;
     const hasResults =
@@ -326,8 +326,8 @@ class ScientificReportListPage extends Component {
           <div className="modal-wrapper">
             <div className="form-wrapper">
               <Form
-                onSubmit={e => this.onSubmit(e)}
-                ref={c => {
+                onSubmit={(e) => this.onSubmit(e)}
+                ref={(c) => {
                   this.form = c;
                 }}
               >
@@ -369,12 +369,10 @@ class ScientificReportListPage extends Component {
                         className="select-custom"
                         defaultValue={
                           item.time
-                            ? moment(item.time)
-                                .add(7, "h")
-                                .format("DD-MM-YYYY")
+                            ? moment(item.time).add(7, "h").format("YYYY")
                             : ""
                         }
-                        dateFormat="DD-MM-YYYY"
+                        dateFormat="YYYY"
                         timeFormat=""
                         onChange={this.onTimeChange}
                       />
@@ -418,7 +416,7 @@ class ScientificReportListPage extends Component {
                         style={{
                           marginLeft: 20,
                           fontWeight: "bold",
-                          opacity: "0"
+                          opacity: "0",
                         }}
                       >
                         <span className="text-danger">
@@ -457,7 +455,7 @@ class ScientificReportListPage extends Component {
                         style={{
                           marginLeft: 20,
                           fontWeight: "bold",
-                          opacity: "0"
+                          opacity: "0",
                         }}
                       >
                         <span className="text-danger">
@@ -528,9 +526,7 @@ class ScientificReportListPage extends Component {
                             )}
                           </td>
                           <td>
-                            {moment(item.time)
-                              .add(7, "h")
-                              .format("DD-MM-YYYY")}
+                            {moment(item.time).add(7, "h").format("YYYY")}
                           </td>
                           {/* <td>
                           {item.content.length > 50 ? (
@@ -589,10 +585,10 @@ class ScientificReportListPage extends Component {
 }
 
 export default connect(
-  state => ({
-    scientificReportPagedListReducer: state.scientificReportPagedListReducer
+  (state) => ({
+    scientificReportPagedListReducer: state.scientificReportPagedListReducer,
   }),
   {
-    getScientificReportList
+    getScientificReportList,
   }
 )(ScientificReportListPage);
