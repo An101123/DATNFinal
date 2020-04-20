@@ -12,7 +12,7 @@ using ScientificResearch.Core.Business.Services;
 
 namespace ScientificResearch.Controllers
 {
-    [Route("api/classificationOfOtherScientificWorks")]
+    [Route("api/classificationOfScientificWorks")]
     [ValidateModel]
     public class ClassificationOfScientificWorkController : ControllerBase
     {

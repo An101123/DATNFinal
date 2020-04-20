@@ -103,7 +103,7 @@ export default {
     {
       name: "Hướng dẫn sinh viên NCKH",
       icon: "fa fa-balance-scale",
-      url: "/studyGuides",
+      url: "/otherScientificWorks",
       children: [
         {
           name: "Cấp Trường",
@@ -113,6 +113,23 @@ export default {
         {
           name: "Cấp Khoa",
           url: "/capkhoa",
+          icon: "fa fa-angle-right",
+        },
+      ],
+    },
+    {
+      name: "CTKH khác",
+      icon: "fa fa-balance-scale",
+      url: "/studyGuides",
+      children: [
+        {
+          name: "Bằng sáng chế",
+          url: "/bangsangche",
+          icon: "fa fa-angle-right",
+        },
+        {
+          name: "BCKH bộ môn, khoa",
+          url: "/bckhbomon",
           icon: "fa fa-angle-right",
         },
       ],

@@ -80,6 +80,23 @@ export default {
       ],
     },
     {
+      name: "CTKH khác",
+      icon: "fa fa-pie-chart",
+      children: [
+        {
+          name: "CTKH khác",
+          url: "/otherScientificWorks",
+          icon: "fa fa-angle-right",
+        },
+        {
+          name: "Phân cấp",
+          url: "/classificationOfScientificWorks",
+          icon: "fa fa-angle-right",
+        },
+      ],
+    },
+
+    {
       name: "Giảng viên",
       url: "/lecturers",
       icon: "fa fa-address-book",

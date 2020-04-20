@@ -78,7 +78,12 @@ const CapTruongListPage = React.lazy(() =>
 const CapKhoaListPage = React.lazy(() =>
   import("./pages/admin/studyGuide/capKhoa.list.page")
 );
-
+const BangSangCheListPage = React.lazy(() =>
+  import("./pages/admin/otherScientificWork/bangsangche.list.page")
+);
+const BCKHBoMonListPage = React.lazy(() =>
+  import("./pages/admin/otherScientificWork/bckhKhoa.list.page")
+);
 const routes = [
   // {
   //   path: "/",
@@ -178,6 +183,16 @@ const routes = [
     path: "/capkhoa",
     name: "Cấp Khoa",
     component: CapKhoaListPage,
+  },
+  {
+    path: "/bangsangche",
+    name: "Bằng sáng chế",
+    component: BangSangCheListPage,
+  },
+  {
+    path: "/bckhbomon",
+    name: "BCKH tại bộ môn",
+    component: BCKHBoMonListPage,
   },
   {
     path: "/news",

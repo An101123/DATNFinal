@@ -30,9 +30,11 @@ namespace ScientificResearch.Entities
         public Guid PublishBookId { get; set; }
 
         public Guid StudyGuideId { get; set; }
+        public Guid OtherScientificWorkId { get; set; }
 
         [Required]
         public float Total { get; set; }
+        public int TotalHour { get; set; }
         public virtual ICollection<ScientificWork> ScientificWorks { get; set; }
 
         public virtual ICollection<ScientificReport> ScientificReports { get; set; }
@@ -40,5 +42,6 @@ namespace ScientificResearch.Entities
         public virtual ICollection<PublishBook> PublishBooks { get; set; }
 
         public virtual ICollection<StudyGuide> StudyGuides { get; set; }
+        public virtual ICollection<OtherScientificWork> OtherScientificWorks { get; set; }
     }
 }

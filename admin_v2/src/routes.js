@@ -30,6 +30,15 @@ const LevelStudyGuideListPage = React.lazy(() =>
 const StudyGuideListPage = React.lazy(() =>
   import("./pages/admin/studyGuide/studyGuide.list.page")
 );
+const OtherScientificWorkListPage = React.lazy(() =>
+  import("./pages/admin/otherScientificWork/otherScientificWork.list.page")
+);
+
+const ClassificationOfScientificWorkListPage = React.lazy(() =>
+  import(
+    "./pages/admin/classificationScientificWork/classificationScientificWork.list.page"
+  )
+);
 
 const LecturerListPage = React.lazy(() =>
   import("./pages/admin/lecturer/lecturer.list.page")
@@ -86,6 +95,17 @@ const routes = [
     name: "Hướng dẫn sinh viên ",
     component: StudyGuideListPage,
   },
+  {
+    path: "/otherScientificWorks",
+    name: "CTKH khác",
+    component: OtherScientificWorkListPage,
+  },
+  {
+    path: "/classificationOfScientificWorks",
+    name: "Phân loại",
+    component: ClassificationOfScientificWorkListPage,
+  },
+
   { path: "/lecturers", name: "Giảng viên", component: LecturerListPage },
   {
     path: "/news",

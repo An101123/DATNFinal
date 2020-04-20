@@ -12,6 +12,7 @@ class LecturerDetail extends Component {
       scientificReports: [],
       publishBooks: [],
       studyGuides: [],
+      otherScientificWorks: [],
     };
   }
 
@@ -55,6 +56,12 @@ class LecturerDetail extends Component {
     let studyGuides = await ApiLecturer.GetAllStudyGuideByLecturerId(id);
     this.setState({ studyGuides: studyGuides.data });
   };
+  GetOtherScientificWork = async (id) => {
+    let otherScientificWorks = await ApiLecturer.GetAllOtherScientificWorkByLecturerId(
+      id
+    );
+    this.setState({ otherScientificWorks: otherScientificWorks.data });
+  };
 
   componentDidMount() {
     this.setState({ lecturer: this.props.lecturer });
@@ -62,18 +69,17 @@ class LecturerDetail extends Component {
     this.GetScientificReport(this.props.lecturer.id);
     this.GetPublishBook(this.props.lecturer.id);
     this.GetStudyGuide(this.props.lecturer.id);
+    this.GetOtherScientificWork(this.props.lecturer.id);
   }
 
   render() {
     const {
-      isShowDetailWork,
-      isShowDetailReport,
-      item,
       lecturer,
       scientificWorks,
       scientificReports,
       publishBooks,
       studyGuides,
+      otherScientificWorks,
     } = this.state;
 
     return (
@@ -81,10 +87,7 @@ class LecturerDetail extends Component {
         <Row>
           <Col md="10">
             {" "}
-            <h4 style={{ textDecoration: "underline", color: "#0473b3" }}>
-              {" "}
-              Giảng viên: {lecturer.name}
-            </h4>
+            <h4 style={{ color: "#0473b3" }}> Giảng viên: {lecturer.name}</h4>
           </Col>
 
           <Col md="2">
@@ -219,6 +222,79 @@ class LecturerDetail extends Component {
                     </tr>
                   );
                 })}
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+        <Row className="hdsv">
+          <Col xs="12">
+            <div className="flex-container header-table">
+              <Label className="label label-default"> BẰNG SÁNG CHẾ</Label>
+            </div>
+            <Table className="admin-table" responsive bordered>
+              <thead>
+                <tr>
+                  <th style={{ width: "50px" }}>STT</th>
+                  <th>Bằng sáng chế</th>
+                </tr>
+              </thead>
+              <tbody>
+                {otherScientificWorks
+                  .filter((value) => {
+                    if (
+                      value.classificationOfScientificWork.name ===
+                      "Bằng sáng chế"
+                    ) {
+                      return true;
+                    }
+                    return false;
+                  })
+                  .map((item, index) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>{index + 1}</td>
+                        <td>{item.name}</td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </Table>
+          </Col>
+        </Row>
+        <Row className="hdsv">
+          <Col xs="12">
+            <div className="flex-container header-table">
+              <Label className="label label-default">
+                {" "}
+                BÁO CÁO KHOA HỌC TẠI BỘ MÔN, KHOA
+              </Label>
+            </div>
+            <Table className="admin-table" responsive bordered>
+              <thead>
+                <tr>
+                  <th style={{ width: "50px" }}>STT</th>
+                  <th>Báo cáo khoa học</th>
+                </tr>
+              </thead>
+              <tbody>
+                {otherScientificWorks
+                  .filter((value) => {
+                    if (
+                      value.classificationOfScientificWork.name ===
+                      "Báo cáo khoa học tại bộ môn, khoa"
+                    ) {
+                      return true;
+                    }
+                    return false;
+                  })
+                  .map((item, index) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>{index + 1}</td>
+                        <td> {item.name}</td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </Table>
           </Col>

@@ -10,6 +10,8 @@ import { publishBookListReducer } from "./publishBook.list.reducer";
 import { bookCategoryListReducer } from "./bookCategory.list.reducer";
 import { levelStudyGuideListReducer } from "./levelStudyGuide.list.reducer";
 import { studyGuideListReducer } from "./studyGuide.list.reducer";
+import { classificationOfScientificWorkListReducer } from "./classificationOfScientificWork.list.reducer";
+import { otherScientificWorkListReducer } from "./otherScientificWork.list.reducer";
 import { newsListReducer } from "./news.list.reducer";
 
 export default combineReducers({
@@ -24,6 +26,7 @@ export default combineReducers({
   bookCategoryPagedListReducer: bookCategoryListReducer,
   levelStudyGuidePagedListReducer: levelStudyGuideListReducer,
   studyGuidePagedListReducer: studyGuideListReducer,
-
+  classificationOfScientificWorkPagedListReducer: classificationOfScientificWorkListReducer,
+  otherScientificWorkPagedListReducer: otherScientificWorkListReducer,
   newsPagedListReducer: newsListReducer,
 });

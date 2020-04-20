@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ScientificResearch.Core.Business.Models.Base;
 using ScientificResearch.Core.Business.Models.Lecturers;
+using ScientificResearch.Core.Business.Models.OtherScientificWorks;
 using ScientificResearch.Core.Business.Models.PublishBooks;
 using ScientificResearch.Core.Business.Models.ScientificReports;
 using ScientificResearch.Core.Business.Models.ScientificWorks;
@@ -30,6 +31,7 @@ namespace ScientificResearch.Core.Business.Services
         Task<ResponseModel> GetScientificReportByLecturerIdAsync(Guid? id);
         Task<ResponseModel> GetPublishBookByLecturerIdAsync(Guid? id);
         Task<ResponseModel> GetStudyGuideByLecturerIdAsync(Guid? id);
+        Task<ResponseModel> GetOtherScientificWorkByLecturerIdAsync(Guid? id);
 
     }
 
@@ -56,7 +58,10 @@ namespace ScientificResearch.Core.Business.Services
                 .Include(x => x.ScientificReports)
                     .ThenInclude(x => x.ScientificReportType)
                 .Include(x => x.ScientificWorks)
-                    .ThenInclude(x => x.Level).Include(x => x.PublishBooks).ThenInclude(x=>x.BookCategory).Include(x=>x.StudyGuides).ThenInclude(x=>x.LevelStudyGuide);
+                    .ThenInclude(x => x.Level)
+                    .Include(x => x.PublishBooks).ThenInclude(x=>x.BookCategory)
+                    .Include(x=>x.StudyGuides).ThenInclude(x=>x.LevelStudyGuide)
+                    .Include(x => x.OtherScientificWorks).ThenInclude(x => x.ClassificationOfScientificWork);
         }
 
         private List<string> GetAllPropertyNameOfLecturerViewModel()
@@ -89,12 +94,78 @@ namespace ScientificResearch.Core.Business.Services
                         sum += scientificWork.Level.Score;
                     }
                 }
-
+                if (lecturer.PublishBooks.Count > 0)
+                {
+                    foreach (var publishBook in lecturer.PublishBooks)
+                    {
+                        sum += publishBook.BookCategory.Score;
+                    }
+                }
+                if (lecturer.StudyGuides.Count > 0)
+                {
+                    foreach (var studyGuide in lecturer.StudyGuides)
+                    {
+                        sum += studyGuide.LevelStudyGuide.Score;
+                    }
+                }
+                if (lecturer.OtherScientificWorks.Count > 0)
+                {
+                    foreach (var otherScientificWork in lecturer.OtherScientificWorks)
+                    {
+                        sum += otherScientificWork.ClassificationOfScientificWork.Score;
+                    }
+                }
                 lecturer.Total = sum;
                 await _lecturerRepository.UpdateAsync(lecturer);
             }
         }
 
+        private async Task TotalHours()
+        {
+            var list = await GetAll().ToListAsync();
+            foreach (var lecturer in list)
+            {
+                int hour = 0;
+                if (lecturer.ScientificReports.Count > 0)
+                {
+                    foreach (var scientificReport in lecturer.ScientificReports)
+                    {
+                        hour += scientificReport.ScientificReportType.HoursConverted;
+                    }
+                }
+
+                if (lecturer.ScientificWorks.Count > 0)
+                {
+                    foreach (var scientificWork in lecturer.ScientificWorks)
+                    {
+                        hour += scientificWork.Level.HoursConverted;
+                    }
+                }
+                if (lecturer.PublishBooks.Count > 0)
+                {
+                    foreach (var publishBook in lecturer.PublishBooks)
+                    {
+                        hour += publishBook.BookCategory.HoursConverted;
+                    }
+                }
+                if (lecturer.StudyGuides.Count > 0)
+                {
+                    foreach (var studyGuide in lecturer.StudyGuides)
+                    {
+                        hour += studyGuide.LevelStudyGuide.HoursConverted;
+                    }
+                }
+                if (lecturer.OtherScientificWorks.Count > 0)
+                {
+                    foreach (var otherScientificWork in lecturer.OtherScientificWorks)
+                    {
+                      hour += otherScientificWork.ClassificationOfScientificWork.HoursConverted;
+                    }
+                }
+                lecturer.TotalHour = hour;
+                await _lecturerRepository.UpdateAsync(lecturer);
+            }
+        }
         #endregion
 
         public async Task<List<LecturerViewModel>> GetAllLecturer()
@@ -106,6 +177,7 @@ namespace ScientificResearch.Core.Business.Services
         public async Task<PagedList<LecturerViewModel>> ListLecturerAsync(RequestListViewModel requestListViewModel)
         {
             await ScoreCount();
+            await TotalHours();
             var list = await GetAll()
                 .Where(x => (!requestListViewModel.IsActive.HasValue || x.RecordActive == requestListViewModel.IsActive)
                 && (string.IsNullOrEmpty(requestListViewModel.Query)
@@ -277,6 +349,27 @@ namespace ScientificResearch.Core.Business.Services
                 {
                     StatusCode = System.Net.HttpStatusCode.OK,
                     Data = studyGuides
+                };
+            }
+        }
+        public async Task<ResponseModel> GetOtherScientificWorkByLecturerIdAsync(Guid? id)
+        {
+            var lecturer = await GetAll().FirstAsync(x => x.Id == id);
+            if (lecturer.OtherScientificWorks == null)
+            {
+                return new ResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.NotFound,
+                    Message = "This lecturer has no OtherScientificWork"
+                };
+            }
+            else
+            {
+                List<OtherScientificWorkViewModel> otherScientificWorks = lecturer.OtherScientificWorks.Select(x => new OtherScientificWorkViewModel(x)).ToList();
+                return new ResponseModel
+                {
+                    StatusCode = System.Net.HttpStatusCode.OK,
+                    Data = otherScientificWorks
                 };
             }
         }

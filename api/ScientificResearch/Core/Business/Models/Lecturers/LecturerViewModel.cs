@@ -21,6 +21,7 @@ namespace ScientificResearch.Core.Business.Models.Lecturers
                 Faculty = lecturer.Faculty;
                 DateOfBirth = lecturer.DateOfBirth;
                 Total = lecturer.Total;
+                TotalHour = lecturer.TotalHour;
             }
         }
 
@@ -33,5 +34,6 @@ namespace ScientificResearch.Core.Business.Models.Lecturers
         public DateTime DateOfBirth { get; set; }
 
         public float Total { get; set; }
+        public int TotalHour { get; set; }
     }
 }
