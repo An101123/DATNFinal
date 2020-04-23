@@ -15,6 +15,7 @@ import ApiLecturer from "../../../api/api.lecturer";
 import { pagination } from "../../../constant/app.constant";
 import faculty from "../../../constant/faculty";
 import "../../../pages/admin/select-custom.css";
+import LecturerDetail from "./lecturer.detail.page";
 
 class LecturerListPage extends Component {
   constructor(props) {
@@ -22,35 +23,48 @@ class LecturerListPage extends Component {
     this.state = {
       isShowDeleteModal: false,
       isShowInfoModal: false,
+      isShowDetail: false,
       item: {},
       itemId: null,
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 1);
   }
 
   toggleDeleteModal = () => {
-    this.setState(prevState => ({
-      isShowDeleteModal: !prevState.isShowDeleteModal
+    this.setState((prevState) => ({
+      isShowDeleteModal: !prevState.isShowDeleteModal,
     }));
   };
 
+  backToAdminPage = () => {
+    this.setState((prevState) => ({
+      isShowDetail: !prevState.isShowDetail,
+    }));
+  };
   toggleModalInfo = (item, title) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowInfoModal: !prevState.isShowInfoModal,
       item: item || {},
-      formTitle: title
+      formTitle: title,
     }));
   };
 
-  showConfirmDelete = itemId => {
+  toggleDetailPage = (item) => {
+    this.setState((prevState) => ({
+      isShowDetail: !prevState.isShowDetail,
+      item: item,
+    }));
+  };
+
+  showConfirmDelete = (itemId) => {
     this.setState(
       {
-        itemId: itemId
+        itemId: itemId,
       },
       () => this.toggleDeleteModal()
     );
@@ -61,17 +75,17 @@ class LecturerListPage extends Component {
     let lecturer = {
       name: "",
       faculty: "",
-      dateOfBirth: null
+      dateOfBirth: null,
     };
     this.toggleModalInfo(lecturer, title);
   };
 
-  showUpdateModal = item => {
+  showUpdateModal = (item) => {
     let title = "Chỉnh sửa giảng viên";
     this.toggleModalInfo(item, title);
   };
 
-  onModelChange = el => {
+  onModelChange = (el) => {
     let inputName = el.target.name;
     let inputValue = el.target.value;
     let item = Object.assign({}, this.state.item);
@@ -80,14 +94,14 @@ class LecturerListPage extends Component {
     console.log(item);
   };
 
-  search = e => {
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getLecturerList();
@@ -95,18 +109,18 @@ class LecturerListPage extends Component {
     );
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
+  handlePageClick = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: e.selected + 1
-        }
+          skip: e.selected + 1,
+        },
       },
       () => this.getLecturerList()
     );
@@ -114,15 +128,13 @@ class LecturerListPage extends Component {
 
   getLecturerList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     console.log(params);
     this.props.getLecturerList(params);
   };
 
   addLecturer = async () => {
-    console.log("state ==================");
-    console.log(this.state);
     const { name, faculty, dateOfBirth } = this.state.item;
     const lecturer = { name, faculty, dateOfBirth };
     try {
@@ -174,7 +186,7 @@ class LecturerListPage extends Component {
     this.saveLecturer();
   }
 
-  onDateOfBirthChange = el => {
+  onDateOfBirthChange = (el) => {
     let inputValue = el._d;
     let item = Object.assign({}, this.state.item);
     item["dateOfBirth"] = inputValue;
@@ -186,10 +198,11 @@ class LecturerListPage extends Component {
   }
 
   render() {
-    const { isShowDeleteModal, isShowInfoModal, item } = this.state;
+    const { isShowDeleteModal, isShowInfoModal } = this.state;
+    const { isShowDetail, item } = this.state;
+
     const { lecturerPagedList } = this.props.lecturerPagedListReducer;
     const { sources, pageIndex, totalPages } = lecturerPagedList;
-    console.log(sources);
     const hasResults =
       lecturerPagedList.sources && lecturerPagedList.sources.length > 0;
     return (
@@ -208,8 +221,8 @@ class LecturerListPage extends Component {
           <div className="modal-wrapper">
             <div className="form-wrapper">
               <Form
-                onSubmit={e => this.onSubmit(e)}
-                ref={c => {
+                onSubmit={(e) => this.onSubmit(e)}
+                ref={(c) => {
                   this.form = c;
                 }}
               >
@@ -260,7 +273,7 @@ class LecturerListPage extends Component {
                           onChange={this.onModelChange}
                           value={this.state.faculty}
                         >
-                          {faculty.FACULTY.map(item => {
+                          {faculty.FACULTY.map((item) => {
                             return (
                               <option value={item.name}>{item.name}</option>
                             );
@@ -283,89 +296,99 @@ class LecturerListPage extends Component {
             </div>
           </div>
         </ModalInfo>
-
-        <Row>
-          <Col xs="12">
-            <div className="flex-container header-table">
-              <Button
-                onClick={this.showAddNew}
-                className="btn btn-pill btn-success btn-sm"
-              >
-                Tạo mới
-              </Button>
-              <input
-                onChange={this.onSearchChange}
-                className="form-control form-control-sm"
-                placeholder="Tìm kiếm..."
-              />
-            </div>
-            <Table className="admin-table" responsive bordered>
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Tên</th>
-                  <th>Ngày sinh</th>
-                  <th>Khoa</th>
-                  <th>Tổng điểm</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {hasResults &&
-                  sources.map((item, index) => {
-                    return (
-                      <tr key={item.id}>
-                        <td>{index + 1}</td>
-                        <td>{item.name}</td>
-                        <td>
-                          {moment(item.dateOfBirth)
-                            .add(7, "h")
-                            .format("DD-MM-YYYY")}
-                        </td>
-                        <td>{item.faculty}</td>
-                        <td>{item.total}</td>
-                        <td>
-                          <Button
-                            className="btn-sm"
-                            color="secondary"
-                            onClick={() => this.showUpdateModal(item)}
-                          >
-                            Sửa
-                          </Button>
-                          <Button
-                            className="btn-sm"
-                            color="danger"
-                            onClick={() => this.showConfirmDelete(item.id)}
-                          >
-                            Xóa
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </Table>
-            {hasResults && totalPages > 1 && (
-              <Pagination
-                initialPage={0}
-                totalPages={totalPages}
-                forcePage={pageIndex - 1}
-                pageRangeDisplayed={2}
-                onPageChange={this.handlePageClick}
-              />
-            )}
-          </Col>
-        </Row>
+        {!isShowDetail ? (
+          <Row>
+            <Col xs="12">
+              <div className="flex-container header-table">
+                <Button
+                  onClick={this.showAddNew}
+                  className="btn btn-pill btn-success btn-sm"
+                >
+                  Tạo mới
+                </Button>
+                <input
+                  onChange={this.onSearchChange}
+                  className="form-control form-control-sm"
+                  placeholder="Tìm kiếm..."
+                />
+              </div>
+              <Table className="admin-table" responsive bordered>
+                <thead>
+                  <tr>
+                    <th>STT</th>
+                    <th>Tên</th>
+                    <th>Ngày sinh</th>
+                    <th>Khoa</th>
+                    <th>Tổng điểm</th>
+                    <th>Số giờ quy đổi</th>
+                    <th>Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {hasResults &&
+                    sources.map((item, index) => {
+                      return (
+                        <tr key={item.id}>
+                          <td>{index + 1}</td>
+                          <td onClick={() => this.toggleDetailPage(item)}>
+                            {item.name}
+                          </td>
+                          <td>
+                            {moment(item.dateOfBirth)
+                              .add(7, "h")
+                              .format("DD-MM-YYYY")}
+                          </td>
+                          <td>{item.faculty}</td>
+                          <td>{item.total}</td>
+                          <td>{item.totalHour}</td>
+                          <td>
+                            <Button
+                              className="btn-sm"
+                              color="secondary"
+                              onClick={() => this.showUpdateModal(item)}
+                            >
+                              Sửa
+                            </Button>
+                            <Button
+                              className="btn-sm"
+                              color="danger"
+                              onClick={() => this.showConfirmDelete(item.id)}
+                            >
+                              Xóa
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </Table>
+              {hasResults && totalPages > 1 && (
+                <Pagination
+                  initialPage={0}
+                  totalPages={totalPages}
+                  forcePage={pageIndex - 1}
+                  pageRangeDisplayed={2}
+                  onPageChange={this.handlePageClick}
+                />
+              )}
+            </Col>
+          </Row>
+        ) : (
+          <LecturerDetail
+            lecturer={item}
+            backToAdminPage={this.backToAdminPage}
+          />
+        )}
       </div>
     );
   }
 }
 
 export default connect(
-  state => ({
-    lecturerPagedListReducer: state.lecturerPagedListReducer
+  (state) => ({
+    lecturerPagedListReducer: state.lecturerPagedListReducer,
   }),
   {
-    getLecturerList
+    getLecturerList,
   }
 )(LecturerListPage);

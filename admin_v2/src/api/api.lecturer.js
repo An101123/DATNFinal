@@ -24,4 +24,30 @@ export default class ApiLecturer {
   static deleteLecturer(lecturerId) {
     return RequestHelper.delete(appConfig.apiUrl + `lecturers/${lecturerId}`);
   }
+  static GetAllScientificWorkByLecturerId(lecturerId) {
+    return RequestHelper.get(
+      appConfig.apiUrl + `lecturers/${lecturerId}/scientificWorks`
+    );
+  }
+
+  static GetAllScientificReportByLecturerId(lecturerId) {
+    return RequestHelper.get(
+      appConfig.apiUrl + `lecturers/${lecturerId}/scientificReports`
+    );
+  }
+  static GetAllPublishBookByLecturerId(lecturerId) {
+    return RequestHelper.get(
+      appConfig.apiUrl + `lecturers/${lecturerId}/publishBooks`
+    );
+  }
+  static GetAllStudyGuideByLecturerId(lecturerId) {
+    return RequestHelper.get(
+      appConfig.apiUrl + `lecturers/${lecturerId}/studyGuides`
+    );
+  }
+  static GetAllOtherScientificWorkByLecturerId(lecturerId) {
+    return RequestHelper.get(
+      appConfig.apiUrl + `lecturers/${lecturerId}/otherScientificWorks`
+    );
+  }
 }
