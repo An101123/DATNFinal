@@ -55,5 +55,11 @@ namespace ScientificResearch.Controllers
             var responseModel = await _publishBookService.DeletePublishBookAsync(id);
             return new CustomActionResult(responseModel);
         }
+        [HttpGet("{id}/lecturers")]
+        public async Task<IActionResult> GetAllLecturerkByPublishBookId(Guid id)
+        {
+            var lecturers = await _publishBookService.GetLecturerByPublishBookIdAsync(id);
+            return Ok(lecturers);
+        }
     }
 }

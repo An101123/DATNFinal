@@ -159,7 +159,6 @@ class StudyGuideListPage extends Component {
                           <td> {item.name}</td>
                           <td>{item.literacy}</td>
                           <td>{item.placeOfTraining}</td>
-
                           <td>
                             {moment(item.instructionTime)
                               .add(7, "h")
@@ -170,9 +169,12 @@ class StudyGuideListPage extends Component {
                               .add(7, "h")
                               .format("YYYY")}
                           </td>
-
                           <td>{item.levelStudyGuide.name}</td>
-                          <td>{item.lecturer.name}</td>
+                          <td>
+                            {item.lecturers.map(
+                              (lecturer) => lecturer.name + "; "
+                            )}
+                          </td>{" "}
                         </tr>
                       );
                     })}

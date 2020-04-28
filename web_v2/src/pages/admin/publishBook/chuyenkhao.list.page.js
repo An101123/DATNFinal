@@ -168,10 +168,13 @@ class PublishBookListPage extends Component {
                                 .add(7, "h")
                                 .format("DD-MM-YYYY")}
                             </td>
-
                             <td>{item.bookCategory.name}</td>
                             <td>{item.placeOfPublication}</td>
-                            <td>{item.lecturer.name}</td>
+                            <td>
+                              {item.lecturers.map(
+                                (lecturer) => lecturer.name + "; "
+                              )}
+                            </td>{" "}
                           </tr>
                         );
                       })}

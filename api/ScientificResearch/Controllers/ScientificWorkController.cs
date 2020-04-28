@@ -55,5 +55,12 @@ namespace ScientificResearch.Controllers
             var responseModel = await _scientificWorkService.DeleteScientificWorkAsync(id);
             return new CustomActionResult(responseModel);
         }
+
+        [HttpGet("{id}/lecturers")]
+        public async Task<IActionResult> GetAllLecturerkByScientificWorkId(Guid id)
+        {
+            var lecturers = await _scientificWorkService.GetLecturerByScientificWorkIdAsync(id);
+            return Ok(lecturers);
+        }
     }
 }

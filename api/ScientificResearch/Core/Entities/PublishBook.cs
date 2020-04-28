@@ -23,9 +23,8 @@ namespace ScientificResearch.Core.Entities
 
         public Guid BookCategoryId { get; set; }
         public virtual BookCategory BookCategory { get; set; }
+        public List<LecturerInPublishBook> LecturerInPublishBooks { get; set; }
 
-        public Guid LecturerId { get; set; }
-        public virtual Lecturer Lecturer { get; set; }
 
         //public Guid UserId { get; set; }
         //public virtual User User { get; set; }

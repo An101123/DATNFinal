@@ -17,7 +17,7 @@ namespace ScientificResearch.Core.Business.Models.ScientificReports
 
         public Guid ScientificReportTypeId { get; set; }
 
-        public Guid LecturerId { get; set; }
+        public List<Guid> LecturerIds { get; set; }
 
         public DateTime Time { get; set; }
 
@@ -30,7 +30,6 @@ namespace ScientificResearch.Core.Business.Models.ScientificReports
             scientificReport.Name = Name;
             scientificReport.Content = Content;
             scientificReport.ScientificReportTypeId = ScientificReportTypeId;
-            scientificReport.LecturerId = LecturerId;
             scientificReport.Time = Time;
             //scientificReport.UserId = UserId;
         }
@@ -51,15 +50,19 @@ namespace ScientificResearch.Core.Business.Models.ScientificReports
             {
                 yield return new ValidationResult("Scientific Report Type is not found!", new string[] { "ScientificReportTypeId" });
             }
-            if (LecturerId == Guid.Empty)
-            {
-                yield return new ValidationResult("Lecturer is required!", new string[] { "LecturerId" });
-            }
+
             var lecturerRepository = IoCHelper.GetInstance<IRepository<Lecturer>>();
-            var lecturer = lecturerRepository.GetAll().FirstOrDefault(x => x.Id == LecturerId);
-            if (lecturer == null)
+            if (LecturerIds.Count <= 0)
             {
-                yield return new ValidationResult("Lecturer is not found!");
+                yield return new ValidationResult("Lecturer is required!", new string[] { "LecturerIds" });
+            }
+            foreach (var lecturerId in LecturerIds)
+            {
+                var lecturer = lecturerRepository.GetAll().FirstOrDefault(x => x.Id == lecturerId);
+                if (lecturer == null)
+                {
+                    yield return new ValidationResult("Lecturer is not found!", new string[] { "lecturerId" });
+                }
             }
         }
     }

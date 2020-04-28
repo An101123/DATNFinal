@@ -23,9 +23,7 @@ namespace ScientificResearch.Core.Entities
         public Guid ClassificationOfScientificWorkId { get; set; }
         public virtual ClassificationOfScientificWork ClassificationOfScientificWork { get; set; }
 
-        public Guid LecturerId { get; set; }
-        public virtual Lecturer Lecturer { get; set; }
-
+        public List<LecturerInOtherScientificWork> LecturerInOtherScientificWorks { get; set; }
         //public Guid UserId { get; set; }
         //public virtual User User { get; set; }
     }

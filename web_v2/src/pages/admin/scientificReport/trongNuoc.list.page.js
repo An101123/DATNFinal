@@ -190,9 +190,12 @@ class ScientificReportListPage extends Component {
                                   .add(7, "h")
                                   .format("DD-MM-YYYY")}
                               </td>
-
                               <td>{item.scientificReportType.name}</td>
-                              <td>{item.lecturer.name}</td>
+                              <td>
+                                {item.lecturers.map(
+                                  (lecturer) => lecturer.name + "; "
+                                )}
+                              </td>{" "}
                             </tr>
                           );
                         })}

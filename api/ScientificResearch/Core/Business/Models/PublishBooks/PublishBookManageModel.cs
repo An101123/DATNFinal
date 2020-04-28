@@ -20,9 +20,9 @@ namespace ScientificResearch.Core.Business.Models.PublishBooks
         public string PlaceOfPublication { get; set; }
         public Guid BookCategoryId { get; set; }
 
-        public Guid LecturerId { get; set; }
+        public List<Guid> LecturerIds { get; set; }
 
-        
+
 
         //public Guid UserId { get; set; }
 
@@ -32,7 +32,6 @@ namespace ScientificResearch.Core.Business.Models.PublishBooks
             publishBook.Time = Time;
             publishBook.PlaceOfPublication = PlaceOfPublication;
             publishBook.BookCategoryId = BookCategoryId;
-            publishBook.LecturerId = LecturerId;
             //scientificWork.UserId = UserId;
         }
 
@@ -52,15 +51,18 @@ namespace ScientificResearch.Core.Business.Models.PublishBooks
             {
                 yield return new ValidationResult("BookCategory is not found!", new string[] { "BookCategoryId" });
             }
-            if (LecturerId == Guid.Empty)
-            {
-                yield return new ValidationResult("Lecturer is required!", new string[] { "LecturerId" });
-            }
             var lecturerRepository = IoCHelper.GetInstance<IRepository<Lecturer>>();
-            var lecturer = lecturerRepository.GetAll().FirstOrDefault(x => x.Id == LecturerId);
-            if (lecturer == null)
+            if (LecturerIds.Count <= 0)
             {
-                yield return new ValidationResult("Lecturer is not found!");
+                yield return new ValidationResult("Lecturer is required!", new string[] { "LecturerIds" });
+            }
+            foreach (var lecturerId in LecturerIds)
+            {
+                var lecturer = lecturerRepository.GetAll().FirstOrDefault(x => x.Id == lecturerId);
+                if (lecturer == null)
+                {
+                    yield return new ValidationResult("Lecturer is not found!", new string[] { "lecturerId" });
+                }
             }
         }
 

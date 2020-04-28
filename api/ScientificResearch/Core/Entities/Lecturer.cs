@@ -23,25 +23,14 @@ namespace ScientificResearch.Entities
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-        public Guid ScientificWorkId { get; set; }
-
-        public Guid ScientificReportId { get; set; }
-
-        public Guid PublishBookId { get; set; }
-
-        public Guid StudyGuideId { get; set; }
-        public Guid OtherScientificWorkId { get; set; }
 
         [Required]
         public float Total { get; set; }
         public int TotalHour { get; set; }
-        public virtual ICollection<ScientificWork> ScientificWorks { get; set; }
-
-        public virtual ICollection<ScientificReport> ScientificReports { get; set; }
-
-        public virtual ICollection<PublishBook> PublishBooks { get; set; }
-
+        public List<LecturerInScientificWork> LecturerInScientificWorks { get; set; }
+        public List<LecturerInScientificReport> LecturerInScientificReports { get; set; }
+        public List<LecturerInPublishBook> LecturerInPublishBooks { get; set; }
+        public List<LecturerInOtherScientificWork> LecturerInOtherScientificWorks { get; set; }
         public virtual ICollection<StudyGuide> StudyGuides { get; set; }
-        public virtual ICollection<OtherScientificWork> OtherScientificWorks { get; set; }
     }
 }

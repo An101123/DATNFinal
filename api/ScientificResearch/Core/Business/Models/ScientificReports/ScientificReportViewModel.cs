@@ -25,7 +25,7 @@ namespace ScientificResearch.Core.Business.Models.ScientificReports
                 Content = scientificReport.Content;
                 Time = scientificReport.Time;
                 ScientificReportType = new ScientificReportTypeViewModel(scientificReport.ScientificReportType);
-                Lecturer = new LecturerViewModel(scientificReport.Lecturer);
+                Lecturers = GetLecturer(scientificReport);
                 //User = new UserViewModel(scientificReport.User);
             }
         }
@@ -39,8 +39,17 @@ namespace ScientificResearch.Core.Business.Models.ScientificReports
 
         public ScientificReportTypeViewModel ScientificReportType { get; set; }
 
-        public LecturerViewModel Lecturer { get; set; }
+        public List<LecturerViewModel> Lecturers { get; set; }
 
+        private List<LecturerViewModel> GetLecturer(ScientificReport scientificReport)
+        {
+            var lecturers = new List<LecturerViewModel>();
+            foreach (var lecturerInScientificReport in scientificReport.LecturerInScientificReports)
+            {
+                lecturers.Add(new LecturerViewModel(lecturerInScientificReport.Lecturer));
+            }
+            return lecturers;
+        }
         //public UserViewModel User { get; set; }
 
     }

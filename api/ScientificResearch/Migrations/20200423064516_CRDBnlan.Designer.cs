@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ScientificResearch.Core.DataAccess;
 
 namespace ScientificResearch.Migrations
 {
     [DbContext(typeof(ScientificResearchDbContext))]
-    partial class ScientificResearchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200423064516_CRDBnlan")]
+    partial class CRDBnlan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,114 +97,6 @@ namespace ScientificResearch.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ClassificationOfScientificWork");
-                });
-
-            modelBuilder.Entity("ScientificResearch.Core.Entities.LecturerInOtherScientificWork", b =>
-                {
-                    b.Property<Guid>("LecturerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("OtherScientificWorkId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreateOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("RecordActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("RecordDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("RecordOrder")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("LecturerId", "OtherScientificWorkId");
-
-                    b.HasIndex("OtherScientificWorkId");
-
-                    b.ToTable("LecturerInOtherScientificWork");
-                });
-
-            modelBuilder.Entity("ScientificResearch.Core.Entities.LecturerInPublishBook", b =>
-                {
-                    b.Property<Guid>("LecturerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PublishBookId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreateOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("RecordActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("RecordDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("RecordOrder")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("LecturerId", "PublishBookId");
-
-                    b.HasIndex("PublishBookId");
-
-                    b.ToTable("LecturerInPublishBook");
-                });
-
-            modelBuilder.Entity("ScientificResearch.Core.Entities.LecturerInScientificReport", b =>
-                {
-                    b.Property<Guid>("LecturerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ScientificReportId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CreateOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("RecordActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("RecordDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("RecordOrder")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("LecturerId", "ScientificReportId");
-
-                    b.HasIndex("ScientificReportId");
-
-                    b.ToTable("LecturerInScientificReport");
                 });
 
             modelBuilder.Entity("ScientificResearch.Core.Entities.LecturerInScientificWork", b =>
@@ -295,6 +189,9 @@ namespace ScientificResearch.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("LecturerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -318,6 +215,8 @@ namespace ScientificResearch.Migrations
 
                     b.HasIndex("ClassificationOfScientificWorkId");
 
+                    b.HasIndex("LecturerId");
+
                     b.ToTable("OtherScientificWorks");
                 });
 
@@ -335,6 +234,9 @@ namespace ScientificResearch.Migrations
 
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LecturerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -361,6 +263,8 @@ namespace ScientificResearch.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BookCategoryId");
+
+                    b.HasIndex("LecturerId");
 
                     b.ToTable("PublishBooks");
                 });
@@ -445,6 +349,12 @@ namespace ScientificResearch.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("OtherScientificWorkId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PublishBookId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("RecordActive")
                         .HasColumnType("bit");
 
@@ -453,6 +363,12 @@ namespace ScientificResearch.Migrations
 
                     b.Property<int>("RecordOrder")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("ScientificReportId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StudyGuideId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<float>("Total")
                         .HasColumnType("real");
@@ -566,6 +482,9 @@ namespace ScientificResearch.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("LecturerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -589,6 +508,8 @@ namespace ScientificResearch.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LecturerId");
 
                     b.HasIndex("ScientificReportTypeId");
 
@@ -738,51 +659,6 @@ namespace ScientificResearch.Migrations
                     b.ToTable("User");
                 });
 
-            modelBuilder.Entity("ScientificResearch.Core.Entities.LecturerInOtherScientificWork", b =>
-                {
-                    b.HasOne("ScientificResearch.Entities.Lecturer", "Lecturer")
-                        .WithMany("LecturerInOtherScientificWorks")
-                        .HasForeignKey("LecturerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScientificResearch.Core.Entities.OtherScientificWork", "OtherScientificWork")
-                        .WithMany("LecturerInOtherScientificWorks")
-                        .HasForeignKey("OtherScientificWorkId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ScientificResearch.Core.Entities.LecturerInPublishBook", b =>
-                {
-                    b.HasOne("ScientificResearch.Entities.Lecturer", "Lecturer")
-                        .WithMany("LecturerInPublishBooks")
-                        .HasForeignKey("LecturerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScientificResearch.Core.Entities.PublishBook", "PublishBook")
-                        .WithMany("LecturerInPublishBooks")
-                        .HasForeignKey("PublishBookId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ScientificResearch.Core.Entities.LecturerInScientificReport", b =>
-                {
-                    b.HasOne("ScientificResearch.Entities.Lecturer", "Lecturer")
-                        .WithMany("LecturerInScientificReports")
-                        .HasForeignKey("LecturerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ScientificResearch.Entities.ScientificReport", "ScientificReport")
-                        .WithMany("LecturerInScientificReports")
-                        .HasForeignKey("ScientificReportId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("ScientificResearch.Core.Entities.LecturerInScientificWork", b =>
                 {
                     b.HasOne("ScientificResearch.Entities.Lecturer", "Lecturer")
@@ -805,6 +681,12 @@ namespace ScientificResearch.Migrations
                         .HasForeignKey("ClassificationOfScientificWorkId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ScientificResearch.Entities.Lecturer", "Lecturer")
+                        .WithMany("OtherScientificWorks")
+                        .HasForeignKey("LecturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ScientificResearch.Core.Entities.PublishBook", b =>
@@ -812,6 +694,12 @@ namespace ScientificResearch.Migrations
                     b.HasOne("ScientificResearch.Core.Entities.BookCategory", "BookCategory")
                         .WithMany("PublishBooks")
                         .HasForeignKey("BookCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ScientificResearch.Entities.Lecturer", "Lecturer")
+                        .WithMany("PublishBooks")
+                        .HasForeignKey("LecturerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -833,6 +721,12 @@ namespace ScientificResearch.Migrations
 
             modelBuilder.Entity("ScientificResearch.Entities.ScientificReport", b =>
                 {
+                    b.HasOne("ScientificResearch.Entities.Lecturer", "Lecturer")
+                        .WithMany("ScientificReports")
+                        .HasForeignKey("LecturerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ScientificResearch.Entities.ScientificReportType", "ScientificReportType")
                         .WithMany("ScientificReports")
                         .HasForeignKey("ScientificReportTypeId")

@@ -24,7 +24,7 @@ namespace ScientificResearch.Core.Business.Models.OtherScientificWorks
                
                 Time = otherScientificWork.Time;
                 ClassificationOfScientificWork = new ClassificationOfScientificWorkViewModel(otherScientificWork.ClassificationOfScientificWork);
-                Lecturer = new LecturerViewModel(otherScientificWork.Lecturer);
+                Lecturers = GetLecturer(otherScientificWork);
                 //User = new UserViewModel(scientificWork.User);
                 //Lecturer = new LecturerViewModel;
             }
@@ -36,8 +36,17 @@ namespace ScientificResearch.Core.Business.Models.OtherScientificWorks
         public DateTime Time { get; set; }
         public ClassificationOfScientificWorkViewModel ClassificationOfScientificWork { get; }
 
-        public LecturerViewModel Lecturer { get; set; }
+        public List<LecturerViewModel> Lecturers { get; set; }
 
+        private List<LecturerViewModel> GetLecturer(OtherScientificWork otherScientificWork)
+        {
+            var lecturers = new List<LecturerViewModel>();
+            foreach (var lecturerInOtherScientificWork in otherScientificWork.LecturerInOtherScientificWorks)
+            {
+                lecturers.Add(new LecturerViewModel(lecturerInOtherScientificWork.Lecturer));
+            }
+            return lecturers;
+        }
         //public UserViewModel User { get; set; }
     }
 }

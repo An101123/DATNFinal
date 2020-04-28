@@ -17,7 +17,7 @@ namespace ScientificResearch.Core.Business.Models.ScientificWorks
 
         public Guid LevelId { get; set; }
 
-        public Guid LecturerId { get; set; }
+        public List<Guid> LecturerIds { get; set; }
 
         public DateTime Time { get; set; }
 
@@ -28,7 +28,6 @@ namespace ScientificResearch.Core.Business.Models.ScientificWorks
             scientificWork.Name = Name;
             scientificWork.Content = Content;
             scientificWork.LevelId = LevelId;
-            scientificWork.LecturerId = LecturerId;
             scientificWork.Time = Time;
             //scientificWork.UserId = UserId;
         }
@@ -45,19 +44,23 @@ namespace ScientificResearch.Core.Business.Models.ScientificWorks
             }
             var levelRepository = IoCHelper.GetInstance<IRepository<Level>>();
             var level = levelRepository.GetAll().FirstOrDefault(x => x.Id == LevelId);
-            if (level == null)
+            if (level == null) 
             {
                 yield return new ValidationResult("Level is not found!", new string[] { "LevelId" });
             }
-            if (LecturerId == Guid.Empty)
-            {
-                yield return new ValidationResult("Lecturer is required!", new string[] { "LecturerId" });
-            }
+
             var lecturerRepository = IoCHelper.GetInstance<IRepository<Lecturer>>();
-            var lecturer = lecturerRepository.GetAll().FirstOrDefault(x => x.Id == LecturerId);
-            if (lecturer == null)
+            if (LecturerIds.Count <= 0)
             {
-                yield return new ValidationResult("Lecturer is not found!");
+                yield return new ValidationResult("Lecturer is required!", new string[] { "LecturerIds" });
+            }
+            foreach (var lecturerId in LecturerIds)
+            {
+                var lecturer = lecturerRepository.GetAll().FirstOrDefault(x => x.Id == lecturerId);
+                if (lecturer == null)
+                {
+                    yield return new ValidationResult("Lecturer is not found!", new string[] { "lecturerId" });
+                }
             }
         }
 

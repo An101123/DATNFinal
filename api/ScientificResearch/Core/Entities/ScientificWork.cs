@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ScientificResearch.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,8 +26,7 @@ namespace ScientificResearch.Entities
         public Guid LevelId { get; set; }
         public virtual Level Level { get; set; }
 
-        public Guid LecturerId { get; set; }
-        public virtual Lecturer Lecturer { get; set; }
+        public List<LecturerInScientificWork> LecturerInScientificWorks { get; set; }
 
         //public Guid UserId { get; set; }
         //public virtual User User { get; set; }

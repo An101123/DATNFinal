@@ -15,7 +15,7 @@ namespace ScientificResearch.Core.Business.Models.OtherScientificWorks
         public string Name { get; set; }
         public DateTime Time { get; set; }
         public Guid ClassificationOfScientificWorkId { get; set; }
-        public Guid LecturerId { get; set; }
+        public List<Guid> LecturerIds { get; set; }
 
 
         //public Guid UserId { get; set; }
@@ -25,7 +25,6 @@ namespace ScientificResearch.Core.Business.Models.OtherScientificWorks
             otherScientificWork.Name = Name; 
             otherScientificWork.Time = Time;
             otherScientificWork.ClassificationOfScientificWorkId = ClassificationOfScientificWorkId;
-            otherScientificWork.LecturerId = LecturerId;
             //scientificWork.UserId = UserId;
         }
 
@@ -45,15 +44,18 @@ namespace ScientificResearch.Core.Business.Models.OtherScientificWorks
             {
                 yield return new ValidationResult("ClassificationOfScientificWork is not found!", new string[] { "ClassificationOfScientificWorkId" });
             }
-            if (LecturerId == Guid.Empty)
-            {
-                yield return new ValidationResult("Lecturer is required!", new string[] { "LecturerId" });
-            }
             var lecturerRepository = IoCHelper.GetInstance<IRepository<Lecturer>>();
-            var lecturer = lecturerRepository.GetAll().FirstOrDefault(x => x.Id == LecturerId);
-            if (lecturer == null)
+            if (LecturerIds.Count <= 0)
             {
-                yield return new ValidationResult("Lecturer is not found!");
+                yield return new ValidationResult("Lecturer is required!", new string[] { "LecturerIds" });
+            }
+            foreach (var lecturerId in LecturerIds)
+            {
+                var lecturer = lecturerRepository.GetAll().FirstOrDefault(x => x.Id == lecturerId);
+                if (lecturer == null)
+                {
+                    yield return new ValidationResult("Lecturer is not found!", new string[] { "lecturerId" });
+                }
             }
         }
 

@@ -30,45 +30,45 @@ class NewsListPage extends Component {
       itemId: null,
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 1000);
   }
 
   toggleDeleteModal = () => {
-    this.setState(prevState => ({
-      isShowDeleteModal: !prevState.isShowDeleteModal
+    this.setState((prevState) => ({
+      isShowDeleteModal: !prevState.isShowDeleteModal,
     }));
   };
 
   toggleModalInfo = (item, title) => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowInfoModal: !prevState.isShowInfoModal,
       item: item || {},
-      formTitle: title
+      formTitle: title,
     }));
   };
-  toggleDetailPage = item => {
-    this.setState(prevState => ({
+  toggleDetailPage = (item) => {
+    this.setState((prevState) => ({
       isShowDetail: !prevState.isShowDetail,
-      item: item
+      item: item,
     }));
   };
 
-  showConfirmDelete = itemId => {
+  showConfirmDelete = (itemId) => {
     this.setState(
       {
-        itemId: itemId
+        itemId: itemId,
       },
       () => this.toggleDeleteModal()
     );
   };
 
   backToAdminPage = () => {
-    this.setState(prevState => ({
-      isShowDetail: !prevState.isShowDetail
+    this.setState((prevState) => ({
+      isShowDetail: !prevState.isShowDetail,
     }));
   };
 
@@ -78,12 +78,12 @@ class NewsListPage extends Component {
       title: "",
       content: "",
       link: "",
-      image: null
+      image: null,
     };
     this.toggleModalInfo(news, title);
   };
 
-  onModelChange = el => {
+  onModelChange = (el) => {
     let inputName = el.target.name;
     let inputValue = el.target.value;
     let item = Object.assign({}, this.state.item);
@@ -91,26 +91,26 @@ class NewsListPage extends Component {
     this.setState({ item });
   };
 
-  onImageChange = file => {
+  onImageChange = (file) => {
     this.setState({ image: file });
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => {
       document.getElementById("itemImage").src = reader.result;
     };
-    reader.onerror = function(error) {
+    reader.onerror = function (error) {
       console.log("Error: ", error);
     };
   };
 
-  search = e => {
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getNewsList();
@@ -118,18 +118,18 @@ class NewsListPage extends Component {
     );
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
+  handlePageClick = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: e.selected + 1
-        }
+          skip: e.selected + 1,
+        },
       },
       () => this.getNewsList()
     );
@@ -137,7 +137,7 @@ class NewsListPage extends Component {
 
   getNewsList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     this.props.getNewsList(params);
   };
@@ -145,10 +145,10 @@ class NewsListPage extends Component {
   addNews = async () => {
     console.log("state ==================");
     console.log(this.state);
-    const { title, link, content } = this.state.item;
+    const { title, content } = this.state.item;
     try {
       var image = await uploadFile("Image", this.state.image);
-      const news = { title, link, content, image };
+      const news = { title, content, image };
       await ApiNews.postNews(news);
       this.toggleModalInfo();
       this.getNewsList();
@@ -177,7 +177,7 @@ class NewsListPage extends Component {
       this.addNews();
     }
   };
-  onContentChange = e => {
+  onContentChange = (e) => {
     let item = Object.assign({}, this.state.item);
     item.content = e.editor.getData();
     this.setState({ item });
@@ -199,7 +199,7 @@ class NewsListPage extends Component {
       isShowInfoModal,
       item,
       image,
-      isShowDetail
+      isShowDetail,
     } = this.state;
     const { newsPagedList } = this.props.newsPagedListReducer;
     const { sources, pageIndex, totalPages } = newsPagedList;
@@ -221,8 +221,8 @@ class NewsListPage extends Component {
           <div className="modal-wrapper">
             <div className="form-wrapper">
               <Form
-                onSubmit={e => this.onSubmit(e)}
-                ref={c => {
+                onSubmit={(e) => this.onSubmit(e)}
+                ref={(c) => {
                   this.form = c;
                 }}
               >
@@ -241,7 +241,7 @@ class NewsListPage extends Component {
                   </Col>
                 </Row>
 
-                <Row>
+                {/* <Row>
                   <Col>
                     <FormGroup>
                       <ValidationInput
@@ -254,7 +254,7 @@ class NewsListPage extends Component {
                       />
                     </FormGroup>
                   </Col>
-                </Row>
+                </Row> */}
 
                 <Row>
                   <Col>
@@ -375,10 +375,10 @@ class NewsListPage extends Component {
 }
 
 export default connect(
-  state => ({
-    newsPagedListReducer: state.newsPagedListReducer
+  (state) => ({
+    newsPagedListReducer: state.newsPagedListReducer,
   }),
   {
-    getNewsList
+    getNewsList,
   }
 )(NewsListPage);

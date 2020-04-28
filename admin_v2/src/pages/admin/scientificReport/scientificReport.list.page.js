@@ -29,6 +29,7 @@ import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
 import ScientificReportDetail from "./scientificReport.detail";
 import CKEditorInput from "../../../components/common/ckeditor-input";
+import { Select } from "antd";
 
 class ScientificReportListPage extends Component {
   constructor(props) {
@@ -159,6 +160,12 @@ class ScientificReportListPage extends Component {
     this.delayedCallback(e);
   };
 
+  onLecturerChange = (value) => {
+    let item = Object.assign({}, this.state.item);
+    item.lecturerIds = value;
+    this.setState({ item });
+  };
+
   handlePageClick = (e) => {
     this.setState(
       {
@@ -198,14 +205,14 @@ class ScientificReportListPage extends Component {
       time,
       content,
       scientificReportTypeId,
-      lecturerId,
+      lecturerIds,
     } = this.state.item;
     const scientificReport = {
       name,
       time,
       content,
       scientificReportTypeId,
-      lecturerId,
+      lecturerIds,
     };
     try {
       await ApiScientificReport.postScientificReport(scientificReport);
@@ -220,14 +227,16 @@ class ScientificReportListPage extends Component {
   updateScientificReport = async () => {
     const { id, name, time, content } = this.state.item;
     const scientificReportTypeId = this.state.item.scientificReportType.id;
-    const lecturerId = this.state.item.lecturer.id;
+    const lecturerIds = this.state.item.lecturerIds
+      ? this.state.item.lecturerIds
+      : this.state.item.lecturers.map((lecturer) => lecturer.id);
     const scientificReport = {
       id,
       name,
       time,
       content,
       scientificReportTypeId,
-      lecturerId,
+      lecturerIds,
     };
     if (
       !scientificReportTypeId ||
@@ -299,6 +308,8 @@ class ScientificReportListPage extends Component {
     const hasResults =
       scientificReportPagedList.sources &&
       scientificReportPagedList.sources.length > 0;
+    const { Option } = Select;
+
     return (
       <div className="animated fadeIn">
         <ModalConfirm
@@ -434,22 +445,25 @@ class ScientificReportListPage extends Component {
                         Giảng viên<span className="text-danger"> *</span>
                       </Label>
                       <br />
-                      <select
-                        className="select-custom"
-                        defaultValue={item.lecturer ? item.lecturer.id : ""}
-                        id="selectLecturer"
-                        name="lecturerId"
-                        onChange={this.onModelChange}
+                      <Select
+                        mode="multiple"
+                        style={{ display: "block" }}
+                        placeholder="Please select"
+                        onChange={this.onLecturerChange}
+                        defaultValue={
+                          item.lecturers
+                            ? item.lecturers.map((lecturer) => lecturer.id)
+                            : undefined
+                        }
                       >
-                        <option style={{ display: "none" }}>-- Chọn --</option>
                         {lecturers.length > 0
                           ? lecturers.map((lecturer, i) => (
-                              <option key={i} value={lecturer.id}>
+                              <Option key={i} value={lecturer.id}>
                                 {lecturer.name}
-                              </option>
+                              </Option>
                             ))
                           : ""}
-                      </select>
+                      </Select>
                       <Label
                         id="lecturerWarning"
                         style={{
@@ -539,7 +553,11 @@ class ScientificReportListPage extends Component {
                           )}
                         </td> */}
                           <td>{item.scientificReportType.name}</td>
-                          <td>{item.lecturer.name}</td>
+                          <td>
+                            {item.lecturers.map(
+                              (lecturer) => lecturer.name + "; "
+                            )}
+                          </td>
 
                           <td>
                             <Button

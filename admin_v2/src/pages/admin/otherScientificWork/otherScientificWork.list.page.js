@@ -27,7 +27,7 @@ import { pagination } from "../../../constant/app.constant";
 import ApiClassificationOfScientificWork from "../../../api/api.classificationOfScientificWork";
 import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
-import CKEditorInput from "../../../components/common/ckeditor-input";
+import { Select } from "antd";
 
 class OtherScientificWorkListPage extends Component {
   constructor(props) {
@@ -114,7 +114,11 @@ class OtherScientificWorkListPage extends Component {
     item["time"] = inputValue;
     this.setState({ item });
   };
-
+  onLecturerChange = (value) => {
+    let item = Object.assign({}, this.state.item);
+    item.lecturerIds = value;
+    this.setState({ item });
+  };
   search = (e) => {
     this.setState(
       {
@@ -173,13 +177,13 @@ class OtherScientificWorkListPage extends Component {
       name,
       time,
       classificationOfScientificWorkId,
-      lecturerId,
+      lecturerIds,
     } = this.state.item;
     const otherScientificWork = {
       name,
       time,
       classificationOfScientificWorkId,
-      lecturerId,
+      lecturerIds,
     };
     try {
       await ApiOtherScientificWork.postOtherScientificWork(otherScientificWork);
@@ -195,13 +199,15 @@ class OtherScientificWorkListPage extends Component {
     const { id, name, time } = this.state.item;
     const classificationOfScientificWorkId = this.state.item
       .classificationOfScientificWork.id;
-    const lecturerId = this.state.item.lecturer.id;
+    const lecturerIds = this.state.item.lecturerIds
+      ? this.state.item.lecturerIds
+      : this.state.item.lecturers.map((lecturer) => lecturer.id);
     const otherScientificWork = {
       id,
       name,
       time,
       classificationOfScientificWorkId,
-      lecturerId,
+      lecturerIds,
     };
 
     try {
@@ -252,8 +258,6 @@ class OtherScientificWorkListPage extends Component {
     const {
       isShowDeleteModal,
       isShowInfoModal,
-      isShowContentModal,
-      isShowDetail,
       item,
       classificationOfScientificWorks,
       lecturers,
@@ -265,6 +269,8 @@ class OtherScientificWorkListPage extends Component {
     const hasResults =
       otherScientificWorkPagedList.sources &&
       otherScientificWorkPagedList.sources.length > 0;
+    const { Option } = Select;
+
     return (
       <div className="animated fadeIn">
         <ModalConfirm
@@ -376,22 +382,25 @@ class OtherScientificWorkListPage extends Component {
                         Giảng viên<span className="text-danger"> *</span>
                       </Label>
                       <br />
-                      <select
-                        className="select-custom"
-                        defaultValue={item.lecturer ? item.lecturer.id : ""}
-                        id="selectLecturer"
-                        name="lecturerId"
-                        onChange={this.onModelChange}
+                      <Select
+                        mode="multiple"
+                        style={{ display: "block" }}
+                        placeholder="Please select"
+                        onChange={this.onLecturerChange}
+                        defaultValue={
+                          item.lecturers
+                            ? item.lecturers.map((lecturer) => lecturer.id)
+                            : undefined
+                        }
                       >
-                        <option style={{ display: "none" }}>-- Chọn --</option>
                         {lecturers.length > 0
                           ? lecturers.map((lecturer, i) => (
-                              <option key={i} value={lecturer.id}>
+                              <Option key={i} value={lecturer.id}>
                                 {lecturer.name}
-                              </option>
+                              </Option>
                             ))
                           : ""}
-                      </select>
+                      </Select>
                       <Label
                         id="lecturerWarning"
                         style={{
@@ -464,7 +473,11 @@ class OtherScientificWorkListPage extends Component {
                         </td>
                         <td>{moment(item.time).add(7, "h").format("YYYY")}</td>
                         <td>{item.classificationOfScientificWork.name}</td>
-                        <td>{item.lecturer.name}</td>
+                        <td>
+                          {item.lecturers.map(
+                            (lecturer) => lecturer.name + "; "
+                          )}
+                        </td>{" "}
                         <td>
                           <Button
                             className="btn-sm"

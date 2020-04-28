@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ScientificResearch.Core.Business.Models.Base;
+using ScientificResearch.Core.Business.Models.Lecturers;
 using ScientificResearch.Core.Business.Models.OtherScientificWorks;
 using ScientificResearch.Core.Business.Reflections;
 using ScientificResearch.Core.Common.Constants;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace ScientificResearch.Core.Business.Services
 {
-   
+
     public interface IOtherScientificWorkService
     {
         Task<PagedList<OtherScientificWorkViewModel>> ListOtherScientificWorkAsync(RequestListViewModel requestListViewModel);
@@ -26,17 +27,21 @@ namespace ScientificResearch.Core.Business.Services
         Task<ResponseModel> UpdateOtherScientificWorkAsync(Guid id, OtherScientificWorkManageModel otherScientificWorkManagerModel);
 
         Task<ResponseModel> DeleteOtherScientificWorkAsync(Guid id);
+
+        Task<ResponseModel> GetLecturerByOtherScientificWorkIdAsync(Guid? id);
     }
     public class OtherScientificWorkService : IOtherScientificWorkService
     {
         private readonly IRepository<OtherScientificWork> _otherScientificWorkResponstory;
+        private readonly IRepository<LecturerInOtherScientificWork> _lecturerInOtherScientificWorkRepository;
         private readonly IRepository<ClassificationOfScientificWork> _classificationOfScientificWorkRepository;
         private readonly IRepository<Lecturer> _lecturerRepository;
         private readonly IMapper _mapper;
 
-        public OtherScientificWorkService(IRepository<OtherScientificWork> otherScientificWorkResponstory, IRepository<ClassificationOfScientificWork> classificationOfScientificWorkRepository, IRepository<Lecturer> lecturerRepository, IMapper mapper)
+        public OtherScientificWorkService(IRepository<OtherScientificWork> otherScientificWorkResponstory, IRepository<LecturerInOtherScientificWork> lecturerInOtherScientificWorkRepository, IRepository<ClassificationOfScientificWork> classificationOfScientificWorkRepository, IRepository<Lecturer> lecturerRepository, IMapper mapper)
         {
             _otherScientificWorkResponstory = otherScientificWorkResponstory;
+            _lecturerInOtherScientificWorkRepository = lecturerInOtherScientificWorkRepository;
             _classificationOfScientificWorkRepository = classificationOfScientificWorkRepository;
             _lecturerRepository = lecturerRepository;
             _mapper = mapper;
@@ -46,7 +51,7 @@ namespace ScientificResearch.Core.Business.Services
         private IQueryable<OtherScientificWork> GetAll()
         {
             return _otherScientificWorkResponstory.GetAll().Include(x => x.ClassificationOfScientificWork)
-                .Include(x => x.Lecturer);
+                .Include(x => x.LecturerInOtherScientificWorks).ThenInclude(x => x.Lecturer);
         }
 
         private List<string> GetAllPropertyNameOfOtherScientificWorkViewModel()
@@ -65,7 +70,6 @@ namespace ScientificResearch.Core.Business.Services
             && (string.IsNullOrEmpty(requestListViewModel.Query)
                 || (x.Name.Contains(requestListViewModel.Query)
                 || (x.ClassificationOfScientificWork.Name.Contains(requestListViewModel.Query))
-                || (x.Lecturer.Name.Contains(requestListViewModel.Query))
                 )))
             .Select(x => new OtherScientificWorkViewModel(x)).ToListAsync();
 
@@ -107,8 +111,24 @@ namespace ScientificResearch.Core.Business.Services
 
         public async Task<ResponseModel> DeleteOtherScientificWorkAsync(Guid id)
         {
-            return await _otherScientificWorkResponstory.DeleteAsync(id);
+            var otherScientificWork = await GetAll().FirstOrDefaultAsync(x => x.Id == id);
+            if (otherScientificWork == null)
+            {
+                return new ResponseModel()
+                {
+                    StatusCode = System.Net.HttpStatusCode.NotFound,
+                    Message = "This Scientific Work is not exist. Please try again!"
+                };
+            }
+            else
+            {
+                await _lecturerInOtherScientificWorkRepository.DeleteAsync(otherScientificWork.LecturerInOtherScientificWorks);
+
+                return await _otherScientificWorkResponstory.DeleteAsync(id);
+            }
         }
+
+        
 
         public async Task<ResponseModel> CreateOtherScientificWorkAsync(OtherScientificWorkManageModel otherScientificWorkManageModel)
         {
@@ -123,13 +143,24 @@ namespace ScientificResearch.Core.Business.Services
             }
             else
             {
-                var classificationOfScientificWork = await _classificationOfScientificWorkRepository.GetByIdAsync(otherScientificWorkManageModel.ClassificationOfScientificWorkId);
-                var lecturer = await _lecturerRepository.GetByIdAsync(otherScientificWorkManageModel.LecturerId);
                 otherScientificWork = _mapper.Map<OtherScientificWork>(otherScientificWorkManageModel);
+                var classificationOfScientificWork = await _classificationOfScientificWorkRepository.GetByIdAsync(otherScientificWorkManageModel.ClassificationOfScientificWorkId);
                 otherScientificWork.ClassificationOfScientificWork = classificationOfScientificWork;
-                otherScientificWork.Lecturer = lecturer;
 
                 await _otherScientificWorkResponstory.InsertAsync(otherScientificWork);
+
+                var lecturerInOtherScientificWorks = new List<LecturerInOtherScientificWork>();
+                foreach (var lecturerId in otherScientificWorkManageModel.LecturerIds)
+                {
+                    lecturerInOtherScientificWorks.Add(new LecturerInOtherScientificWork()
+                    {
+                        OtherScientificWorkId = otherScientificWork.Id,
+                        LecturerId = lecturerId
+                    });
+                }
+                _lecturerInOtherScientificWorkRepository.GetDbContext().LecturerInOtherScientificWorks.AddRange(lecturerInOtherScientificWorks);
+                await _lecturerInOtherScientificWorkRepository.GetDbContext().SaveChangesAsync();
+
                 return new ResponseModel()
                 {
                     StatusCode = System.Net.HttpStatusCode.OK,
@@ -139,7 +170,7 @@ namespace ScientificResearch.Core.Business.Services
         }
         public async Task<ResponseModel> UpdateOtherScientificWorkAsync(Guid id, OtherScientificWorkManageModel otherScientificWorkManageModel)
         {
-            var otherScientificWork = await _otherScientificWorkResponstory.GetByIdAsync(id);
+            var otherScientificWork = await GetAll().FirstOrDefaultAsync(x => x.Id == id);
             if (otherScientificWork == null)
             {
                 return new ResponseModel()
@@ -150,23 +181,43 @@ namespace ScientificResearch.Core.Business.Services
             }
             else
             {
-                var existedOtherScientificWork = await _otherScientificWorkResponstory.FetchFirstAsync(x => x.Name == otherScientificWorkManageModel.Name && x.ClassificationOfScientificWorkId == otherScientificWorkManageModel.ClassificationOfScientificWorkId && x.Id != id);
-                if (existedOtherScientificWork != null)
+                await _lecturerInOtherScientificWorkRepository.DeleteAsync(otherScientificWork.LecturerInOtherScientificWorks);
+
+                var lecturerInOtherScientificWorks = new List<LecturerInOtherScientificWork>();
+                foreach (var lecturerId in otherScientificWorkManageModel.LecturerIds)
                 {
-                    var classificationOfScientificWork = await _otherScientificWorkResponstory.GetByIdAsync(otherScientificWorkManageModel.ClassificationOfScientificWorkId);
-                    return new ResponseModel()
+                    lecturerInOtherScientificWorks.Add(new LecturerInOtherScientificWork()
                     {
-                        StatusCode = System.Net.HttpStatusCode.BadRequest,
-                        Message = "OtherScientificWork " + existedOtherScientificWork.Name + " already created on ClassificationOfScientificWork " + classificationOfScientificWork.Name,
-                    };
+                        OtherScientificWorkId = otherScientificWork.Id,
+                        LecturerId = lecturerId
+                    });
                 }
-                else
+
+                _lecturerInOtherScientificWorkRepository.GetDbContext().LecturerInOtherScientificWorks.AddRange(lecturerInOtherScientificWorks);
+                await _lecturerInOtherScientificWorkRepository.GetDbContext().SaveChangesAsync();
+
+                otherScientificWorkManageModel.GetOtherScientificWorkFromModel(otherScientificWork);
+                await _otherScientificWorkResponstory.UpdateAsync(otherScientificWork);
+
+                otherScientificWork = await GetAll().FirstOrDefaultAsync(x => x.Id == id);
+                return new ResponseModel
                 {
-                    otherScientificWorkManageModel.GetOtherScientificWorkFromModel(otherScientificWork);
-                    return await _otherScientificWorkResponstory.UpdateAsync(otherScientificWork);
-                }
+                    StatusCode = System.Net.HttpStatusCode.OK,
+                    Data = new OtherScientificWorkViewModel(otherScientificWork)
+                };
             }
 
+        }
+
+        public async Task<ResponseModel> GetLecturerByOtherScientificWorkIdAsync(Guid? id)
+        {
+            var otherScientificWork = await GetAll().FirstAsync(x => x.Id == id);
+            List<LecturerViewModel> lecturers = otherScientificWork.LecturerInOtherScientificWorks.Select(x => new LecturerViewModel(x.Lecturer)).ToList();
+            return new ResponseModel
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Data = lecturers
+            };
         }
 
     }

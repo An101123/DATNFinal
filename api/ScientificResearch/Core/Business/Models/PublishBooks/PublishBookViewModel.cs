@@ -25,8 +25,8 @@ namespace ScientificResearch.Core.Business.Models.PublishBooks
                 Time = publishBook.Time;
                 PlaceOfPublication = publishBook.PlaceOfPublication;
                 BookCategory = new BookCategoryViewModel(publishBook.BookCategory);
-                Lecturer = new LecturerViewModel(publishBook.Lecturer);
-                //User = new UserViewModel(scientificWork.User);
+                Lecturers = GetLecturer(publishBook);
+                //User = new UserViewModel(publishBook.User);
                 //Lecturer = new LecturerViewModel;
             }
         }
@@ -40,7 +40,16 @@ namespace ScientificResearch.Core.Business.Models.PublishBooks
 
         public BookCategoryViewModel BookCategory { get; set; }
 
-        public LecturerViewModel Lecturer { get; set; }
+        public List<LecturerViewModel> Lecturers { get; set; }
+        private List<LecturerViewModel> GetLecturer(PublishBook publishBook)
+        {
+            var lecturers = new List<LecturerViewModel>();
+            foreach (var lecturerInPublishBook in publishBook.LecturerInPublishBooks)
+            {
+                lecturers.Add(new LecturerViewModel(lecturerInPublishBook.Lecturer));
+            }
+            return lecturers;
+        }
 
         //public UserViewModel User { get; set; }
     }

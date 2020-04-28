@@ -163,8 +163,11 @@ class OtherScientificWorkListPage extends Component {
                                 .format("DD-MM-YYYY")}
                             </td>
 
-                            <td>{item.lecturer.name}</td>
-                          </tr>
+  <td>
+                          {item.lecturers.map(
+                            (lecturer) => lecturer.name + "; "
+                          )}
+                        </td>                          </tr>
                         );
                       })}
                 </tbody>

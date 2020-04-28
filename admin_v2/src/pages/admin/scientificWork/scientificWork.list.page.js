@@ -29,6 +29,7 @@ import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
 import ScientificWorkDetail from "./scientificWork.detail";
 import CKEditorInput from "../../../components/common/ckeditor-input";
+import { Select } from "antd";
 
 class ScientificWorkListPage extends Component {
   constructor(props) {
@@ -125,6 +126,12 @@ class ScientificWorkListPage extends Component {
     console.log(item);
   };
 
+  onLecturerChange = (value) => {
+    let item = Object.assign({}, this.state.item);
+    item.lecturerIds = value;
+    this.setState({ item });
+  };
+
   onTimeChange = (el) => {
     let inputValue = el._d;
     let item = Object.assign({}, this.state.item);
@@ -189,10 +196,8 @@ class ScientificWorkListPage extends Component {
   };
 
   addScientificWork = async () => {
-    console.log("state ==================");
-    console.log(this.state);
-    const { name, time, content, levelId, lecturerId } = this.state.item;
-    const scientificWork = { name, time, content, levelId, lecturerId };
+    const { name, time, content, levelId, lecturerIds } = this.state.item;
+    const scientificWork = { name, time, content, levelId, lecturerIds };
     try {
       await ApiScientificWork.postScientificWork(scientificWork);
       this.toggleModalInfo();
@@ -206,9 +211,10 @@ class ScientificWorkListPage extends Component {
   updateScientificWork = async () => {
     const { id, name, time, content } = this.state.item;
     const levelId = this.state.item.level.id;
-    const lecturerId = this.state.item.lecturer.id;
-    const scientificWork = { id, name, time, content, levelId, lecturerId };
-
+    const lecturerIds = this.state.item.lecturerIds
+      ? this.state.item.lecturerIds
+      : this.state.item.lecturers.map((lecturer) => lecturer.id);
+    const scientificWork = { id, name, time, content, levelId, lecturerIds };
     try {
       await ApiScientificWork.updateScientificWork(scientificWork);
       this.toggleModalInfo();
@@ -269,6 +275,8 @@ class ScientificWorkListPage extends Component {
     const hasResults =
       scientificWorkPagedList.sources &&
       scientificWorkPagedList.sources.length > 0;
+    const { Option } = Select;
+
     return (
       <div className="animated fadeIn">
         <ModalConfirm
@@ -374,16 +382,6 @@ class ScientificWorkListPage extends Component {
                             ))
                           : ""}
                       </select>
-                      {/* <Label
-                        id="levelWarning"
-                        style={{
-                          marginLeft: 20,
-                          fontWeight: "bold",
-                          opacity: "0"
-                        }}
-                      >
-                        <span className="text-danger">Vui lòng chọn cấp</span>
-                      </Label> */}
                     </FormGroup>
                   </Col>
                 </Row>
@@ -395,22 +393,25 @@ class ScientificWorkListPage extends Component {
                         Giảng viên<span className="text-danger"> *</span>
                       </Label>
                       <br />
-                      <select
-                        className="select-custom"
-                        defaultValue={item.lecturer ? item.lecturer.id : ""}
-                        id="selectLecturer"
-                        name="lecturerId"
-                        onChange={this.onModelChange}
+                      <Select
+                        mode="multiple"
+                        style={{ display: "block" }}
+                        placeholder="Please select"
+                        onChange={this.onLecturerChange}
+                        defaultValue={
+                          item.lecturers
+                            ? item.lecturers.map((lecturer) => lecturer.id)
+                            : undefined
+                        }
                       >
-                        <option style={{ display: "none" }}>-- Chọn --</option>
                         {lecturers.length > 0
                           ? lecturers.map((lecturer, i) => (
-                              <option key={i} value={lecturer.id}>
+                              <Option key={i} value={lecturer.id}>
                                 {lecturer.name}
-                              </option>
+                              </Option>
                             ))
                           : ""}
-                      </select>
+                      </Select>
                       <Label
                         id="lecturerWarning"
                         style={{
@@ -490,7 +491,11 @@ class ScientificWorkListPage extends Component {
                           </td>
 
                           <td>{item.level.name}</td>
-                          <td>{item.lecturer.name}</td>
+                          <td>
+                            {item.lecturers.map(
+                              (lecturer) => lecturer.name + "; "
+                            )}
+                          </td>
 
                           <td>
                             <Button

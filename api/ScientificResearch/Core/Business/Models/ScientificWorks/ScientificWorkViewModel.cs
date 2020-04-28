@@ -1,6 +1,7 @@
 ﻿using ScientificResearch.Core.Business.Models.Lecturers;
 using ScientificResearch.Core.Business.Models.Levels;
 using ScientificResearch.Core.Business.Models.Users;
+using ScientificResearch.Core.Entities;
 using ScientificResearch.Entities;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace ScientificResearch.Core.Business.Models.ScientificWorks
                 Content = scientificWork.Content;
                 Time = scientificWork.Time;
                 Level = new LevelViewModel(scientificWork.Level);
-                Lecturer = new LecturerViewModel(scientificWork.Lecturer);
+                Lecturers = GetLecturer(scientificWork);
                 //User = new UserViewModel(scientificWork.User);
                 //Lecturer = new LecturerViewModel;
             }
@@ -40,8 +41,18 @@ namespace ScientificResearch.Core.Business.Models.ScientificWorks
 
         public LevelViewModel Level { get; set; }
 
-        public LecturerViewModel Lecturer { get; set; }
+        public List<LecturerViewModel> Lecturers { get; set; }
 
         //public UserViewModel User { get; set; }
+
+        private List<LecturerViewModel> GetLecturer(ScientificWork scientificWork)
+        {
+            var lecturers = new List<LecturerViewModel>();
+            foreach(var lecturerInScientificWork in scientificWork.LecturerInScientificWorks)
+            {
+                lecturers.Add(new LecturerViewModel(lecturerInScientificWork.Lecturer));
+            }
+            return lecturers;
+        }
     }
 }

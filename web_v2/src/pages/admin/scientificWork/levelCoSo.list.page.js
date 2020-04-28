@@ -185,9 +185,12 @@ class ScientificWorkListPage extends Component {
                                   .add(7, "h")
                                   .format("DD-MM-YYYY")}
                               </td>
-
                               <td>{item.level.name}</td>
-                              <td>{item.lecturer.name}</td>
+                              <td>
+                                {item.lecturers.map(
+                                  (lecturer) => lecturer.name + "; "
+                                )}
+                              </td>{" "}
                             </tr>
                           );
                         })}

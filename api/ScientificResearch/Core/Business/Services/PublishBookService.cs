@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ScientificResearch.Core.Business.Models.Base;
+using ScientificResearch.Core.Business.Models.Lecturers;
 using ScientificResearch.Core.Business.Models.PublishBooks;
 using ScientificResearch.Core.Business.Reflections;
 using ScientificResearch.Core.Common.Constants;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace ScientificResearch.Core.Business.Services
 {
-   
+
     public interface IPublishBookService
     {
         Task<PagedList<PublishBookViewModel>> ListPublishBookAsync(RequestListViewModel requestListViewModel);
@@ -26,17 +27,21 @@ namespace ScientificResearch.Core.Business.Services
         Task<ResponseModel> UpdatePublishBookAsync(Guid id, PublishBookManageModel publishBookManagerModel);
 
         Task<ResponseModel> DeletePublishBookAsync(Guid id);
+
+        Task<ResponseModel> GetLecturerByPublishBookIdAsync(Guid? id);
     }
     public class PublishBookService : IPublishBookService
     {
         private readonly IRepository<PublishBook> _publishBookResponstory;
+        private readonly IRepository<LecturerInPublishBook> _lecturerInPublishBookRepository;
         private readonly IRepository<BookCategory> _bookCategoryRepository;
         private readonly IRepository<Lecturer> _lecturerRepository;
         private readonly IMapper _mapper;
 
-        public PublishBookService(IRepository<PublishBook> publishBookResponstory, IRepository<BookCategory> bookCategoryRepository, IRepository<Lecturer> lecturerRepository, IMapper mapper)
+        public PublishBookService(IRepository<PublishBook> publishBookResponstory, IRepository<LecturerInPublishBook> lecturerInPublishBookRepository, IRepository<BookCategory> bookCategoryRepository, IRepository<Lecturer> lecturerRepository, IMapper mapper)
         {
             _publishBookResponstory = publishBookResponstory;
+            _lecturerInPublishBookRepository = lecturerInPublishBookRepository;
             _bookCategoryRepository = bookCategoryRepository;
             _lecturerRepository = lecturerRepository;
             _mapper = mapper;
@@ -46,7 +51,7 @@ namespace ScientificResearch.Core.Business.Services
         private IQueryable<PublishBook> GetAll()
         {
             return _publishBookResponstory.GetAll().Include(x => x.BookCategory)
-                .Include(x => x.Lecturer);
+                .Include(x => x.LecturerInPublishBooks).ThenInclude(x => x.Lecturer);
         }
 
         private List<string> GetAllPropertyNameOfPublishBookViewModel()
@@ -65,7 +70,6 @@ namespace ScientificResearch.Core.Business.Services
             && (string.IsNullOrEmpty(requestListViewModel.Query)
                 || (x.Name.Contains(requestListViewModel.Query)
                 || (x.BookCategory.Name.Contains(requestListViewModel.Query))
-                || (x.Lecturer.Name.Contains(requestListViewModel.Query))
                 )))
             .Select(x => new PublishBookViewModel(x)).ToListAsync();
 
@@ -107,8 +111,23 @@ namespace ScientificResearch.Core.Business.Services
 
         public async Task<ResponseModel> DeletePublishBookAsync(Guid id)
         {
-            return await _publishBookResponstory.DeleteAsync(id);
+            var publishBook = await GetAll().FirstOrDefaultAsync(x => x.Id == id);
+            if (publishBook == null)
+            {
+                return new ResponseModel()
+                {
+                    StatusCode = System.Net.HttpStatusCode.NotFound,
+                    Message = "This Scientific Work is not exist. Please try again!"
+                };
+            }
+            else
+            {
+                await _lecturerInPublishBookRepository.DeleteAsync(publishBook.LecturerInPublishBooks);
+
+                return await _publishBookResponstory.DeleteAsync(id);
+            }
         }
+
 
         public async Task<ResponseModel> CreatePublishBookAsync(PublishBookManageModel publishBookManageModel)
         {
@@ -123,13 +142,24 @@ namespace ScientificResearch.Core.Business.Services
             }
             else
             {
-                var bookCategory = await _bookCategoryRepository.GetByIdAsync(publishBookManageModel.BookCategoryId);
-                var lecturer = await _lecturerRepository.GetByIdAsync(publishBookManageModel.LecturerId);
                 publishBook = _mapper.Map<PublishBook>(publishBookManageModel);
+                var bookCategory = await _bookCategoryRepository.GetByIdAsync(publishBookManageModel.BookCategoryId);
                 publishBook.BookCategory = bookCategory;
-                publishBook.Lecturer = lecturer;
 
                 await _publishBookResponstory.InsertAsync(publishBook);
+
+                var lecturerInPublishBooks = new List<LecturerInPublishBook>();
+                foreach (var lecturerId in publishBookManageModel.LecturerIds)
+                {
+                    lecturerInPublishBooks.Add(new LecturerInPublishBook()
+                    {
+                        PublishBookId = publishBook.Id,
+                        LecturerId = lecturerId
+                    });
+                }
+                _lecturerInPublishBookRepository.GetDbContext().LecturerInPublishBooks.AddRange(lecturerInPublishBooks);
+                await _lecturerInPublishBookRepository.GetDbContext().SaveChangesAsync();
+
                 return new ResponseModel()
                 {
                     StatusCode = System.Net.HttpStatusCode.OK,
@@ -139,7 +169,7 @@ namespace ScientificResearch.Core.Business.Services
         }
         public async Task<ResponseModel> UpdatePublishBookAsync(Guid id, PublishBookManageModel publishBookManageModel)
         {
-            var publishBook = await _publishBookResponstory.GetByIdAsync(id);
+            var publishBook = await GetAll().FirstOrDefaultAsync(x => x.Id == id);
             if (publishBook == null)
             {
                 return new ResponseModel()
@@ -150,23 +180,43 @@ namespace ScientificResearch.Core.Business.Services
             }
             else
             {
-                var existedPublishBook = await _publishBookResponstory.FetchFirstAsync(x => x.Name == publishBookManageModel.Name && x.BookCategoryId == publishBookManageModel.BookCategoryId && x.Id != id);
-                if (existedPublishBook != null)
+                await _lecturerInPublishBookRepository.DeleteAsync(publishBook.LecturerInPublishBooks);
+
+                var lecturerInPublishBooks = new List<LecturerInPublishBook>();
+                foreach (var lecturerId in publishBookManageModel.LecturerIds)
                 {
-                    var bookCategory = await _publishBookResponstory.GetByIdAsync(publishBookManageModel.BookCategoryId);
-                    return new ResponseModel()
+                    lecturerInPublishBooks.Add(new LecturerInPublishBook()
                     {
-                        StatusCode = System.Net.HttpStatusCode.BadRequest,
-                        Message = "PublishBook " + existedPublishBook.Name + " already created on BookCategory " + bookCategory.Name,
-                    };
+                        PublishBookId = publishBook.Id,
+                        LecturerId = lecturerId
+                    });
                 }
-                else
+
+                _lecturerInPublishBookRepository.GetDbContext().LecturerInPublishBooks.AddRange(lecturerInPublishBooks);
+                await _lecturerInPublishBookRepository.GetDbContext().SaveChangesAsync();
+
+                publishBookManageModel.GetPublishBookFromModel(publishBook);
+                await _publishBookResponstory.UpdateAsync(publishBook);
+
+                publishBook = await GetAll().FirstOrDefaultAsync(x => x.Id == id);
+                return new ResponseModel
                 {
-                    publishBookManageModel.GetPublishBookFromModel(publishBook);
-                    return await _publishBookResponstory.UpdateAsync(publishBook);
-                }
+                    StatusCode = System.Net.HttpStatusCode.OK,
+                    Data = new PublishBookViewModel(publishBook)
+                };
             }
 
+        }
+
+        public async Task<ResponseModel> GetLecturerByPublishBookIdAsync(Guid? id)
+        {
+            var publishBook = await GetAll().FirstAsync(x => x.Id == id);
+            List<LecturerViewModel> lecturers = publishBook.LecturerInPublishBooks.Select(x => new LecturerViewModel(x.Lecturer)).ToList();
+            return new ResponseModel
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Data = lecturers
+            };
         }
 
     }

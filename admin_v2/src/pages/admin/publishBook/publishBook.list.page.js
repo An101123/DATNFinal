@@ -27,7 +27,7 @@ import { pagination } from "../../../constant/app.constant";
 import ApiBookCategory from "../../../api/api.bookCategory";
 import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
-import CKEditorInput from "../../../components/common/ckeditor-input";
+import { Select } from "antd";
 
 class PublishBookListPage extends Component {
   constructor(props) {
@@ -147,7 +147,11 @@ class PublishBookListPage extends Component {
     e.persist();
     this.delayedCallback(e);
   };
-
+  onLecturerChange = (value) => {
+    let item = Object.assign({}, this.state.item);
+    item.lecturerIds = value;
+    this.setState({ item });
+  };
   handlePageClick = (e) => {
     this.setState(
       {
@@ -187,16 +191,15 @@ class PublishBookListPage extends Component {
       time,
       placeOfPublication,
       bookCategoryId,
-      lecturerId,
+      lecturerIds,
     } = this.state.item;
     const publishBook = {
       name,
       time,
       placeOfPublication,
       bookCategoryId,
-      lecturerId,
+      lecturerIds,
     };
-    console.log(publishBook);
     try {
       await ApiPublishBook.postPublishBook(publishBook);
       this.toggleModalInfo();
@@ -210,14 +213,16 @@ class PublishBookListPage extends Component {
   updatePublishBook = async () => {
     const { id, name, time, placeOfPublication } = this.state.item;
     const bookCategoryId = this.state.item.bookCategory.id;
-    const lecturerId = this.state.item.lecturer.id;
+    const lecturerIds = this.state.item.lecturerIds
+      ? this.state.item.lecturerIds
+      : this.state.item.lecturers.map((lecturer) => lecturer.id);
     const publishBook = {
       id,
       name,
       time,
       placeOfPublication,
       bookCategoryId,
-      lecturerId,
+      lecturerIds,
     };
 
     try {
@@ -277,6 +282,8 @@ class PublishBookListPage extends Component {
     const { sources, pageIndex, totalPages } = publishBookPagedList;
     const hasResults =
       publishBookPagedList.sources && publishBookPagedList.sources.length > 0;
+    const { Option } = Select;
+
     return (
       <div className="animated fadeIn">
         <ModalConfirm
@@ -406,22 +413,25 @@ class PublishBookListPage extends Component {
                         Giảng viên<span className="text-danger"> *</span>
                       </Label>
                       <br />
-                      <select
-                        className="select-custom"
-                        defaultValue={item.lecturer ? item.lecturer.id : ""}
-                        id="selectLecturer"
-                        name="lecturerId"
-                        onChange={this.onModelChange}
+                      <Select
+                        mode="multiple"
+                        style={{ display: "block" }}
+                        placeholder="Please select"
+                        onChange={this.onLecturerChange}
+                        defaultValue={
+                          item.lecturers
+                            ? item.lecturers.map((lecturer) => lecturer.id)
+                            : undefined
+                        }
                       >
-                        <option style={{ display: "none" }}>-- Chọn --</option>
                         {lecturers.length > 0
                           ? lecturers.map((lecturer, i) => (
-                              <option key={i} value={lecturer.id}>
+                              <Option key={i} value={lecturer.id}>
                                 {lecturer.name}
-                              </option>
+                              </Option>
                             ))
                           : ""}
-                      </select>
+                      </Select>
                       <Label
                         id="lecturerWarning"
                         style={{
@@ -488,8 +498,11 @@ class PublishBookListPage extends Component {
 
                         <td>{item.bookCategory.name}</td>
                         <td>{item.placeOfPublication}</td>
-                        <td>{item.lecturer.name}</td>
-
+                        <td>
+                          {item.lecturers.map(
+                            (lecturer) => lecturer.name + "; "
+                          )}
+                        </td>
                         <td>
                           <Button
                             className="btn-sm"
