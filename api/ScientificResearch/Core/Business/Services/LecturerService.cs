@@ -75,53 +75,52 @@ namespace ScientificResearch.Core.Business.Services
 
             return ReflectionUtilities.GetAllPropertyNamesOfType(type);
         }
+        private async Task ScoreCount()
+        {
+            var list = await GetAll().ToListAsync();
+            foreach (var lecturer in list)
+            {
+                float sum = 0;
+                if (lecturer.LecturerInScientificReports.Count > 0)
+                {
+                    foreach (var scientificReport in lecturer.LecturerInScientificReports)
+                    {
+                        sum += scientificReport.ScientificReport.ScientificReportType.Score;
+                    }
+                }
 
-        //private async Task ScoreCount()
-        //{
-        //    var list = await GetAll().ToListAsync();
-        //    foreach (var lecturer in list)
-        //    {
-        //        float sum = 0;
-        //        if (lecturer.ScientificReports.Count > 0)
-        //        {
-        //            foreach (var scientificReport in lecturer.ScientificReports)
-        //            {
-        //                sum += scientificReport.ScientificReportType.Score;
-        //            }
-        //        }
-
-        //        if (lecturer.LecturerInScientificWorks.Count > 0)
-        //        {
-        //            foreach (var scientificWork in lecturer.LecturerInScientificWorks)
-        //            {
-        //                sum += scientificWork.Level.Score;
-        //            }
-        //        }
-        //        if (lecturer.PublishBooks.Count > 0)
-        //        {
-        //            foreach (var publishBook in lecturer.PublishBooks)
-        //            {
-        //                sum += publishBook.BookCategory.Score;
-        //            }
-        //        }
-        //        if (lecturer.StudyGuides.Count > 0)
-        //        {
-        //            foreach (var studyGuide in lecturer.StudyGuides)
-        //            {
-        //                sum += studyGuide.LevelStudyGuide.Score;
-        //            }
-        //        }
-        //        if (lecturer.OtherScientificWorks.Count > 0)
-        //        {
-        //            foreach (var otherScientificWork in lecturer.OtherScientificWorks)
-        //            {
-        //                sum += otherScientificWork.ClassificationOfScientificWork.Score;
-        //            }
-        //        }
-        //        lecturer.Total = sum;
-        //        await _lecturerRepository.UpdateAsync(lecturer);
-        //    }
-        //}
+                if (lecturer.LecturerInScientificWorks.Count > 0)
+                {
+                    foreach (var scientificWork in lecturer.LecturerInScientificWorks)
+                    {
+                        sum += scientificWork.ScientificWork.Level.Score;
+                    }
+                }
+                if (lecturer.LecturerInPublishBooks.Count > 0)
+                {
+                    foreach (var publishBook in lecturer.LecturerInPublishBooks)
+                    {
+                        sum += publishBook.PublishBook.BookCategory.Score;
+                    }
+                }
+                if (lecturer.StudyGuides.Count > 0)
+                {
+                    foreach (var studyGuide in lecturer.StudyGuides)
+                    {
+                        sum += studyGuide.LevelStudyGuide.Score;
+                    }
+                }
+                if (lecturer.LecturerInOtherScientificWorks.Count > 0)
+                {
+                    foreach (var otherScientificWork in lecturer.LecturerInOtherScientificWorks)
+                    {
+                        sum += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.Score;
+                    }
+                }
+                lecturer.Total = sum;
+                await _lecturerRepository.UpdateAsync(lecturer);
+            }
+        }
 
         //private async Task TotalHours()
         //{
@@ -179,7 +178,7 @@ namespace ScientificResearch.Core.Business.Services
 
         public async Task<PagedList<LecturerViewModel>> ListLecturerAsync(RequestListViewModel requestListViewModel)
         {
-            //await ScoreCount();
+            await ScoreCount();
             //await TotalHours();
             var list = await GetAll()
                 .Where(x => (!requestListViewModel.IsActive.HasValue || x.RecordActive == requestListViewModel.IsActive)
