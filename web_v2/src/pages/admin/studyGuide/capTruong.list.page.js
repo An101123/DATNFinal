@@ -168,11 +168,7 @@ class StudyGuideListPage extends Component {
                                 .format("YYYY")}
                             </td>
                             <td>{item.levelStudyGuide.name}</td>
-                            <td>
-                              {item.lecturers.map(
-                                (lecturer) => lecturer.name + "; "
-                              )}
-                            </td>{" "}
+                            <td>{item.lecturer.name}</td>{" "}
                           </tr>
                         );
                       })}

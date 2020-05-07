@@ -30,12 +30,18 @@ namespace ScientificResearch.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] RequestListViewModel requestListViewModel)
+        public async Task<IActionResult> GetAll([FromQuery] RequestListViewModel requestListViewModel,DateTime? startTime, DateTime endTime)
         {
-            var lecturer = await _lecturerService.ListLecturerAsync(requestListViewModel);
+            var lecturer = await _lecturerService.ListLecturerAsync(requestListViewModel,startTime, endTime);
             return Ok(lecturer);
         }
 
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> GetLecturerById(Guid id, DateTime startTime, DateTime endTime)
+        //{
+        //    var lecturer = await _lecturerService.GetLecturerByIdAsync(id, startTime, endTime);
+        //    return Ok(lecturer);
+        //}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetLecturerById(Guid id)
         {

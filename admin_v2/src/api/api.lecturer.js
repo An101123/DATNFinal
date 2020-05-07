@@ -6,8 +6,8 @@ export default class ApiLecturer {
     return RequestHelper.get(appConfig.apiUrl + "lecturers/all");
   }
 
-  static getLecturers(params) {
-    return RequestHelper.get(appConfig.apiUrl + "lecturers", params);
+  static getLecturers(params, year) {
+    return RequestHelper.get(appConfig.apiUrl + "lecturers", params, year);
   }
 
   static postLecturer(lecturer) {

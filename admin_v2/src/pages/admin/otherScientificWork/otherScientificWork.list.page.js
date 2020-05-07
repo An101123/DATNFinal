@@ -316,10 +316,10 @@ class OtherScientificWorkListPage extends Component {
                         className="select-custom"
                         defaultValue={
                           item.time
-                            ? moment(item.time).add(7, "h").format("YYYY")
+                            ? moment(item.time).add(7, "h").format("DD-MM-YYYY")
                             : ""
                         }
-                        dateFormat="YYYY"
+                        dateFormat="DD-MM-YYYY"
                         timeFormat=""
                         onChange={this.onTimeChange}
                       />
@@ -471,7 +471,9 @@ class OtherScientificWorkListPage extends Component {
                             item.name
                           )}
                         </td>
-                        <td>{moment(item.time).add(7, "h").format("YYYY")}</td>
+                        <td>
+                          {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
+                        </td>
                         <td>{item.classificationOfScientificWork.name}</td>
                         <td>
                           {item.lecturers.map(

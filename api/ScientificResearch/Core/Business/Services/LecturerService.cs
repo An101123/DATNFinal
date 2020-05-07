@@ -22,7 +22,7 @@ namespace ScientificResearch.Core.Business.Services
     {
         Task<List<LecturerViewModel>> GetAllLecturer();
 
-        Task<PagedList<LecturerViewModel>> ListLecturerAsync(RequestListViewModel requestListViewModel);
+        Task<PagedList<LecturerViewModel>> ListLecturerAsync(RequestListViewModel requestListViewModel, DateTime? startTime, DateTime? endTime);
         Task<LecturerViewModel> GetLecturerByIdAsync(Guid? id);
         Task<ResponseModel> CreateLecturerAsync(LecturerManageModel lecturerManageModel);
         Task<ResponseModel> UpdateLecturerAsync(Guid id, LecturerManageModel lecturerManageModel);
@@ -56,15 +56,15 @@ namespace ScientificResearch.Core.Business.Services
         {
             return _lecturerRepository.GetAll()
                 .Include(x => x.LecturerInScientificReports)
-                .ThenInclude(x=> x.ScientificReport)
+                .ThenInclude(x => x.ScientificReport)
                     .ThenInclude(x => x.ScientificReportType)
                 .Include(x => x.LecturerInScientificWorks)
                     .ThenInclude(x => x.ScientificWork)
                     .ThenInclude(x => x.Level)
                     .Include(x => x.LecturerInPublishBooks)
-                    .ThenInclude(x=> x.PublishBook).ThenInclude(x=>x.BookCategory)
-                    .Include(x=>x.StudyGuides).ThenInclude(x=>x.LevelStudyGuide)
-                    .Include(x => x.LecturerInOtherScientificWorks).ThenInclude(x=> x.OtherScientificWork).ThenInclude(x => x.ClassificationOfScientificWork);
+                    .ThenInclude(x => x.PublishBook).ThenInclude(x => x.BookCategory)
+                    .Include(x => x.StudyGuides).ThenInclude(x => x.LevelStudyGuide)
+                    .Include(x => x.LecturerInOtherScientificWorks).ThenInclude(x => x.OtherScientificWork).ThenInclude(x => x.ClassificationOfScientificWork);
         }
 
         private List<string> GetAllPropertyNameOfLecturerViewModel()
@@ -75,17 +75,19 @@ namespace ScientificResearch.Core.Business.Services
 
             return ReflectionUtilities.GetAllPropertyNamesOfType(type);
         }
-        private async Task ScoreCount()
+        private async Task ScoreAndHourCount()
         {
             var list = await GetAll().ToListAsync();
             foreach (var lecturer in list)
             {
                 float sum = 0;
+                int hour = 0;
                 if (lecturer.LecturerInScientificReports.Count > 0)
                 {
                     foreach (var scientificReport in lecturer.LecturerInScientificReports)
                     {
                         sum += scientificReport.ScientificReport.ScientificReportType.Score;
+                        hour += scientificReport.ScientificReport.ScientificReportType.HoursConverted;
                     }
                 }
 
@@ -94,6 +96,7 @@ namespace ScientificResearch.Core.Business.Services
                     foreach (var scientificWork in lecturer.LecturerInScientificWorks)
                     {
                         sum += scientificWork.ScientificWork.Level.Score;
+                        hour += scientificWork.ScientificWork.Level.HoursConverted;
                     }
                 }
                 if (lecturer.LecturerInPublishBooks.Count > 0)
@@ -101,6 +104,7 @@ namespace ScientificResearch.Core.Business.Services
                     foreach (var publishBook in lecturer.LecturerInPublishBooks)
                     {
                         sum += publishBook.PublishBook.BookCategory.Score;
+                        hour += publishBook.PublishBook.BookCategory.HoursConverted;
                     }
                 }
                 if (lecturer.StudyGuides.Count > 0)
@@ -108,6 +112,7 @@ namespace ScientificResearch.Core.Business.Services
                     foreach (var studyGuide in lecturer.StudyGuides)
                     {
                         sum += studyGuide.LevelStudyGuide.Score;
+                        hour += studyGuide.LevelStudyGuide.HoursConverted;
                     }
                 }
                 if (lecturer.LecturerInOtherScientificWorks.Count > 0)
@@ -115,12 +120,202 @@ namespace ScientificResearch.Core.Business.Services
                     foreach (var otherScientificWork in lecturer.LecturerInOtherScientificWorks)
                     {
                         sum += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.Score;
+                        hour += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.HoursConverted;
                     }
                 }
                 lecturer.Total = sum;
+                lecturer.TotalHour = hour;
                 await _lecturerRepository.UpdateAsync(lecturer);
             }
         }
+        private async Task ScoreAndHourByStage( DateTime? startTime, DateTime? endTime)
+        {
+            var list = await GetAll().ToListAsync();
+            foreach (var lecturer in list)
+            {
+                if (startTime != null && endTime != null)
+                {
+                    float sum = 0;
+                    int hour = 0;
+                    if (lecturer.LecturerInScientificReports.Count > 0)
+                    {
+                        foreach (var scientificReport in lecturer.LecturerInScientificReports)
+                        {
+                            if (scientificReport.ScientificReport.Time > startTime && scientificReport.ScientificReport.Time < endTime)
+                            {
+                                sum += scientificReport.ScientificReport.ScientificReportType.Score;
+                                hour += scientificReport.ScientificReport.ScientificReportType.HoursConverted;
+                            }
+                        }
+                    }
+                    if (lecturer.LecturerInScientificWorks.Count > 0)
+                    {
+                        foreach (var scientificWork in lecturer.LecturerInScientificWorks)
+                        {
+                            if (scientificWork.ScientificWork.Time > startTime && scientificWork.ScientificWork.Time < endTime)
+                            {
+                                sum += scientificWork.ScientificWork.Level.Score;
+                                hour += scientificWork.ScientificWork.Level.HoursConverted;
+                            }
+                        }
+                    }
+                    if (lecturer.LecturerInPublishBooks.Count > 0)
+                    {
+                        foreach (var publishBook in lecturer.LecturerInPublishBooks)
+                        {
+                            if (publishBook.PublishBook.Time > startTime && publishBook.PublishBook.Time < endTime)
+                            {
+                                sum += publishBook.PublishBook.BookCategory.Score;
+                                hour += publishBook.PublishBook.BookCategory.HoursConverted;
+                            }
+                        }
+                    }
+                    if (lecturer.LecturerInOtherScientificWorks.Count > 0)
+                    {
+                        foreach (var otherScientificWork in lecturer.LecturerInOtherScientificWorks)
+                        {
+                            if (otherScientificWork.OtherScientificWork.Time > startTime && otherScientificWork.OtherScientificWork.Time < endTime)
+                            {
+                                sum += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.Score;
+                                hour += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.HoursConverted;
+                            }
+                        }
+                    }
+                    if (lecturer.StudyGuides.Count > 0)
+                    {
+                        foreach (var studyGuide in lecturer.StudyGuides)
+                        {
+                            sum += studyGuide.LevelStudyGuide.Score;
+                            hour += studyGuide.LevelStudyGuide.HoursConverted;
+                        }
+                    }
+
+                    lecturer.Total = sum;
+                    lecturer.TotalHour = hour;
+                    await _lecturerRepository.UpdateAsync(lecturer);
+                }
+            }
+        }
+        //private async Task HourByStage(DateTime? startTime, DateTime? endTime)
+        //{
+        //    var list = await GetAll().ToListAsync();
+        //    foreach (var lecturer in list)
+        //    {
+        //        if (startTime != null && endTime != null)
+        //        {
+        //            float sum = 0;
+        //            if (lecturer.LecturerInScientificReports.Count > 0)
+        //            {
+        //                foreach (var scientificReport in lecturer.LecturerInScientificReports)
+        //                {
+        //                    if (scientificReport.ScientificReport.Time > startTime && scientificReport.ScientificReport.Time < endTime)
+        //                    {
+        //                        sum += scientificReport.ScientificReport.ScientificReportType.HoursConverted;
+        //                    }
+        //                }
+        //            }
+        //            if (lecturer.LecturerInScientificWorks.Count > 0)
+        //            {
+        //                foreach (var scientificWork in lecturer.LecturerInScientificWorks)
+        //                {
+        //                    if (scientificWork.ScientificWork.Time > startTime && scientificWork.ScientificWork.Time < endTime)
+        //                    {
+        //                        sum += scientificWork.ScientificWork.Level.HoursConverted;
+        //                    }
+        //                }
+        //            }
+        //            if (lecturer.LecturerInPublishBooks.Count > 0)
+        //            {
+        //                foreach (var publishBook in lecturer.LecturerInPublishBooks)
+        //                {
+        //                    if (publishBook.PublishBook.Time > startTime && publishBook.PublishBook.Time < endTime)
+        //                    {
+        //                        sum += publishBook.PublishBook.BookCategory.HoursConverted;
+        //                    }
+        //                }
+        //            }
+        //            if (lecturer.LecturerInOtherScientificWorks.Count > 0)
+        //            {
+        //                foreach (var otherScientificWork in lecturer.LecturerInOtherScientificWorks)
+        //                {
+        //                    if (otherScientificWork.OtherScientificWork.Time > startTime && otherScientificWork.OtherScientificWork.Time < endTime)
+        //                    {
+        //                        sum += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.HoursConverted;
+        //                    }
+        //                }
+        //            }
+        //            if (lecturer.StudyGuides.Count > 0)
+        //            {
+        //                foreach (var studyGuide in lecturer.StudyGuides)
+        //                {
+        //                    sum += studyGuide.LevelStudyGuide.HoursConverted;
+        //                }
+        //            }
+
+        //            lecturer.Total = sum;
+        //            await _lecturerRepository.UpdateAsync(lecturer);
+        //        }
+        //    }
+        //}
+
+        //private async Task<Lecturer> ScoreByStage(Guid? id, DateTime? startTime, DateTime? endTime)
+        //{
+        //    var lecturer = await GetAll().FirstOrDefaultAsync(x => x.Id == id);
+        //    if (startTime != null && endTime != null)
+        //    {
+        //        float sum = 0;
+        //        if (lecturer.LecturerInScientificReports.Count > 0)
+        //        {
+        //            foreach (var scientificReport in lecturer.LecturerInScientificReports)
+        //            {
+        //                if (scientificReport.ScientificReport.Time > startTime && scientificReport.ScientificReport.Time < endTime)
+        //                {
+        //                    sum += scientificReport.ScientificReport.ScientificReportType.Score;
+        //                }
+        //            }
+        //        }
+        //        if (lecturer.LecturerInScientificWorks.Count > 0)
+        //        {
+        //            foreach (var scientificWork in lecturer.LecturerInScientificWorks)
+        //            {
+        //                if (scientificWork.ScientificWork.Time > startTime && scientificWork.ScientificWork.Time < endTime)
+        //                {
+        //                    sum += scientificWork.ScientificWork.Level.Score;
+        //                }
+        //            }
+        //        }
+        //        if (lecturer.LecturerInPublishBooks.Count > 0)
+        //        {
+        //            foreach (var publishBook in lecturer.LecturerInPublishBooks)
+        //            {
+        //                if (publishBook.PublishBook.Time > startTime && publishBook.PublishBook.Time < endTime)
+        //                {
+        //                    sum += publishBook.PublishBook.BookCategory.Score;
+        //                }
+        //            }
+        //        }
+        //        if (lecturer.LecturerInOtherScientificWorks.Count > 0)
+        //        {
+        //            foreach (var otherScientificWork in lecturer.LecturerInOtherScientificWorks)
+        //            {
+        //                if (otherScientificWork.OtherScientificWork.Time > startTime && otherScientificWork.OtherScientificWork.Time < endTime)
+        //                {
+        //                    sum += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.Score;
+        //                }
+        //            }
+        //        }
+        //        if (lecturer.StudyGuides.Count > 0)
+        //        {
+        //            foreach (var studyGuide in lecturer.StudyGuides)
+        //            {
+        //                sum += studyGuide.LevelStudyGuide.Score;
+        //            }
+        //        }
+
+        //        lecturer.Total = sum;
+        //    }
+        //    return lecturer;
+        //}
 
         //private async Task TotalHours()
         //{
@@ -168,6 +363,7 @@ namespace ScientificResearch.Core.Business.Services
         //        await _lecturerRepository.UpdateAsync(lecturer);
         //    }
         //}
+
         #endregion
 
         public async Task<List<LecturerViewModel>> GetAllLecturer()
@@ -176,9 +372,10 @@ namespace ScientificResearch.Core.Business.Services
             return list;
         }
 
-        public async Task<PagedList<LecturerViewModel>> ListLecturerAsync(RequestListViewModel requestListViewModel)
+        public async Task<PagedList<LecturerViewModel>> ListLecturerAsync(RequestListViewModel requestListViewModel, DateTime? startTime, DateTime? endTime)
         {
-            await ScoreCount();
+            await ScoreAndHourCount();
+            await ScoreAndHourByStage(startTime, endTime);
             //await TotalHours();
             var list = await GetAll()
                 .Where(x => (!requestListViewModel.IsActive.HasValue || x.RecordActive == requestListViewModel.IsActive)
@@ -219,8 +416,12 @@ namespace ScientificResearch.Core.Business.Services
 
         public async Task<LecturerViewModel> GetLecturerByIdAsync(Guid? id)
         {
-            var table = await GetAll().FirstAsync(x => x.Id == id);
-            return new LecturerViewModel(table);
+            //var lecturer = await ScoreByStage(id, startTime, endTime);
+            //return new LecturerViewModel(lecturer);
+          
+                var table = await GetAll().FirstAsync(x => x.Id == id);
+                return new LecturerViewModel(table);
+            
         }
 
         public async Task<ResponseModel> CreateLecturerAsync(LecturerManageModel lecturerManageModel)
@@ -366,6 +567,6 @@ namespace ScientificResearch.Core.Business.Services
         }
 
     }
-    
+
 
 }

@@ -3,11 +3,11 @@ import { Card, CardImg, CardBody, CardTitle } from "reactstrap";
 
 const ListNews2 = () => {
   return (
-    <div className="slide-container">
+    <div className="news">
       <Card>
         <CardImg
           top
-          width="100%"
+          width="70%"
           src="https://due.udn.vn/Portals/0/Editor/TruyenThong_DUE/Nam%202019%202/Quy%204/SV%20Giai%201%20Eureka%202019/GiaiNhatEureka1.jpg"
           alt="Card image cap"
         />

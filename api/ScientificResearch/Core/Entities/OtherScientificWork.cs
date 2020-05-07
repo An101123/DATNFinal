@@ -1,4 +1,4 @@
-﻿using ScientificResearch.Entities;
+﻿ using ScientificResearch.Entities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

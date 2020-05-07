@@ -375,10 +375,10 @@ class StudyGuideListPage extends Component {
                           item.instructionTime
                             ? moment(item.instructionTime)
                                 .add(7, "h")
-                                .format("YYYY")
+                                .format("DD-MM-YYYY")
                             : ""
                         }
-                        dateFormat="YYYY"
+                        dateFormat="DD-MM-YYYY"
                         timeFormat=""
                         onChange={this.onInstructionTimeChange}
                       />
@@ -397,10 +397,10 @@ class StudyGuideListPage extends Component {
                           item.graduationTime
                             ? moment(item.graduationTime)
                                 .add(7, "h")
-                                .format("YYYY")
+                                .format("DD-MM-YYYY")
                             : ""
                         }
-                        dateFormat="YYYY"
+                        dateFormat="DD-MM-YYYY"
                         timeFormat=""
                         onChange={this.onGraduationTimeChange}
                       />
@@ -412,7 +412,7 @@ class StudyGuideListPage extends Component {
                   <Col>
                     <FormGroup>
                       <Label className="label-input">
-                        Phân loại<span className="text-danger"> *</span>
+                        Cấp<span className="text-danger"> *</span>
                       </Label>
                       <br />
                       <select
@@ -508,7 +508,74 @@ class StudyGuideListPage extends Component {
                 placeholder="Tìm kiếm..."
               />
             </div>
+            <Table className="admin-table" responsive bordered>
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Hướng dẫn sinh viên NCKH</th>
+                  <th>Trình độ</th>
+                  <th>Cơ sở đào tạo</th>
+                  <th>Năm hướng dẫn</th>
+                  <th>Năm bảo vệ</th>
+                  <th>Cấp</th>
+                  <th>Giảng viên</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                {hasResults &&
+                  sources.map((item, index) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>{index + 1}</td>
+                        <td onClick={() => this.toggleDetailPage(item)}>
+                          {item.name.length > 100 ? (
+                            <span>
+                              {item.name.substr(0, 100)}{" "}
+                              <span style={{ fontWeight: "bolder" }}> ...</span>
+                            </span>
+                          ) : (
+                            item.name
+                          )}
+                        </td>
+                        <td>{item.literacy}</td>
+                        <td>{item.placeOfTraining}</td>
 
+                        <td>
+                          {moment(item.instructionTime)
+                            .add(7, "h")
+                            .format("DD-MM-YYYY")}
+                        </td>
+                        <td>
+                          {moment(item.graduationTime)
+                            .add(7, "h")
+                            .format("DD-MM-YYYY")}
+                        </td>
+
+                        <td>{item.levelStudyGuide.name}</td>
+                        <td>{item.lecturer.name}</td>
+
+                        <td>
+                          <Button
+                            className="btn-sm"
+                            color="secondary"
+                            onClick={() => this.showUpdateModal(item)}
+                          >
+                            Sửa
+                          </Button>
+                          <Button
+                            className="btn-sm"
+                            color="danger"
+                            onClick={() => this.showConfirmDelete(item.id)}
+                          >
+                            Xóa
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </Table>
             {hasResults && totalPages > 1 && (
               <Pagination
                 initialPage={0}

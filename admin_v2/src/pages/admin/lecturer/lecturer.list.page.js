@@ -26,6 +26,7 @@ class LecturerListPage extends Component {
       isShowDetail: false,
       item: {},
       itemId: null,
+      year: null,
       params: {
         skip: pagination.initialPage,
         take: pagination.defaultTake,
@@ -130,8 +131,10 @@ class LecturerListPage extends Component {
     let params = Object.assign({}, this.state.params, {
       query: this.state.query,
     });
-    console.log(params);
-    this.props.getLecturerList(params);
+    var year = null; //muốn lấy theo năm thì chỉ việc tạo một cái state year rồi làm một cái select để chọn năm
+    //rồi bỏ cái năm nớ vô hàm gọi api thôi
+    //ví dụ year 2020 thì bỏ vô như ri là xong
+    this.props.getLecturerList(params, year);
   };
 
   addLecturer = async () => {
@@ -306,12 +309,14 @@ class LecturerListPage extends Component {
                 >
                   Tạo mới
                 </Button>
+
                 <input
                   onChange={this.onSearchChange}
                   className="form-control form-control-sm"
                   placeholder="Tìm kiếm..."
                 />
               </div>
+
               <Table className="admin-table" responsive bordered>
                 <thead>
                   <tr>

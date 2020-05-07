@@ -395,10 +395,10 @@ class PublishBookListPage extends Component {
                         className="select-custom"
                         defaultValue={
                           item.time
-                            ? moment(item.time).add(7, "h").format("YYYY")
+                            ? moment(item.time).add(7, "h").format("DD-MM-YYYY")
                             : ""
                         }
-                        dateFormat="YYYY"
+                        dateFormat="DD-MM-YYYY"
                         timeFormat=""
                         onChange={this.onTimeChange}
                       />
@@ -494,7 +494,9 @@ class PublishBookListPage extends Component {
                       <tr key={item.id}>
                         <td>{index + 1}</td>
                         <td> {item.name}</td>
-                        <td>{moment(item.time).add(7, "h").format("YYYY")}</td>
+                        <td>
+                          {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
+                        </td>
 
                         <td>{item.bookCategory.name}</td>
                         <td>{item.placeOfPublication}</td>

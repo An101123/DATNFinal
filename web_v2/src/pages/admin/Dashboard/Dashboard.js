@@ -15,21 +15,17 @@ class Dashboard extends Component {
           <Logo />
           <hr />
           <Row>
-            <Col xs="8">
+            <Col xs="9">
               <Home />
             </Col>
-            <Col xs="4">
+            <Col xs="3">
               <ListNews />
               <ListNews2 />
             </Col>
           </Row>
           <hr />
         </div>
-        {/* <div className="aboutus">
-          <Row>
-            <AboutUs />
-          </Row>
-        </div> */}
+
         <div>
           <Row>
             <Lecturer />

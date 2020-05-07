@@ -7,24 +7,23 @@
 .nckh {
   margin-top: 20px;
 }
-.imagenews {
-  width: 300px;
-  height: 200px;
-}
+
+
+
 .gioithieu {
   margin-top: 50px;
 }
 
-.slide-container {
+/* .slide-container {
   width: 70%;
   margin: 10px;
-}
+} */
 
 h3 {
   text-align: center;
 }
 
-.each-slide > div {
+.each-slide>div {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,6 +59,7 @@ h3 {
   margin: 0;
   background: #adceed;
 }
+
 /* ListNews */
 
 .card-cover {

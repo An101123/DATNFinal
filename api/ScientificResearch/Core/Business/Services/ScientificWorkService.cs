@@ -71,6 +71,7 @@ namespace ScientificResearch.Core.Business.Services
                 || (x.Name.Contains(requestListViewModel.Query)
                 || (x.Content.Contains(requestListViewModel.Query))
                 || (x.Level.Name.Contains(requestListViewModel.Query))
+               
                 )))
             .Select(x => new ScientificWorkViewModel(x)).ToListAsync();
 

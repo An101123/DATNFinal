@@ -346,10 +346,10 @@ class ScientificWorkListPage extends Component {
                         className="select-custom"
                         defaultValue={
                           item.time
-                            ? moment(item.time).add(7, "h").format("YYYY")
+                            ? moment(item.time).add(7, "h").format("DD-MM-YYYY")
                             : ""
                         }
-                        dateFormat="YYYY"
+                        dateFormat="DD-MM-YYYY"
                         timeFormat=""
                         onChange={this.onTimeChange}
                       />
@@ -487,7 +487,7 @@ class ScientificWorkListPage extends Component {
                             )}
                           </td>
                           <td>
-                            {moment(item.time).add(7, "h").format("YYYY")}
+                            {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
                           </td>
 
                           <td>{item.level.name}</td>

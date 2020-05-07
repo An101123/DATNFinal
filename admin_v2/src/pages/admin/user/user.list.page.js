@@ -28,33 +28,33 @@ class UserListPage extends Component {
       itemId: null,
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 1);
   }
 
   toggleDeleteModal = () => {
-    this.setState(prevState => ({
-      isShowDeleteModal: !prevState.isShowDeleteModal
+    this.setState((prevState) => ({
+      isShowDeleteModal: !prevState.isShowDeleteModal,
     }));
   };
 
   toggleModalInfo = (item, title) => {
     let updatingItem = Object.assign({}, item);
     updatingItem.passwordConfirm = updatingItem.password;
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       isShowInfoModal: !prevState.isShowInfoModal,
       item: updatingItem || {},
-      formTitle: title
+      formTitle: title,
     }));
   };
 
-  showConfirmDelete = itemId => {
+  showConfirmDelete = (itemId) => {
     this.setState(
       {
-        itemId: itemId
+        itemId: itemId,
       },
       () => this.toggleDeleteModal()
     );
@@ -69,25 +69,25 @@ class UserListPage extends Component {
       fullName: "",
       email: "",
       gender: "",
-      dateOfBirth: null
+      dateOfBirth: null,
     };
     this.setState({ isConfirm: true, isChangePassword: false });
     this.toggleModalInfo(user, title);
   };
 
-  showUpdateModal = item => {
+  showUpdateModal = (item) => {
     let title = "Chỉnh sửa tài khoản";
     this.setState({ isChangePassword: false });
     this.toggleModalInfo(item, title);
   };
 
-  showChangePassword = item => {
+  showChangePassword = (item) => {
     let title = "Đổi mật khẩu";
     this.setState({ isChangePassword: true });
     this.toggleModalInfo(item, title);
   };
 
-  onModelChange = el => {
+  onModelChange = (el) => {
     let inputName = el.target.name;
     let inputValue = el.target.value;
     let item = Object.assign({}, this.state.item);
@@ -96,14 +96,14 @@ class UserListPage extends Component {
     console.log(item);
   };
 
-  search = e => {
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getUserList();
@@ -111,18 +111,18 @@ class UserListPage extends Component {
     );
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
+  handlePageClick = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: e.selected + 1
-        }
+          skip: e.selected + 1,
+        },
       },
       () => this.getUserList()
     );
@@ -130,7 +130,7 @@ class UserListPage extends Component {
 
   getUserList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     console.log(params);
     this.props.getUserList(params);
@@ -144,7 +144,7 @@ class UserListPage extends Component {
       fullName,
       email,
       gender,
-      dateOfBirth
+      dateOfBirth,
     } = this.state.item;
     if (password !== passwordConfirm) {
       this.setState({ isConfirm: false });
@@ -156,7 +156,7 @@ class UserListPage extends Component {
         fullName,
         email,
         gender,
-        dateOfBirth
+        dateOfBirth,
       };
       try {
         await ApiUser.postUser(user);
@@ -173,34 +173,26 @@ class UserListPage extends Component {
     const {
       id,
       username,
-      password,
-      passwordConfirm,
       fullName,
       email,
       gender,
-      dateOfBirth
+      dateOfBirth,
     } = this.state.item;
-    if (password !== passwordConfirm) {
-      this.setState({ isConfirm: false });
-    } else {
-      this.setState({ isConfirm: true });
-      const user = {
-        id,
-        username,
-        password,
-        fullName,
-        email,
-        gender,
-        dateOfBirth
-      };
-      try {
-        await ApiUser.updateUser(user);
-        this.toggleModalInfo();
-        this.getUserList();
-        toastSuccess("Chỉnh sửa thành công");
-      } catch (err) {
-        toastError(err);
-      }
+    const user = {
+      id,
+      username,
+      fullName,
+      email,
+      gender,
+      dateOfBirth,
+    };
+    try {
+      await ApiUser.updateUser(user);
+      this.toggleModalInfo();
+      this.getUserList();
+      toastSuccess("Chỉnh sửa thành công");
+    } catch (err) {
+      toastError(err);
     }
   };
   // changePassword = async () => {
@@ -234,7 +226,7 @@ class UserListPage extends Component {
     }
   };
 
-  onDateOfBirthChange = el => {
+  onDateOfBirthChange = (el) => {
     let inputValue = el._d;
     let item = Object.assign({}, this.state.item);
     item["dateOfBirth"] = inputValue;
@@ -257,7 +249,7 @@ class UserListPage extends Component {
       isShowInfoModal,
       isChangePassword,
       isConfirm,
-      item
+      item,
     } = this.state;
     const { userPagedList } = this.props.userPagedListReducer;
     const { sources, pageIndex, totalPages } = userPagedList;
@@ -280,8 +272,8 @@ class UserListPage extends Component {
           <div className="modal-wrapper">
             <div className="form-wrapper">
               <Form
-                onSubmit={e => this.onSubmit(e)}
-                ref={c => {
+                onSubmit={(e) => this.onSubmit(e)}
+                ref={(c) => {
                   this.form = c;
                 }}
               >
@@ -570,10 +562,10 @@ class UserListPage extends Component {
 }
 
 export default connect(
-  state => ({
-    userPagedListReducer: state.userPagedListReducer
+  (state) => ({
+    userPagedListReducer: state.userPagedListReducer,
   }),
   {
-    getUserList
+    getUserList,
   }
 )(UserListPage);
