@@ -185,8 +185,11 @@ namespace ScientificResearch.Core.Business.Services
                     {
                         foreach (var studyGuide in lecturer.StudyGuides)
                         {
-                            sum += studyGuide.LevelStudyGuide.Score;
-                            hour += studyGuide.LevelStudyGuide.HoursConverted;
+                            if (studyGuide.InstructionTime > startTime && studyGuide.InstructionTime < endTime)
+                            {
+                                sum += studyGuide.LevelStudyGuide.Score;
+                                hour += studyGuide.LevelStudyGuide.HoursConverted;
+                            }
                         }
                     }
 

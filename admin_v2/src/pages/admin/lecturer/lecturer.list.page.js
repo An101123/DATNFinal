@@ -299,9 +299,81 @@ class LecturerListPage extends Component {
             </div>
           </div>
         </ModalInfo>
+
         {!isShowDetail ? (
           <Row>
             <Col xs="12">
+              <div className="score and hour">
+                <Label>Tính điểm</Label>
+                <Row>
+                  <Col xs="3" sm="3" md="3" lg="3">
+                    <FormGroup>
+                      <Label for="examplePassword">
+                        {" "}
+                        <strong>Start Time: </strong>
+                      </Label>
+                    </FormGroup>
+                  </Col>
+                  <Col xs="9" sm="9" md="9" lg="9">
+                    <FormGroup>
+                      <Datetime
+                        defaultValue={
+                          item.startTime
+                            ? moment(item.startTime)
+                                .add(7, "h")
+                                .format("DD-MM-YYYY")
+                            : ""
+                        }
+                        dateFormat="DD-MM-YYYY"
+                        isValidDate={(current) => {
+                          if (item.endTime) {
+                            return current.isBetween(
+                              item.startTime,
+                              moment(item.endTime).add("day")
+                            );
+                          } else {
+                            var yesterday = Datetime.moment().subtract(
+                              1,
+                              "day"
+                            );
+                            return current.isAfter(yesterday);
+                          }
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+
+                {/* End Day */}
+                <Row>
+                  <Col xs="3" sm="3" md="3" lg="3">
+                    <FormGroup>
+                      <Label for="examplePassword">
+                        <strong>Finish Time: </strong>{" "}
+                      </Label>
+                    </FormGroup>
+                  </Col>
+                  <Col xs="9" sm="9" md="9" lg="9">
+                    <FormGroup>
+                      <Datetime
+                        defaultValue={
+                          item.endTime
+                            ? moment(item.endTime)
+                                .add(7, "h")
+                                .format("DD-MM-YYYY")
+                            : ""
+                        }
+                        dateFormat="DD-MM-YYYY"
+                        isValidDate={(current) => {
+                          return current.isAfter(
+                            moment(item.startTime).subtract(1, "day")
+                          );
+                        }}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+              </div>
               <div className="flex-container header-table">
                 <Button
                   onClick={this.showAddNew}
