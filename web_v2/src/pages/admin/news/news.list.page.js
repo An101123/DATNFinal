@@ -7,7 +7,6 @@ import "../../../pages/admin/select-custom.css";
 import { Row, CardBody } from "reactstrap";
 import { List } from "antd";
 import "antd/dist/antd.css";
-import ReactHtmlParser from "react-html-parser";
 import NewsDetail from "./news.detail";
 
 class NewsListPage extends Component {
@@ -22,31 +21,31 @@ class NewsListPage extends Component {
       itemId: null,
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 1000);
   }
-  toggleDetailPage = item => {
-    this.setState(prevState => ({
+  toggleDetailPage = (item) => {
+    this.setState((prevState) => ({
       isShowDetail: !prevState.isShowDetail,
-      item: item
+      item: item,
     }));
   };
   backToAdminPage = () => {
-    this.setState(prevState => ({
-      isShowDetail: !prevState.isShowDetail
+    this.setState((prevState) => ({
+      isShowDetail: !prevState.isShowDetail,
     }));
   };
-  search = e => {
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getNewsList();
@@ -54,14 +53,14 @@ class NewsListPage extends Component {
     );
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
   getNewsList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     this.props.getNewsList(params);
   };
@@ -102,7 +101,7 @@ class NewsListPage extends Component {
               fontSize: "200%",
               marginBottom: "100px",
               fontWeight: "400",
-              fontFamily: "Arial"
+              // fontFamily: "Arial"
             }}
           >
             TIN TỨC & SỰ KIỆN
@@ -114,20 +113,19 @@ class NewsListPage extends Component {
                 itemLayout="vertical"
                 size="large"
                 pagination={{
-                  onChange: page => {
+                  onChange: (page) => {
                     console.log(page);
                   },
-                  pageSize: 3
+                  pageSize: 3,
                 }}
                 dataSource={sources}
-                renderItem={item => (
+                renderItem={(item) => (
                   <List.Item key={item.title}>
                     {" "}
                     <img width={100} alt="logo" src={item.image} />
                     <a
                       onClick={() => this.toggleDetailPage(item)}
                       style={{ marginLeft: "50px" }}
-                      href="#"
                     >
                       {item.title}
                     </a>
@@ -145,10 +143,10 @@ class NewsListPage extends Component {
 }
 
 export default connect(
-  state => ({
-    newsPagedListReducer: state.newsPagedListReducer
+  (state) => ({
+    newsPagedListReducer: state.newsPagedListReducer,
   }),
   {
-    getNewsList
+    getNewsList,
   }
 )(NewsListPage);

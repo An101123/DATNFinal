@@ -141,7 +141,7 @@ namespace ScientificResearch.Core.Business.Services
                     {
                         foreach (var scientificReport in lecturer.LecturerInScientificReports)
                         {
-                            if (scientificReport.ScientificReport.Time > startTime && scientificReport.ScientificReport.Time < endTime)
+                            if (scientificReport.ScientificReport.Time >= startTime && scientificReport.ScientificReport.Time <= endTime)
                             {
                                 sum += scientificReport.ScientificReport.ScientificReportType.Score;
                                 hour += scientificReport.ScientificReport.ScientificReportType.HoursConverted;
@@ -152,7 +152,7 @@ namespace ScientificResearch.Core.Business.Services
                     {
                         foreach (var scientificWork in lecturer.LecturerInScientificWorks)
                         {
-                            if (scientificWork.ScientificWork.Time > startTime && scientificWork.ScientificWork.Time < endTime)
+                            if (scientificWork.ScientificWork.Time >= startTime && scientificWork.ScientificWork.Time <= endTime)
                             {
                                 sum += scientificWork.ScientificWork.Level.Score;
                                 hour += scientificWork.ScientificWork.Level.HoursConverted;
@@ -163,7 +163,7 @@ namespace ScientificResearch.Core.Business.Services
                     {
                         foreach (var publishBook in lecturer.LecturerInPublishBooks)
                         {
-                            if (publishBook.PublishBook.Time > startTime && publishBook.PublishBook.Time < endTime)
+                            if (publishBook.PublishBook.Time >= startTime && publishBook.PublishBook.Time <= endTime)
                             {
                                 sum += publishBook.PublishBook.BookCategory.Score;
                                 hour += publishBook.PublishBook.BookCategory.HoursConverted;
@@ -174,7 +174,7 @@ namespace ScientificResearch.Core.Business.Services
                     {
                         foreach (var otherScientificWork in lecturer.LecturerInOtherScientificWorks)
                         {
-                            if (otherScientificWork.OtherScientificWork.Time > startTime && otherScientificWork.OtherScientificWork.Time < endTime)
+                            if (otherScientificWork.OtherScientificWork.Time >= startTime && otherScientificWork.OtherScientificWork.Time <= endTime)
                             {
                                 sum += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.Score;
                                 hour += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.HoursConverted;
@@ -185,7 +185,7 @@ namespace ScientificResearch.Core.Business.Services
                     {
                         foreach (var studyGuide in lecturer.StudyGuides)
                         {
-                            if (studyGuide.InstructionTime > startTime && studyGuide.InstructionTime < endTime)
+                            if (studyGuide.InstructionTime >= startTime && studyGuide.InstructionTime <= endTime)
                             {
                                 sum += studyGuide.LevelStudyGuide.Score;
                                 hour += studyGuide.LevelStudyGuide.HoursConverted;

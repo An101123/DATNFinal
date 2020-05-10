@@ -73,7 +73,7 @@ class NewsListPage extends Component {
   };
 
   showAddNew = () => {
-    let title = "Tạo cấp công trình khoa học";
+    let title = "Tạo mới tin tức";
     let news = {
       title: "",
       content: "",

@@ -104,7 +104,6 @@ class PublishBookListPage extends Component {
   }
 
   render() {
-    const { item } = this.state;
     const { publishBookPagedList } = this.props.publishBookPagedListReducer;
     const { sources, pageIndex, totalPages } = publishBookPagedList;
     const hasResults =

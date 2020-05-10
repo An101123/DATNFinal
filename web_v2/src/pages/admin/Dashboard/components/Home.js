@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Zoom } from "react-slideshow-image";
 import "../../Dashboard/dashboard.css";
-import { Label } from "reactstrap";
 const images = [
   //"https://scontent-hkg3-1.xx.fbcdn.net/v/t1.0-9/78038434_1760512070749488_9128787880515207168_o.jpg?_nc_cat=100&_nc_sid=8024bb&_nc_ohc=nL_mZDKG_XEAX9BO-nF&_nc_ht=scontent-hkg3-1.xx&oh=766f4fe9030518a996e576e80c49545a&oe=5E9AF405",
   "https://due.udn.vn/Portals/0/Editor/TruyenThong_DUE/Nam%202019%202/Quy%204/SV%20Giai%201%20Eureka%202019/GiaiNhatEureka.jpg",

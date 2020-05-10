@@ -474,9 +474,9 @@ class ScientificWorkListPage extends Component {
                         <tr key={item.id}>
                           <td>{index + 1}</td>
                           <td onClick={() => this.toggleDetailPage(item)}>
-                            {item.name.length > 100 ? (
+                            {item.name.length > 50 ? (
                               <span>
-                                {item.name.substr(0, 100)}{" "}
+                                {item.name.substr(0, 50)}{" "}
                                 <span style={{ fontWeight: "bolder" }}>
                                   {" "}
                                   ...

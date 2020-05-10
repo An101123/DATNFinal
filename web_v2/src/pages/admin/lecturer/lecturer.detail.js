@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import ApiLecturer from "../../../api/api.lecturer";
 import { Row, Col, Button, Table, Label } from "reactstrap";
-import ScientificWorkDetail from "../scientificWork/scientificWork.detail";
-import ScientificReportDetail from "../scientificReport/scientificReport.detail";
 class LecturerDetail extends Component {
   constructor(props) {
     super(props);

@@ -98,7 +98,7 @@ class ScientificReportListPage extends Component {
   };
 
   showAddNew = () => {
-    let title = "Tạo mới công trình khoa học";
+    let title = "Tạo mới bài báo, báo cáo khoa học";
     let scientificReport = {
       name: "",
       time: "",

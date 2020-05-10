@@ -21,34 +21,34 @@ class LecturerListPage extends Component {
       itemId: null,
       params: {
         skip: pagination.initialPage,
-        take: pagination.defaultTake
+        take: pagination.defaultTake,
       },
-      query: ""
+      query: "",
     };
     this.delayedCallback = lodash.debounce(this.search, 1);
   }
 
-  toggleDetailPage = item => {
-    this.setState(prevState => ({
+  toggleDetailPage = (item) => {
+    this.setState((prevState) => ({
       isShowDetail: !prevState.isShowDetail,
-      item: item
+      item: item,
     }));
   };
 
   backToAdminPage = () => {
-    this.setState(prevState => ({
-      isShowDetail: !prevState.isShowDetail
+    this.setState((prevState) => ({
+      isShowDetail: !prevState.isShowDetail,
     }));
   };
 
-  search = e => {
+  search = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: 1
+          skip: 1,
         },
-        query: e.target.value
+        query: e.target.value,
       },
       () => {
         this.getLecturerList();
@@ -56,18 +56,18 @@ class LecturerListPage extends Component {
     );
   };
 
-  onSearchChange = e => {
+  onSearchChange = (e) => {
     e.persist();
     this.delayedCallback(e);
   };
 
-  handlePageClick = e => {
+  handlePageClick = (e) => {
     this.setState(
       {
         params: {
           ...this.state.params,
-          skip: e.selected + 1
-        }
+          skip: e.selected + 1,
+        },
       },
       () => this.getLecturerList()
     );
@@ -75,7 +75,7 @@ class LecturerListPage extends Component {
 
   getLecturerList = () => {
     let params = Object.assign({}, this.state.params, {
-      query: this.state.query
+      query: this.state.query,
     });
     console.log(params);
     this.props.getLecturerList(params);
@@ -122,7 +122,6 @@ class LecturerListPage extends Component {
                       <th>Tên</th>
                       <th>Ngày sinh</th>
                       <th>Khoa</th>
-                      <th>Tổng điểm</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -140,7 +139,6 @@ class LecturerListPage extends Component {
                                 .format("DD-MM-YYYY")}
                             </td>
                             <td>{item.faculty}</td>
-                            <td>{item.total}</td>
                           </tr>
                         );
                       })}
@@ -170,10 +168,10 @@ class LecturerListPage extends Component {
 }
 
 export default connect(
-  state => ({
-    lecturerPagedListReducer: state.lecturerPagedListReducer
+  (state) => ({
+    lecturerPagedListReducer: state.lecturerPagedListReducer,
   }),
   {
-    getLecturerList
+    getLecturerList,
   }
 )(LecturerListPage);

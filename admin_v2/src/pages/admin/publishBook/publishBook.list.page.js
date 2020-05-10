@@ -272,7 +272,6 @@ class PublishBookListPage extends Component {
       isShowDeleteModal,
       isShowInfoModal,
       isShowContentModal,
-      isShowDetail,
       item,
       bookCategorys,
       lecturers,

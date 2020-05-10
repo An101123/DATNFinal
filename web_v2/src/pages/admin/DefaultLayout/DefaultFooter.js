@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 const propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 const defaultProps = {};
@@ -16,9 +16,6 @@ class DefaultFooter extends Component {
       <React.Fragment>
         <span>
           <a href="/">Scientific Research Management</a> &copy; 2019.
-        </span>
-        <span className="ml-auto">
-          <a href="/"></a>
         </span>
       </React.Fragment>
     );

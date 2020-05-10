@@ -89,7 +89,7 @@ export default {
           icon: "fa fa-angle-right",
         },
         {
-          name: "Phân cấp",
+          name: "Phân loại",
           url: "/classificationOfScientificWorks",
           icon: "fa fa-angle-right",
         },

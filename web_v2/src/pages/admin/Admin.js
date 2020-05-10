@@ -1,12 +1,10 @@
 import React, { Component, Suspense } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 import cookie from "react-cookies";
 import {
   AppAside,
-  AppBreadcrumb,
   AppFooter,
   AppHeader,
   AppSidebar,
@@ -14,7 +12,7 @@ import {
   AppSidebarForm,
   AppSidebarHeader,
   AppSidebarMinimizer,
-  AppSidebarNav
+  AppSidebarNav,
 } from "@coreui/react";
 // sidebar nav config
 import navigation from "../../_nav";
@@ -51,7 +49,7 @@ class DefaultLayout extends Component {
           {/* <ToastContainer /> */}
           <AppHeader style={{ backgroundColor: "rgb(56,56,56)" }} fixed>
             <Suspense fallback={this.loading()}>
-              <DefaultHeader onLogout={e => this.signOut(e)} />
+              <DefaultHeader onLogout={(e) => this.signOut(e)} />
             </Suspense>
           </AppHeader>
           <div className="app-body">
@@ -77,7 +75,7 @@ class DefaultLayout extends Component {
                           path={route.path}
                           exact={route.exact}
                           name={route.name}
-                          render={props => <route.component {...props} />}
+                          render={(props) => <route.component {...props} />}
                         />
                       ) : null;
                     })}
@@ -106,8 +104,8 @@ class DefaultLayout extends Component {
 }
 
 export default connect(
-  state => ({
-    profile: state.profile
+  (state) => ({
+    profile: state.profile,
   }),
   { getProfile }
 )(DefaultLayout);

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Button, Table, Label } from "reactstrap";
+import { Row, Col, Button } from "reactstrap";
 import ReactHtmlParser from "react-html-parser";
 import ApiLecturer from "../../../api/api.lecturer";
 
@@ -14,7 +14,7 @@ export default class ScientificReportDetail extends Component {
   };
 
   getLecturerList = () => {
-    ApiLecturer.getAllLecturer().then(values => {
+    ApiLecturer.getAllLecturer().then((values) => {
       this.setState({ lecturers: values });
     });
   };
@@ -39,7 +39,7 @@ export default class ScientificReportDetail extends Component {
                     style={{
                       textTransform: "uppercase",
                       marginLeft: "50px",
-                      marginBottom: "50px"
+                      marginBottom: "50px",
                     }}
                   >
                     {item.name}

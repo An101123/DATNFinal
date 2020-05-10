@@ -4,24 +4,23 @@ export const GET_LECTURER_LIST_SUCCESS =
 export const GET_LECTURER_LIST_FAILED =
   "[LECTURER_LIST] GET_LECTURER_LIST_FAILED";
 
-export const getLecturerList = params => {
+export const getLecturerList = (query) => {
+  console.log("-----", query);
   return {
     type: GET_LECTURER_LIST,
-    payload: {
-      params
-    }
+    payload: query,
   };
 };
 
-export const getLecturerListSuccess = params => {
+export const getLecturerListSuccess = (params) => {
   return {
     type: GET_LECTURER_LIST_SUCCESS,
-    payload: params
+    payload: params,
   };
 };
 
 export const getLecturerListFailed = () => {
   return {
-    type: GET_LECTURER_LIST_FAILED
+    type: GET_LECTURER_LIST_FAILED,
   };
 };

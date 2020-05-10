@@ -5,7 +5,6 @@ import ListNews from "./components/ListNews";
 import ListNews2 from "./components/ListNews2";
 
 import { Row, Col } from "reactstrap";
-import AboutUs from "./components/Aboutus";
 import Lecturer from "../lecturer/lecturer.image";
 class Dashboard extends Component {
   render() {

@@ -128,13 +128,10 @@ class LecturerListPage extends Component {
   };
 
   getLecturerList = () => {
-    let params = Object.assign({}, this.state.params, {
+    const params = Object.assign({}, this.state.params, {
       query: this.state.query,
     });
-    var year = null; //muốn lấy theo năm thì chỉ việc tạo một cái state year rồi làm một cái select để chọn năm
-    //rồi bỏ cái năm nớ vô hàm gọi api thôi
-    //ví dụ year 2020 thì bỏ vô như ri là xong
-    this.props.getLecturerList(params, year);
+    this.props.getLecturerList(params);
   };
 
   addLecturer = async () => {
@@ -304,73 +301,80 @@ class LecturerListPage extends Component {
           <Row>
             <Col xs="12">
               <div className="score and hour">
-                <Label>Tính điểm</Label>
                 <Row>
-                  <Col xs="3" sm="3" md="3" lg="3">
-                    <FormGroup>
-                      <Label for="examplePassword">
-                        {" "}
-                        <strong>Start Time: </strong>
-                      </Label>
-                    </FormGroup>
+                  <Col xs="5">
+                    <Row>
+                      <Col xs="3" sm="3" md="3" lg="3">
+                        <FormGroup>
+                          <Label for="examplePassword">
+                            {" "}
+                            <strong>Từ: </strong>
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                      <Col xs="9" sm="9" md="9" lg="9">
+                        <FormGroup>
+                          <Datetime
+                            dateFormat="YYYY-MM-DD"
+                            timeFormat={false}
+                            isValidDate={(curr) => curr.isBefore(moment())}
+                            onChange={(date) =>
+                              this.setState({
+                                params: {
+                                  ...this.state.params,
+                                  startTime: date.format("YYYY-MM-DD"),
+                                },
+                              })
+                            }
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
                   </Col>
-                  <Col xs="9" sm="9" md="9" lg="9">
-                    <FormGroup>
-                      <Datetime
-                        defaultValue={
-                          item.startTime
-                            ? moment(item.startTime)
-                                .add(7, "h")
-                                .format("DD-MM-YYYY")
-                            : ""
-                        }
-                        dateFormat="DD-MM-YYYY"
-                        isValidDate={(current) => {
-                          if (item.endTime) {
-                            return current.isBetween(
-                              item.startTime,
-                              moment(item.endTime).add("day")
-                            );
-                          } else {
-                            var yesterday = Datetime.moment().subtract(
-                              1,
-                              "day"
-                            );
-                            return current.isAfter(yesterday);
-                          }
-                        }}
-                      />
-                    </FormGroup>
-                  </Col>
-                </Row>
 
-                {/* End Day */}
-                <Row>
-                  <Col xs="3" sm="3" md="3" lg="3">
-                    <FormGroup>
-                      <Label for="examplePassword">
-                        <strong>Finish Time: </strong>{" "}
-                      </Label>
-                    </FormGroup>
+                  {/* End Day */}
+                  <Col xs="5">
+                    <Row>
+                      <Col xs="3" sm="3" md="3" lg="3">
+                        <FormGroup>
+                          <Label for="examplePassword">
+                            <strong>Đến: </strong>{" "}
+                          </Label>
+                        </FormGroup>
+                      </Col>
+                      <Col xs="9" sm="9" md="9" lg="9">
+                        <FormGroup>
+                          <Datetime
+                            dateFormat="YYYY-MM-DD"
+                            timeFormat={false}
+                            isValidDate={(current) =>
+                              current.isAfter(this.state.params.startTime)
+                            }
+                            onChange={(date) =>
+                              this.setState({
+                                params: {
+                                  ...this.state.params,
+                                  endTime: date.format("YYYY-MM-DD"),
+                                },
+                              })
+                            }
+                          />
+                        </FormGroup>
+                      </Col>
+                    </Row>
                   </Col>
-                  <Col xs="9" sm="9" md="9" lg="9">
-                    <FormGroup>
-                      <Datetime
-                        defaultValue={
-                          item.endTime
-                            ? moment(item.endTime)
-                                .add(7, "h")
-                                .format("DD-MM-YYYY")
-                            : ""
-                        }
-                        dateFormat="DD-MM-YYYY"
-                        isValidDate={(current) => {
-                          return current.isAfter(
-                            moment(item.startTime).subtract(1, "day")
-                          );
-                        }}
-                      />
-                    </FormGroup>
+                  <Col xs="2">
+                    <Button
+                      className="btn btn-pill btn-success btn-sm"
+                      onClick={() =>
+                        this.props.getLecturerList({
+                          startTime: this.state.params.startTime,
+                          endTime: this.state.params.endTime,
+                        })
+                      }
+                    >
+                      Xác nhận
+                    </Button>
                   </Col>
                 </Row>
               </div>

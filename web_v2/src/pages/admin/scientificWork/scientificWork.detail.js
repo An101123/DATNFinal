@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Button, Table, Label } from "reactstrap";
+import { Row, Col, Button } from "reactstrap";
 import ReactHtmlParser from "react-html-parser";
 
 export default class ScientificWorkDetail extends Component {
@@ -32,7 +32,7 @@ export default class ScientificWorkDetail extends Component {
                     style={{
                       textTransform: "uppercase",
                       marginLeft: "50px",
-                      marginBottom: "50px"
+                      marginBottom: "50px",
                     }}
                   >
                     {item.name}

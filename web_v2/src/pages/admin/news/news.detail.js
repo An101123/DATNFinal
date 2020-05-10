@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, Button, FormGroup, Table, Label } from "reactstrap";
+import { Button } from "reactstrap";
 import ReactHtmlParser from "react-html-parser";
 
 export default class NewsDetail extends Component {
@@ -29,7 +29,7 @@ export default class NewsDetail extends Component {
                 style={{
                   backgroundColor: "white",
                   float: "right",
-                  marginLeft: "100px"
+                  marginLeft: "100px",
                 }}
                 onClick={this.backToAdminPage}
               />
@@ -39,7 +39,7 @@ export default class NewsDetail extends Component {
                   textTransform: "uppercase",
                   marginLeft: "50px",
                   marginTop: "30px",
-                  fontFamily: "Arial"
+                  fontFamily: "Arial",
                 }}
               >
                 {item.title}{" "}
@@ -52,7 +52,7 @@ export default class NewsDetail extends Component {
                 marginRight: "100px",
                 marginTop: "30px",
                 marginBottom: "50px",
-                width: "80%"
+                width: "80%",
               }}
               src={item.image}
               alt=""

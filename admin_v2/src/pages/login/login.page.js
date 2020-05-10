@@ -10,12 +10,10 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
-  Row
+  Row,
 } from "reactstrap";
 import Loading from "../../components/common/LoadingIndicator";
 import Api from "../../api/api";
-import lodash from "lodash";
-
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -23,9 +21,9 @@ class Login extends Component {
       loading: false,
       user: {
         email: "",
-        password: ""
+        password: "",
       },
-      error: ""
+      error: "",
     };
   }
 
@@ -33,7 +31,7 @@ class Login extends Component {
     let { user } = this.state;
     if (!user.email || !user.password) {
       return this.setState({
-        error: "Vui lòng nhập tên đăng nhập và mật khẩu!"
+        error: "Vui lòng nhập tên đăng nhập và mật khẩu!",
       });
     }
     try {
@@ -44,15 +42,15 @@ class Login extends Component {
       this.setState({ loading: false });
       this.props.history.push("/");
     } catch (err) {
-      const message = lodash.get(err, "response.data.error");
+      // const message = lodash.get(err, "response.data.error");
       this.setState({
         loading: false,
-        error: "Sai tên đăng nhập hoặc mật khẩu"
+        error: "Sai tên đăng nhập hoặc mật khẩu",
       });
     }
   };
 
-  onChange = e => {
+  onChange = (e) => {
     let value = e.target.value;
     let attr = e.target.name;
 
@@ -61,7 +59,7 @@ class Login extends Component {
     this.setState({ user });
   };
 
-  keyPressed = event => {
+  keyPressed = (event) => {
     if (event.key === "Enter") {
       this.onLogin();
     }
@@ -73,8 +71,9 @@ class Login extends Component {
       <>
         {loading && <Loading />}
         <div
-          className={`app flex-row align-items-center ${loading &&
-            "wrapper-indicator"}`}
+          className={`app flex-row align-items-center ${
+            loading && "wrapper-indicator"
+          }`}
         >
           <Container>
             <Row className="justify-content-center">
@@ -115,7 +114,7 @@ class Login extends Component {
                     {error && <p style={{ color: "red" }}>{error}</p>}
                     <Row
                       style={{
-                        justifyContent: "center"
+                        justifyContent: "center",
                       }}
                     >
                       <Col xs="6">

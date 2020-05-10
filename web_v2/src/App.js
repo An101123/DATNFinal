@@ -4,7 +4,6 @@ import { Route, Switch } from "react-router-dom";
 import Loadable from "react-loadable";
 import "./App.scss";
 import "font-awesome/css/font-awesome.min.css";
-import AuthenticationRoute from "./components/common/authentication-route";
 
 const loading = () => (
   <div className="animated fadeIn pt-3 text-center">Đang tải...</div>
@@ -13,28 +12,28 @@ const loading = () => (
 // Containers
 const DefaultLayout = Loadable({
   loader: () => import("./pages/admin/Admin"),
-  loading
+  loading,
 });
 
 // Pages
 const Login = Loadable({
   loader: () => import("./pages/login/login.page"),
-  loading
+  loading,
 });
 
 const Register = Loadable({
   loader: () => import("./pages/Register/Register"),
-  loading
+  loading,
 });
 
 const Page404 = Loadable({
   loader: () => import("./pages/Page404/Page404"),
-  loading
+  loading,
 });
 
 const Page500 = Loadable({
   loader: () => import("./pages/Page500/Page500"),
-  loading
+  loading,
 });
 
 class App extends Component {

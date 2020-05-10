@@ -9,7 +9,6 @@ import {
   Label,
   Modal,
   ModalHeader,
-  ModalBody,
   ModalFooter,
 } from "reactstrap";
 import Form from "react-validation/build/form";
@@ -27,7 +26,6 @@ import { pagination } from "../../../constant/app.constant";
 import ApiLevelStudyGuide from "../../../api/api.levelStudyGuide";
 import ApiLecturer from "../../../api/api.lecturer";
 import "../../../pages/admin/select-custom.css";
-import CKEditorInput from "../../../components/common/ckeditor-input";
 
 class StudyGuideListPage extends Component {
   constructor(props) {
