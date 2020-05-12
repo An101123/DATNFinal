@@ -300,8 +300,8 @@ class LecturerListPage extends Component {
         {!isShowDetail ? (
           <Row>
             <Col xs="12">
-              <div className="score and hour">
-                <Row>
+              <div className="border border-dark">
+                <Row style={{ marginTop: "10px", marginLeft: "10px" }}>
                   <Col xs="5">
                     <Row>
                       <Col xs="3" sm="3" md="3" lg="3">
@@ -378,6 +378,7 @@ class LecturerListPage extends Component {
                   </Col>
                 </Row>
               </div>
+              <br />
               <div className="flex-container header-table">
                 <Button
                   onClick={this.showAddNew}

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ApiLecturer from "../../../api/api.lecturer";
 import { Row, Col, Button, Table, Label } from "reactstrap";
+import moment from "moment";
 
 class LecturerDetail extends Component {
   constructor(props) {
@@ -112,6 +113,7 @@ class LecturerDetail extends Component {
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Đề tài NCKH</th>
                   <th style={{ width: "200px" }}>Cấp</th>
+                  <th style={{ width: "200px" }}>Thời gian</th>
                 </tr>
               </thead>
               <tbody>
@@ -123,6 +125,9 @@ class LecturerDetail extends Component {
                         {item.name}
                       </td>
                       <td>{item.level.name}</td>
+                      <td>
+                        {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
+                      </td>
                     </tr>
                   );
                 })}
@@ -145,6 +150,7 @@ class LecturerDetail extends Component {
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Bài báo - Báo cáo khoa học</th>
                   <th style={{ width: "200px" }}>Loại</th>
+                  <th style={{ width: "200px" }}>Thời gian</th>
                 </tr>
               </thead>
               <tbody>
@@ -156,6 +162,9 @@ class LecturerDetail extends Component {
                         {item.name}
                       </td>
                       <td>{item.scientificReportType.name}</td>
+                      <td>
+                        {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
+                      </td>
                     </tr>
                   );
                 })}
@@ -174,6 +183,7 @@ class LecturerDetail extends Component {
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Xuất bản sách</th>
                   <th style={{ width: "200px" }}>Loại</th>
+                  <th style={{ width: "200px" }}>Thời gian</th>
                 </tr>
               </thead>
               <tbody>
@@ -185,6 +195,9 @@ class LecturerDetail extends Component {
                         {item.name}
                       </td>
                       <td>{item.bookCategory.name}</td>
+                      <td>
+                        {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
+                      </td>
                     </tr>
                   );
                 })}
@@ -207,6 +220,7 @@ class LecturerDetail extends Component {
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Họ và tên, tên đề tài</th>
                   <th style={{ width: "200px" }}>Cấp</th>
+                  <th style={{ width: "200px" }}>Thời gian</th>
                 </tr>
               </thead>
               <tbody>
@@ -218,6 +232,9 @@ class LecturerDetail extends Component {
                         {item.name}
                       </td>
                       <td>{item.levelStudyGuide.name}</td>
+                      <td>
+                        {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
+                      </td>
                     </tr>
                   );
                 })}
@@ -235,6 +252,7 @@ class LecturerDetail extends Component {
                 <tr>
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Bằng sáng chế</th>
+                  <th style={{ width: "200px" }}>Thời gian</th>
                 </tr>
               </thead>
               <tbody>
@@ -253,6 +271,9 @@ class LecturerDetail extends Component {
                       <tr key={item.id}>
                         <td>{index + 1}</td>
                         <td>{item.name}</td>
+                        <td>
+                          {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
+                        </td>
                       </tr>
                     );
                   })}
@@ -265,22 +286,24 @@ class LecturerDetail extends Component {
             <div className="flex-container header-table">
               <Label className="label label-default">
                 {" "}
-                BÁO CÁO KHOA HỌC TẠI BỘ MÔN, KHOA
+                CÔNG TRÌNH KHOA HỌC KHÁC
               </Label>
             </div>
             <Table className="admin-table" responsive bordered>
               <thead>
                 <tr>
                   <th style={{ width: "50px" }}>STT</th>
-                  <th>Báo cáo khoa học</th>
+                  <th>Công trình khoa học khác</th>
+                  <th>Loại</th>
+                  <th style={{ width: "200px" }}>Thời gian</th>
                 </tr>
               </thead>
               <tbody>
                 {otherScientificWorks
                   .filter((value) => {
                     if (
-                      value.classificationOfScientificWork.name ===
-                      "Báo cáo khoa học tại bộ môn, khoa"
+                      value.classificationOfScientificWork.name !==
+                      "Bằng sáng chế"
                     ) {
                       return true;
                     }
@@ -291,6 +314,10 @@ class LecturerDetail extends Component {
                       <tr key={item.id}>
                         <td>{index + 1}</td>
                         <td> {item.name}</td>
+                        <td>{item.classificationOfScientificWork.name}</td>
+                        <td>
+                          {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
+                        </td>
                       </tr>
                     );
                   })}

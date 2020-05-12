@@ -24,6 +24,7 @@ class UserListPage extends Component {
       isShowInfoModal: false,
       isConfirm: true,
       isChangePassword: false,
+      isShowUpdate: false,
       item: {},
       itemId: null,
       params: {
@@ -71,13 +72,17 @@ class UserListPage extends Component {
       gender: "",
       dateOfBirth: null,
     };
-    this.setState({ isConfirm: true, isChangePassword: false });
+    this.setState({
+      isConfirm: true,
+      isChangePassword: false,
+      isShowUpdate: false,
+    });
     this.toggleModalInfo(user, title);
   };
 
   showUpdateModal = (item) => {
     let title = "Chỉnh sửa tài khoản";
-    this.setState({ isChangePassword: false });
+    this.setState({ isChangePassword: false, isShowUpdate: false });
     this.toggleModalInfo(item, title);
   };
 
@@ -248,6 +253,7 @@ class UserListPage extends Component {
       isShowDeleteModal,
       isShowInfoModal,
       isChangePassword,
+      isShowUpdate,
       isConfirm,
       item,
     } = this.state;
@@ -307,40 +313,44 @@ class UserListPage extends Component {
                         </FormGroup>
                       </Col>
                     </Row>
-                    <Row>
-                      <Col>
-                        <FormGroup>
-                          <ValidationInput
-                            name="password"
-                            title="Mật khẩu"
-                            type="password"
-                            required={true}
-                            value=""
-                            onChange={this.onModelChange}
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
+                    {isShowUpdate && (
+                      <div>
+                        <Row>
+                          <Col>
+                            <FormGroup>
+                              <ValidationInput
+                                name="password"
+                                title="Mật khẩu"
+                                type="password"
+                                required={true}
+                                value=""
+                                onChange={this.onModelChange}
+                              />
+                            </FormGroup>
+                          </Col>
+                        </Row>
 
-                    <Row>
-                      <Col>
-                        <FormGroup>
-                          <ValidationInput
-                            name="passwordConfirm"
-                            title="Nhập lại mật khẩu"
-                            type="password"
-                            required={true}
-                            value=""
-                            onChange={this.onModelChange}
-                          />
-                          {!isConfirm && (
-                            <Label className="form-text text-danger">
-                              Mật khẩu không khớp *
-                            </Label>
-                          )}
-                        </FormGroup>
-                      </Col>
-                    </Row>
+                        <Row>
+                          <Col>
+                            <FormGroup>
+                              <ValidationInput
+                                name="passwordConfirm"
+                                title="Nhập lại mật khẩu"
+                                type="password"
+                                required={true}
+                                value=""
+                                onChange={this.onModelChange}
+                              />
+                              {!isConfirm && (
+                                <Label className="form-text text-danger">
+                                  Mật khẩu không khớp *
+                                </Label>
+                              )}
+                            </FormGroup>
+                          </Col>
+                        </Row>
+                      </div>
+                    )}
 
                     <Row>
                       <Col>
