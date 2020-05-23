@@ -43,6 +43,9 @@ const ClassificationOfScientificWorkListPage = React.lazy(() =>
 const LecturerListPage = React.lazy(() =>
   import("./pages/admin/lecturer/lecturer.list.page")
 );
+const LecturerDetailPagesdflkndsaokgndskonga = React.lazy(() =>
+  import("./pages/admin/lecturer/lecturer.detail.page")
+);
 const NewsListPage = React.lazy(() =>
   import("./pages/admin/news/news.list.page")
 );
@@ -106,7 +109,17 @@ const routes = [
     component: ClassificationOfScientificWorkListPage,
   },
 
-  { path: "/lecturers", name: "Giảng viên", component: LecturerListPage },
+  {
+    path: "/lecturers",
+    exact: true,
+    name: "Giảng viên",
+    component: LecturerListPage,
+  },
+  {
+    path: "/lecturers/:id",
+    name: "Giảng viên",
+    component: LecturerDetailPagesdflkndsaokgndskonga,
+  },
   {
     path: "/news",
     name: "Tin tức",

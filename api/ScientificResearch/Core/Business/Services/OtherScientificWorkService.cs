@@ -70,6 +70,7 @@ namespace ScientificResearch.Core.Business.Services
             && (string.IsNullOrEmpty(requestListViewModel.Query)
                 || (x.Name.Contains(requestListViewModel.Query)
                 || (x.ClassificationOfScientificWork.Name.Contains(requestListViewModel.Query))
+                || (x.LecturerInOtherScientificWorks.FirstOrDefault().Lecturer.Name.Contains(requestListViewModel.Query))
                 )))
             .Select(x => new OtherScientificWorkViewModel(x)).ToListAsync();
 

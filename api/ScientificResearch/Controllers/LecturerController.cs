@@ -43,9 +43,9 @@ namespace ScientificResearch.Controllers
         //    return Ok(lecturer);
         //}
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetLecturerById(Guid id)
+        public async Task<IActionResult> GetLecturerById(Guid id,  DateTime startTime, DateTime endTime)
         {
-            var lecturer = await _lecturerService.GetLecturerByIdAsync(id);
+            var lecturer = await _lecturerService.GetLecturerByIdAsync(id, startTime, endTime);
             return Ok(lecturer);
         }
 
@@ -71,22 +71,22 @@ namespace ScientificResearch.Controllers
         }
 
         [HttpGet("{id}/scientificWorks")]
-        public async Task<IActionResult> GetAllScientificWorkByLecturerId(Guid id)
+        public async Task<IActionResult> GetAllScientificWorkByLecturerId(Guid id, DateTime startTime, DateTime endTime)
         {
-            var scientificWorks = await _lecturerService.GetScientificWorkByLecturerIdAsync(id);
+            var scientificWorks = await _lecturerService.GetScientificWorkByLecturerIdAsync(id, startTime, endTime);
             return Ok(scientificWorks);
         }
 
         [HttpGet("{id}/scientificReports")]
-        public async Task<IActionResult> GetAllScientificReportByLecturerId(Guid id)
+        public async Task<IActionResult> GetAllScientificReportByLecturerId(Guid id, DateTime startTime, DateTime endTime)
         {
-            var scientificReports = await _lecturerService.GetScientificReportByLecturerIdAsync(id);
+            var scientificReports = await _lecturerService.GetScientificReportByLecturerIdAsync(id, startTime, endTime);
             return Ok(scientificReports);
         }
         [HttpGet("{id}/publishBooks")]
-        public async Task<IActionResult> GetAllPublishBookByLecturerId(Guid id)
+        public async Task<IActionResult> GetAllPublishBookByLecturerId(Guid id, DateTime startTime, DateTime endTime)
         {
-            var publishBooks = await _lecturerService.GetPublishBookByLecturerIdAsync(id);
+            var publishBooks = await _lecturerService.GetPublishBookByLecturerIdAsync(id, startTime, endTime);
             return Ok(publishBooks);
         }
         [HttpGet("{id}/studyGuides")]
@@ -96,9 +96,9 @@ namespace ScientificResearch.Controllers
             return Ok(studyGuides);
         }
         [HttpGet("{id}/otherScientificWorks")]
-        public async Task<IActionResult> GetAllOtherScientificWorkByLecturerId(Guid id)
+        public async Task<IActionResult> GetAllOtherScientificWorkByLecturerId(Guid id, DateTime startTime, DateTime endTime)
         {
-            var otherScientificWorks = await _lecturerService.GetOtherScientificWorkByLecturerIdAsync(id);
+            var otherScientificWorks = await _lecturerService.GetOtherScientificWorkByLecturerIdAsync(id,  startTime,  endTime);
             return Ok(otherScientificWorks);
         }
     }

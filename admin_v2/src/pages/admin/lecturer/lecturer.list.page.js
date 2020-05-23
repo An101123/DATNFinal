@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Row, Col, Button, FormGroup, Label, Table } from "reactstrap";
 import Form from "react-validation/build/form";
 import Datetime from "react-datetime";
+import { Link } from "react-router-dom";
 import moment from "moment";
 import ModalConfirm from "../../../components/modal/modal-confirm";
 import Pagination from "../../../components/pagination/Pagination";
@@ -199,7 +200,7 @@ class LecturerListPage extends Component {
 
   render() {
     const { isShowDeleteModal, isShowInfoModal } = this.state;
-    const { isShowDetail, item } = this.state;
+    const { isShowDetail, item, params = {} } = this.state;
 
     const { lecturerPagedList } = this.props.lecturerPagedListReducer;
     const { sources, pageIndex, totalPages } = lecturerPagedList;
@@ -297,170 +298,173 @@ class LecturerListPage extends Component {
           </div>
         </ModalInfo>
 
-        {!isShowDetail ? (
-          <Row>
-            <Col xs="12">
-              <div className="border border-dark">
-                <Row style={{ marginTop: "10px", marginLeft: "10px" }}>
-                  <Col xs="5">
-                    <Row>
-                      <Col xs="3" sm="3" md="3" lg="3">
-                        <FormGroup>
-                          <Label for="examplePassword">
-                            {" "}
-                            <strong>Từ: </strong>
-                          </Label>
-                        </FormGroup>
-                      </Col>
-                      <Col xs="9" sm="9" md="9" lg="9">
-                        <FormGroup>
-                          <Datetime
-                            dateFormat="YYYY-MM-DD"
-                            timeFormat={false}
-                            isValidDate={(curr) => curr.isBefore(moment())}
-                            onChange={(date) =>
-                              this.setState({
-                                params: {
-                                  ...this.state.params,
-                                  startTime: date.format("YYYY-MM-DD"),
-                                },
-                              })
-                            }
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </Col>
+        <Row>
+          <Col xs="12">
+            <div className="border border-dark">
+              <Row style={{ marginTop: "10px", marginLeft: "10px" }}>
+                <Col xs="5">
+                  <Row>
+                    <Col xs="3" sm="3" md="3" lg="3">
+                      <FormGroup>
+                        <Label for="examplePassword">
+                          {" "}
+                          <strong>Từ: </strong>
+                        </Label>
+                      </FormGroup>
+                    </Col>
+                    <Col xs="9" sm="9" md="9" lg="9">
+                      <FormGroup>
+                        <Datetime
+                          dateFormat="YYYY-MM-DD"
+                          timeFormat={false}
+                          isValidDate={(curr) => curr.isBefore(moment())}
+                          onChange={(date) =>
+                            this.setState({
+                              params: {
+                                ...this.state.params,
+                                startTime: date.format("YYYY-MM-DD"),
+                              },
+                            })
+                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </Col>
 
-                  {/* End Day */}
-                  <Col xs="5">
-                    <Row>
-                      <Col xs="3" sm="3" md="3" lg="3">
-                        <FormGroup>
-                          <Label for="examplePassword">
-                            <strong>Đến: </strong>{" "}
-                          </Label>
-                        </FormGroup>
-                      </Col>
-                      <Col xs="9" sm="9" md="9" lg="9">
-                        <FormGroup>
-                          <Datetime
-                            dateFormat="YYYY-MM-DD"
-                            timeFormat={false}
-                            isValidDate={(current) =>
-                              current.isAfter(this.state.params.startTime)
-                            }
-                            onChange={(date) =>
-                              this.setState({
-                                params: {
-                                  ...this.state.params,
-                                  endTime: date.format("YYYY-MM-DD"),
-                                },
-                              })
-                            }
-                          />
-                        </FormGroup>
-                      </Col>
-                    </Row>
-                  </Col>
-                  <Col xs="2">
-                    <Button
-                      className="btn btn-pill btn-success btn-sm"
-                      onClick={() =>
-                        this.props.getLecturerList({
-                          startTime: this.state.params.startTime,
-                          endTime: this.state.params.endTime,
-                        })
-                      }
-                    >
-                      Xác nhận
-                    </Button>
-                  </Col>
-                </Row>
-              </div>
-              <br />
-              <div className="flex-container header-table">
-                <Button
-                  onClick={this.showAddNew}
-                  className="btn btn-pill btn-success btn-sm"
-                >
-                  Tạo mới
-                </Button>
+                {/* End Day */}
+                <Col xs="5">
+                  <Row>
+                    <Col xs="3" sm="3" md="3" lg="3">
+                      <FormGroup>
+                        <Label for="examplePassword">
+                          <strong>Đến: </strong>{" "}
+                        </Label>
+                      </FormGroup>
+                    </Col>
+                    <Col xs="9" sm="9" md="9" lg="9">
+                      <FormGroup>
+                        <Datetime
+                          dateFormat="YYYY-MM-DD"
+                          timeFormat={false}
+                          isValidDate={(current) =>
+                            current.isAfter(this.state.params.startTime)
+                          }
+                          onChange={(date) =>
+                            this.setState({
+                              params: {
+                                ...this.state.params,
+                                endTime: date.format("YYYY-MM-DD"),
+                              },
+                            })
+                          }
+                        />
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                </Col>
+                <Col xs="2">
+                  <Button
+                    className="btn btn-pill btn-success btn-sm"
+                    onClick={() =>
+                      this.props.getLecturerList({
+                        startTime: this.state.params.startTime,
+                        endTime: this.state.params.endTime,
+                      })
+                    }
+                  >
+                    Xác nhận
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+            <br />
+            <div className="flex-container header-table">
+              <Button
+                onClick={this.showAddNew}
+                className="btn btn-pill btn-success btn-sm"
+              >
+                Tạo mới
+              </Button>
 
-                <input
-                  onChange={this.onSearchChange}
-                  className="form-control form-control-sm"
-                  placeholder="Tìm kiếm..."
-                />
-              </div>
+              <input
+                onChange={this.onSearchChange}
+                className="form-control form-control-sm"
+                placeholder="Tìm kiếm..."
+              />
+            </div>
 
-              <Table className="admin-table" responsive bordered>
-                <thead>
-                  <tr>
-                    <th>STT</th>
-                    <th>Tên</th>
-                    <th>Ngày sinh</th>
-                    <th>Khoa</th>
-                    <th>Tổng điểm</th>
-                    <th>Số giờ quy đổi</th>
-                    <th>Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {hasResults &&
-                    sources.map((item, index) => {
-                      return (
-                        <tr key={item.id}>
-                          <td>{index + 1}</td>
-                          <td onClick={() => this.toggleDetailPage(item)}>
+            <Table className="admin-table" responsive bordered>
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên</th>
+                  <th>Ngày sinh</th>
+                  <th>Khoa</th>
+                  <th>Tổng điểm</th>
+                  <th>Số giờ quy đổi</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                {hasResults &&
+                  sources.map((item, index) => {
+                    return (
+                      <tr key={item.id}>
+                        <td>{index + 1}</td>
+                        <td onClick={() => {}}>
+                          <Link
+                            to={{
+                              pathname: `/lecturers/${item.id}`,
+                              state: {
+                                startTime: params.startTime,
+                                endTime: params.endTime,
+                              },
+                            }}
+                          >
                             {item.name}
-                          </td>
-                          <td>
-                            {moment(item.dateOfBirth)
-                              .add(7, "h")
-                              .format("DD-MM-YYYY")}
-                          </td>
-                          <td>{item.faculty}</td>
-                          <td>{item.total}</td>
-                          <td>{item.totalHour}</td>
-                          <td>
-                            <Button
-                              className="btn-sm"
-                              color="secondary"
-                              onClick={() => this.showUpdateModal(item)}
-                            >
-                              Sửa
-                            </Button>
-                            <Button
-                              className="btn-sm"
-                              color="danger"
-                              onClick={() => this.showConfirmDelete(item.id)}
-                            >
-                              Xóa
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </Table>
-              {hasResults && totalPages > 1 && (
-                <Pagination
-                  initialPage={0}
-                  totalPages={totalPages}
-                  forcePage={pageIndex - 1}
-                  pageRangeDisplayed={2}
-                  onPageChange={this.handlePageClick}
-                />
-              )}
-            </Col>
-          </Row>
-        ) : (
-          <LecturerDetail
-            lecturer={item}
-            backToAdminPage={this.backToAdminPage}
-          />
-        )}
+                          </Link>
+                        </td>
+                        <td>
+                          {moment(item.dateOfBirth)
+                            .add(7, "h")
+                            .format("DD-MM-YYYY")}
+                        </td>
+                        <td>{item.faculty}</td>
+                        <td>{item.total}</td>
+                        <td>{item.totalHour}</td>
+                        <td>
+                          <Button
+                            className="btn-sm"
+                            color="secondary"
+                            onClick={() => this.showUpdateModal(item)}
+                          >
+                            Sửa
+                          </Button>
+                          <Button
+                            className="btn-sm"
+                            color="danger"
+                            onClick={() => this.showConfirmDelete(item.id)}
+                          >
+                            Xóa
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+              </tbody>
+            </Table>
+            {hasResults && totalPages > 1 && (
+              <Pagination
+                initialPage={0}
+                totalPages={totalPages}
+                forcePage={pageIndex - 1}
+                pageRangeDisplayed={2}
+                onPageChange={this.handlePageClick}
+              />
+            )}
+          </Col>
+        </Row>
       </div>
     );
   }

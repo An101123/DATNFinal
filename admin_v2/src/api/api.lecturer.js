@@ -10,7 +10,12 @@ export default class ApiLecturer {
     console.log("getLecturers", { query });
     return RequestHelper.get(appConfig.apiUrl + "lecturers", query);
   }
-
+  static getLecturerById(lecturerId, startTime, endTime) {
+    return RequestHelper.get(
+      appConfig.apiUrl +
+        `lecturers/${lecturerId}?startTime=${startTime}&endTime=${endTime}`
+    );
+  }
   static postLecturer(lecturer) {
     return RequestHelper.post(appConfig.apiUrl + "lecturers", lecturer);
   }
@@ -25,20 +30,23 @@ export default class ApiLecturer {
   static deleteLecturer(lecturerId) {
     return RequestHelper.delete(appConfig.apiUrl + `lecturers/${lecturerId}`);
   }
-  static GetAllScientificWorkByLecturerId(lecturerId) {
+  static GetAllScientificWorkByLecturerId(lecturerId, startTime, endTime) {
     return RequestHelper.get(
-      appConfig.apiUrl + `lecturers/${lecturerId}/scientificWorks`
+      appConfig.apiUrl +
+        `lecturers/${lecturerId}/scientificWorks?startTime=${startTime}&endTime=${endTime}`
     );
   }
 
-  static GetAllScientificReportByLecturerId(lecturerId) {
+  static GetAllScientificReportByLecturerId(lecturerId, startTime, endTime) {
     return RequestHelper.get(
-      appConfig.apiUrl + `lecturers/${lecturerId}/scientificReports`
+      appConfig.apiUrl +
+        `lecturers/${lecturerId}/scientificReports?startTime=${startTime}&endTime=${endTime}`
     );
   }
-  static GetAllPublishBookByLecturerId(lecturerId) {
+  static GetAllPublishBookByLecturerId(lecturerId, startTime, endTime) {
     return RequestHelper.get(
-      appConfig.apiUrl + `lecturers/${lecturerId}/publishBooks`
+      appConfig.apiUrl +
+        `lecturers/${lecturerId}/publishBooks?startTime=${startTime}&endTime=${endTime}`
     );
   }
   static GetAllStudyGuideByLecturerId(lecturerId) {
@@ -46,9 +54,10 @@ export default class ApiLecturer {
       appConfig.apiUrl + `lecturers/${lecturerId}/studyGuides`
     );
   }
-  static GetAllOtherScientificWorkByLecturerId(lecturerId) {
+  static GetAllOtherScientificWorkByLecturerId(lecturerId, startTime, endTime) {
     return RequestHelper.get(
-      appConfig.apiUrl + `lecturers/${lecturerId}/otherScientificWorks`
+      appConfig.apiUrl +
+        `lecturers/${lecturerId}/otherScientificWorks?startTime=${startTime}&endTime=${endTime}`
     );
   }
 }

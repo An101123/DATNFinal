@@ -14,6 +14,7 @@ using ScientificResearch.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace ScientificResearch.Core.Business.Services
@@ -23,15 +24,15 @@ namespace ScientificResearch.Core.Business.Services
         Task<List<LecturerViewModel>> GetAllLecturer();
 
         Task<PagedList<LecturerViewModel>> ListLecturerAsync(RequestListViewModel requestListViewModel, DateTime? startTime, DateTime? endTime);
-        Task<LecturerViewModel> GetLecturerByIdAsync(Guid? id);
+        Task<LecturerViewModel> GetLecturerByIdAsync(Guid? id, DateTime? startTime, DateTime? endTime);
         Task<ResponseModel> CreateLecturerAsync(LecturerManageModel lecturerManageModel);
         Task<ResponseModel> UpdateLecturerAsync(Guid id, LecturerManageModel lecturerManageModel);
         Task<ResponseModel> DeleteLecturerAsync(Guid id);
-        Task<ResponseModel> GetScientificWorkByLecturerIdAsync(Guid? id);
-        Task<ResponseModel> GetScientificReportByLecturerIdAsync(Guid? id);
-        Task<ResponseModel> GetPublishBookByLecturerIdAsync(Guid? id);
+        Task<ResponseModel> GetScientificWorkByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime);
+        Task<ResponseModel> GetScientificReportByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime);
+        Task<ResponseModel> GetPublishBookByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime);
         Task<ResponseModel> GetStudyGuideByLecturerIdAsync(Guid? id);
-        Task<ResponseModel> GetOtherScientificWorkByLecturerIdAsync(Guid? id);
+        Task<ResponseModel> GetOtherScientificWorkByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime);
 
     }
 
@@ -66,7 +67,6 @@ namespace ScientificResearch.Core.Business.Services
                     .Include(x => x.StudyGuides).ThenInclude(x => x.LevelStudyGuide)
                     .Include(x => x.LecturerInOtherScientificWorks).ThenInclude(x => x.OtherScientificWork).ThenInclude(x => x.ClassificationOfScientificWork);
         }
-
         private List<string> GetAllPropertyNameOfLecturerViewModel()
         {
             var lecturerViewModel = new LecturerViewModel();
@@ -199,173 +199,7 @@ namespace ScientificResearch.Core.Business.Services
                 }
             }
         }
-        //private async Task HourByStage(DateTime? startTime, DateTime? endTime)
-        //{
-        //    var list = await GetAll().ToListAsync();
-        //    foreach (var lecturer in list)
-        //    {
-        //        if (startTime != null && endTime != null)
-        //        {
-        //            float sum = 0;
-        //            if (lecturer.LecturerInScientificReports.Count > 0)
-        //            {
-        //                foreach (var scientificReport in lecturer.LecturerInScientificReports)
-        //                {
-        //                    if (scientificReport.ScientificReport.Time > startTime && scientificReport.ScientificReport.Time < endTime)
-        //                    {
-        //                        sum += scientificReport.ScientificReport.ScientificReportType.HoursConverted;
-        //                    }
-        //                }
-        //            }
-        //            if (lecturer.LecturerInScientificWorks.Count > 0)
-        //            {
-        //                foreach (var scientificWork in lecturer.LecturerInScientificWorks)
-        //                {
-        //                    if (scientificWork.ScientificWork.Time > startTime && scientificWork.ScientificWork.Time < endTime)
-        //                    {
-        //                        sum += scientificWork.ScientificWork.Level.HoursConverted;
-        //                    }
-        //                }
-        //            }
-        //            if (lecturer.LecturerInPublishBooks.Count > 0)
-        //            {
-        //                foreach (var publishBook in lecturer.LecturerInPublishBooks)
-        //                {
-        //                    if (publishBook.PublishBook.Time > startTime && publishBook.PublishBook.Time < endTime)
-        //                    {
-        //                        sum += publishBook.PublishBook.BookCategory.HoursConverted;
-        //                    }
-        //                }
-        //            }
-        //            if (lecturer.LecturerInOtherScientificWorks.Count > 0)
-        //            {
-        //                foreach (var otherScientificWork in lecturer.LecturerInOtherScientificWorks)
-        //                {
-        //                    if (otherScientificWork.OtherScientificWork.Time > startTime && otherScientificWork.OtherScientificWork.Time < endTime)
-        //                    {
-        //                        sum += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.HoursConverted;
-        //                    }
-        //                }
-        //            }
-        //            if (lecturer.StudyGuides.Count > 0)
-        //            {
-        //                foreach (var studyGuide in lecturer.StudyGuides)
-        //                {
-        //                    sum += studyGuide.LevelStudyGuide.HoursConverted;
-        //                }
-        //            }
-
-        //            lecturer.Total = sum;
-        //            await _lecturerRepository.UpdateAsync(lecturer);
-        //        }
-        //    }
-        //}
-
-        //private async Task<Lecturer> ScoreByStage(Guid? id, DateTime? startTime, DateTime? endTime)
-        //{
-        //    var lecturer = await GetAll().FirstOrDefaultAsync(x => x.Id == id);
-        //    if (startTime != null && endTime != null)
-        //    {
-        //        float sum = 0;
-        //        if (lecturer.LecturerInScientificReports.Count > 0)
-        //        {
-        //            foreach (var scientificReport in lecturer.LecturerInScientificReports)
-        //            {
-        //                if (scientificReport.ScientificReport.Time > startTime && scientificReport.ScientificReport.Time < endTime)
-        //                {
-        //                    sum += scientificReport.ScientificReport.ScientificReportType.Score;
-        //                }
-        //            }
-        //        }
-        //        if (lecturer.LecturerInScientificWorks.Count > 0)
-        //        {
-        //            foreach (var scientificWork in lecturer.LecturerInScientificWorks)
-        //            {
-        //                if (scientificWork.ScientificWork.Time > startTime && scientificWork.ScientificWork.Time < endTime)
-        //                {
-        //                    sum += scientificWork.ScientificWork.Level.Score;
-        //                }
-        //            }
-        //        }
-        //        if (lecturer.LecturerInPublishBooks.Count > 0)
-        //        {
-        //            foreach (var publishBook in lecturer.LecturerInPublishBooks)
-        //            {
-        //                if (publishBook.PublishBook.Time > startTime && publishBook.PublishBook.Time < endTime)
-        //                {
-        //                    sum += publishBook.PublishBook.BookCategory.Score;
-        //                }
-        //            }
-        //        }
-        //        if (lecturer.LecturerInOtherScientificWorks.Count > 0)
-        //        {
-        //            foreach (var otherScientificWork in lecturer.LecturerInOtherScientificWorks)
-        //            {
-        //                if (otherScientificWork.OtherScientificWork.Time > startTime && otherScientificWork.OtherScientificWork.Time < endTime)
-        //                {
-        //                    sum += otherScientificWork.OtherScientificWork.ClassificationOfScientificWork.Score;
-        //                }
-        //            }
-        //        }
-        //        if (lecturer.StudyGuides.Count > 0)
-        //        {
-        //            foreach (var studyGuide in lecturer.StudyGuides)
-        //            {
-        //                sum += studyGuide.LevelStudyGuide.Score;
-        //            }
-        //        }
-
-        //        lecturer.Total = sum;
-        //    }
-        //    return lecturer;
-        //}
-
-        //private async Task TotalHours()
-        //{
-        //    var list = await GetAll().ToListAsync();
-        //    foreach (var lecturer in list)
-        //    {
-        //        int hour = 0;
-        //        if (lecturer.ScientificReports.Count > 0)
-        //        {
-        //            foreach (var scientificReport in lecturer.ScientificReports)
-        //            {
-        //                hour += scientificReport.ScientificReportType.HoursConverted;
-        //            }
-        //        }
-
-        //        if (lecturer.LecturerInScientificWorks.Count > 0)
-        //        {
-        //            foreach (var scientificWork in lecturer.LecturerInScientificWorks)
-        //            {
-        //                hour += scientificWork.Level.HoursConverted;
-        //            }
-        //        }
-        //        if (lecturer.PublishBooks.Count > 0)
-        //        {
-        //            foreach (var publishBook in lecturer.PublishBooks)
-        //            {
-        //                hour += publishBook.BookCategory.HoursConverted;
-        //            }
-        //        }
-        //        if (lecturer.StudyGuides.Count > 0)
-        //        {
-        //            foreach (var studyGuide in lecturer.StudyGuides)
-        //            {
-        //                hour += studyGuide.LevelStudyGuide.HoursConverted;
-        //            }
-        //        }
-        //        if (lecturer.OtherScientificWorks.Count > 0)
-        //        {
-        //            foreach (var otherScientificWork in lecturer.OtherScientificWorks)
-        //            {
-        //              hour += otherScientificWork.ClassificationOfScientificWork.HoursConverted;
-        //            }
-        //        }
-        //        lecturer.TotalHour = hour;
-        //        await _lecturerRepository.UpdateAsync(lecturer);
-        //    }
-        //}
+        
 
         #endregion
 
@@ -393,16 +227,6 @@ namespace ScientificResearch.Core.Business.Services
 
             string matchedPropertyName = lecturerViewModelProperties.FirstOrDefault(x => x == requestPropertyName);
 
-            //foreach (var tableViewModelProperty in tableViewModelProperties)
-            //{
-            //    var lowerTypeViewModelProperty = tableViewModelProperty.ToLower();
-            //    if (lowerTypeViewModelProperty.Equals(requestPropertyName))
-            //    {
-            //        matchedPropertyName = tableViewModelProperty;
-            //        break;
-            //    }
-            //}
-
             if (string.IsNullOrEmpty(matchedPropertyName))
             {
                 matchedPropertyName = "Total";
@@ -417,12 +241,12 @@ namespace ScientificResearch.Core.Business.Services
             return new PagedList<LecturerViewModel>(list, requestListViewModel.Offset ?? CommonConstants.Config.DEFAULT_SKIP, requestListViewModel.Limit ?? CommonConstants.Config.DEFAULT_TAKE);
         }
 
-        public async Task<LecturerViewModel> GetLecturerByIdAsync(Guid? id)
+        public async Task<LecturerViewModel> GetLecturerByIdAsync(Guid? id, DateTime? startTime, DateTime? endTime)
         {
             //var lecturer = await ScoreByStage(id, startTime, endTime);
             //return new LecturerViewModel(lecturer);
-          
-                var table = await GetAll().FirstAsync(x => x.Id == id);
+            await ScoreAndHourByStage(startTime, endTime);
+            var table = await GetAll().FirstAsync(x => x.Id == id);
                 return new LecturerViewModel(table);
             
         }
@@ -461,7 +285,7 @@ namespace ScientificResearch.Core.Business.Services
             return await _lecturerRepository.DeleteAsync(id);
         }
 
-        public async Task<ResponseModel> GetScientificWorkByLecturerIdAsync(Guid? id)
+        public async Task<ResponseModel> GetScientificWorkByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime)
         {
             var lecturer = await GetAll().FirstAsync(x => x.Id == id);
             if (lecturer.LecturerInScientificWorks == null)
@@ -474,16 +298,29 @@ namespace ScientificResearch.Core.Business.Services
             }
             else
             {
-                List<ScientificWorkViewModel> scientificWorks = lecturer.LecturerInScientificWorks.Select(x => new ScientificWorkViewModel(x.ScientificWork)).ToList();
-                return new ResponseModel
+                if (startTime != null && endTime != null)
                 {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Data = scientificWorks
-                };
+
+                    List<ScientificWorkViewModel> scientificWorks = lecturer.LecturerInScientificWorks.Where(x => x.ScientificWork.Time >= startTime && x.ScientificWork.Time <= endTime).Select(x => new ScientificWorkViewModel(x.ScientificWork)).ToList();
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Data = scientificWorks
+                    };
+                }
+                else
+                {
+                    List<ScientificWorkViewModel> scientificWorks = lecturer.LecturerInScientificWorks.Select(x => new ScientificWorkViewModel(x.ScientificWork)).ToList();
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Data = scientificWorks
+                    };
+                }
             }
         }
 
-        public async Task<ResponseModel> GetScientificReportByLecturerIdAsync(Guid? id)
+        public async Task<ResponseModel> GetScientificReportByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime)
         {
             var lecturer = await GetAll().FirstAsync(x => x.Id == id);
             if (lecturer.LecturerInScientificReports == null)
@@ -496,16 +333,30 @@ namespace ScientificResearch.Core.Business.Services
             }
             else
             {
-                List<ScientificReportViewModel> scientificReports = lecturer.LecturerInScientificReports.Select(x => new ScientificReportViewModel(x.ScientificReport)).ToList();
-                return new ResponseModel
+                if (startTime != null && endTime != null)
                 {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Data = scientificReports
-                };
+
+                    List<ScientificReportViewModel> scientificReports = lecturer.LecturerInScientificReports.Where(x => x.ScientificReport.Time >= startTime && x.ScientificReport.Time <= endTime).Select(x => new ScientificReportViewModel(x.ScientificReport)).ToList();
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Data = scientificReports
+                    };
+                }
+
+                else
+                {
+                    List<ScientificReportViewModel> scientificReports = lecturer.LecturerInScientificReports.Select(x => new ScientificReportViewModel(x.ScientificReport)).ToList();
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Data = scientificReports
+                    };
+                }
             }
         }
 
-        public async Task<ResponseModel> GetPublishBookByLecturerIdAsync(Guid? id)
+        public async Task<ResponseModel> GetPublishBookByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime)
         {
             var lecturer = await GetAll().FirstAsync(x => x.Id == id);
             if (lecturer.LecturerInPublishBooks == null)
@@ -518,12 +369,26 @@ namespace ScientificResearch.Core.Business.Services
             }
             else
             {
-                List<PublishBookViewModel> publishBooks = lecturer.LecturerInPublishBooks.Select(x => new PublishBookViewModel(x.PublishBook)).ToList();
-                return new ResponseModel
+                if (startTime != null && endTime != null)
                 {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Data = publishBooks
-                };
+
+                    List<PublishBookViewModel> publishBooks = lecturer.LecturerInPublishBooks.Where(x => x.PublishBook.Time >= startTime && x.PublishBook.Time <= endTime).Select(x => new PublishBookViewModel(x.PublishBook)).ToList();
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Data = publishBooks
+                    };
+                }
+
+                else
+                {
+                    List<PublishBookViewModel> publishBooks = lecturer.LecturerInPublishBooks.Select(x => new PublishBookViewModel(x.PublishBook)).ToList();
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Data = publishBooks
+                    };
+                }
             }
         }
         public async Task<ResponseModel> GetStudyGuideByLecturerIdAsync(Guid? id)
@@ -547,7 +412,7 @@ namespace ScientificResearch.Core.Business.Services
                 };
             }
         }
-        public async Task<ResponseModel> GetOtherScientificWorkByLecturerIdAsync(Guid? id)
+        public async Task<ResponseModel> GetOtherScientificWorkByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime)
         {
             var lecturer = await GetAll().FirstAsync(x => x.Id == id);
             if (lecturer.LecturerInOtherScientificWorks == null)
@@ -560,12 +425,26 @@ namespace ScientificResearch.Core.Business.Services
             }
             else
             {
-                List<OtherScientificWorkViewModel> otherScientificWorks = lecturer.LecturerInOtherScientificWorks.Select(x => new OtherScientificWorkViewModel(x.OtherScientificWork)).ToList();
-                return new ResponseModel
+                if (startTime != null && endTime != null)
                 {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Data = otherScientificWorks
-                };
+
+                    List<OtherScientificWorkViewModel> otherScientificWorks = lecturer.LecturerInOtherScientificWorks.Where(x => x.OtherScientificWork.Time >= startTime && x.OtherScientificWork.Time <= endTime).Select(x => new OtherScientificWorkViewModel(x.OtherScientificWork)).ToList();
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Data = otherScientificWorks
+                    };
+                }
+
+                else
+                {
+                    List<OtherScientificWorkViewModel> otherScientificWorks = lecturer.LecturerInOtherScientificWorks.Select(x => new OtherScientificWorkViewModel(x.OtherScientificWork)).ToList();
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Data = otherScientificWorks
+                    };
+                }
             }
         }
 

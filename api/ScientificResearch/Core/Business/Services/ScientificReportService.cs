@@ -70,6 +70,7 @@ namespace ScientificResearch.Core.Business.Services
                 || (x.Name.Contains(requestListViewModel.Query)
                 || (x.Content.Contains(requestListViewModel.Query))
                 || (x.ScientificReportType.Name.Contains(requestListViewModel.Query))
+                || (x.LecturerInScientificReports.FirstOrDefault().Lecturer.Name.Contains(requestListViewModel.Query))
                 )))
             .Select(x => new ScientificReportViewModel(x)).ToListAsync();
 

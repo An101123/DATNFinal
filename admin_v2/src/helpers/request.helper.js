@@ -4,10 +4,10 @@ import cookie from "react-cookies";
 import { toastError } from "../helpers/toast.helper";
 
 const instance = axios.create({
-  timeout: 100000
+  timeout: 100000,
 });
 
-const handleError = error => {
+const handleError = (error) => {
   //eslint-disable-next-line
   if (error.response) {
     const message =
@@ -34,24 +34,23 @@ export default class RequestHelper {
       accept: "application/json",
       contentType: "application/json",
       "x-access-token": cookie.load("token"),
-      ...config
+      ...config,
     };
   }
   static async get(apiUrl, params) {
-    console.log(apiUrl);
     const header = await this.getHeader();
     return instance
       .get(apiUrl, {
         headers: header,
         params,
-        paramsSerializer: params => {
+        paramsSerializer: (params) => {
           return qs.stringify(params, { arrayFormat: "repeat" });
-        }
+        },
       })
-      .then(data => {
+      .then((data) => {
         return data.data;
       })
-      .catch(e => {
+      .catch((e) => {
         handleError(e);
         throw e;
       });
@@ -61,12 +60,12 @@ export default class RequestHelper {
       method: "post",
       url: apiUrl,
       headers: await this.getHeader(config),
-      data: data
+      data: data,
     })
-      .then(data => {
+      .then((data) => {
         return data.data;
       })
-      .catch(e => {
+      .catch((e) => {
         handleError(e);
         throw e;
       });
@@ -76,12 +75,12 @@ export default class RequestHelper {
       method: "put",
       url: apiUrl,
       headers: await this.getHeader(),
-      data: data
+      data: data,
     })
-      .then(data => {
+      .then((data) => {
         return data.data;
       })
-      .catch(e => {
+      .catch((e) => {
         handleError(e);
         throw e;
       });
@@ -90,12 +89,12 @@ export default class RequestHelper {
     return instance({
       method: "delete",
       url: apiUrl,
-      headers: await this.getHeader()
+      headers: await this.getHeader(),
     })
-      .then(data => {
+      .then((data) => {
         return data.data;
       })
-      .catch(e => {
+      .catch((e) => {
         handleError(e);
         throw e;
       });
@@ -108,15 +107,15 @@ export default class RequestHelper {
       headers: {
         accept: "application/pdf",
         contentType: "application/json",
-        "Access-Token": cookie.load("token")
+        "Access-Token": cookie.load("token"),
       },
       responseType: "blob",
-      data: data
+      data: data,
     })
-      .then(data => {
+      .then((data) => {
         return data.data;
       })
-      .catch(e => {
+      .catch((e) => {
         handleError(e);
         throw e;
       });

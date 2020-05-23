@@ -8647,11 +8647,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\DATNFinal\\api\\ScientificResearch\\ScientificResearch.csproj",
+      "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\db\\DATNFinal\\api\\ScientificResearch\\ScientificResearch.csproj",
       "projectName": "ScientificResearch",
-      "projectPath": "C:\\Users\\Administrator\\Desktop\\DATNFinal\\api\\ScientificResearch\\ScientificResearch.csproj",
+      "projectPath": "C:\\Users\\Administrator\\Desktop\\db\\DATNFinal\\api\\ScientificResearch\\ScientificResearch.csproj",
       "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Administrator\\Desktop\\DATNFinal\\api\\ScientificResearch\\obj\\",
+      "outputPath": "C:\\Users\\Administrator\\Desktop\\db\\DATNFinal\\api\\ScientificResearch\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",

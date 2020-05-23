@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace ScientificResearch.Core.Business.Services
@@ -71,7 +72,8 @@ namespace ScientificResearch.Core.Business.Services
                 || (x.Name.Contains(requestListViewModel.Query)
                 || (x.Content.Contains(requestListViewModel.Query))
                 || (x.Level.Name.Contains(requestListViewModel.Query))
-                 )))
+                || (x.LecturerInScientificWorks.FirstOrDefault().Lecturer.Name.Contains(requestListViewModel.Query))
+                   )))
             .Select(x => new ScientificWorkViewModel(x)).ToListAsync();
 
             var scientificWorkViewModelProperties = GetAllPropertyNameOfScientificWorkViewModel();
@@ -128,34 +130,6 @@ namespace ScientificResearch.Core.Business.Services
                 return await _scientificWorkResponstory.DeleteAsync(id);
             }
         }
-
-        //public async Task<ResponseModel> CreateScientificWorkAsync(ScientificWorkManageModel scientificWorkManageModel)
-        //{
-        //    var scientificWork = await _scientificWorkResponstory.FetchFirstAsync(x => x.Name == scientificWorkManageModel.Name && x.LevelId == scientificWorkManageModel.LevelId);
-        //    if (scientificWork != null)
-        //    {
-        //        return new ResponseModel()
-        //        {
-        //            StatusCode = System.Net.HttpStatusCode.BadRequest,
-        //            Message = "This ScientificWork is exist. Can you try again with the update!"
-        //        };
-        //    }
-        //    else
-        //    {
-        //        var level = await _levelRepository.GetByIdAsync(scientificWorkManageModel.LevelId);
-        //        var lecturer = await _lecturerRepository.GetByIdAsync(scientificWorkManageModel.LecturerId);
-        //        scientificWork = _mapper.Map<ScientificWork>(scientificWorkManageModel);
-        //        scientificWork.Level = level;
-        //        scientificWork.Lecturer = lecturer;
-
-        //        await _scientificWorkResponstory.InsertAsync(scientificWork);
-        //        return new ResponseModel()
-        //        {
-        //            StatusCode = System.Net.HttpStatusCode.OK,
-        //            Data = new ScientificWorkViewModel(scientificWork)
-        //        };
-        //    }
-        //}
 
         public async Task<ResponseModel> CreateScientificWorkAsync(ScientificWorkManageModel scientificWorkManageModel)
         {

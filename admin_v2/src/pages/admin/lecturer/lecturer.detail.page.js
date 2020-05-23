@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import ApiLecturer from "../../../api/api.lecturer";
-import { Row, Col, Button, Table, Label } from "reactstrap";
+import { Row, Col, Button, Table, Label, FormGroup } from "reactstrap";
+import Datetime from "react-datetime";
 import moment from "moment";
+import { connect } from "react-redux";
 
 class LecturerDetail extends Component {
   constructor(props) {
@@ -13,6 +15,10 @@ class LecturerDetail extends Component {
       publishBooks: [],
       studyGuides: [],
       otherScientificWorks: [],
+      params: {
+        startTime: null,
+        endTime: null,
+      },
     };
   }
 
@@ -33,22 +39,35 @@ class LecturerDetail extends Component {
       item: item,
     }));
   };
-  GetScientificWork = async (id) => {
+  GetScientificWork = async (id, startTime, endTime) => {
     let scientificWorks = await ApiLecturer.GetAllScientificWorkByLecturerId(
-      id
+      id,
+      startTime,
+      endTime
     );
     this.setState({ scientificWorks: scientificWorks.data });
   };
 
-  GetScientificReport = async (id) => {
+  GetLecturerById = async (id, startTime, endTime) => {
+    const res = await ApiLecturer.getLecturerById(id, startTime, endTime);
+    this.setState({ lecturer: res });
+  };
+
+  GetScientificReport = async (id, startTime, endTime) => {
     let scientificReports = await ApiLecturer.GetAllScientificReportByLecturerId(
-      id
+      id,
+      startTime,
+      endTime
     );
     this.setState({ scientificReports: scientificReports.data });
   };
 
-  GetPublishBook = async (id) => {
-    let publishBooks = await ApiLecturer.GetAllPublishBookByLecturerId(id);
+  GetPublishBook = async (id, startTime, endTime) => {
+    let publishBooks = await ApiLecturer.GetAllPublishBookByLecturerId(
+      id,
+      startTime,
+      endTime
+    );
     this.setState({ publishBooks: publishBooks.data });
   };
 
@@ -56,48 +75,147 @@ class LecturerDetail extends Component {
     let studyGuides = await ApiLecturer.GetAllStudyGuideByLecturerId(id);
     this.setState({ studyGuides: studyGuides.data });
   };
-  GetOtherScientificWork = async (id) => {
+  GetOtherScientificWork = async (id, startTime, endTime) => {
     let otherScientificWorks = await ApiLecturer.GetAllOtherScientificWorkByLecturerId(
-      id
+      id,
+      startTime,
+      endTime
     );
     this.setState({ otherScientificWorks: otherScientificWorks.data });
   };
 
+  handleFilter = () => {
+    const { match = {} } = this.props;
+    const { params = {} } = match;
+    const { id } = params;
+    const { startTime, endTime } = this.state.params;
+    this.GetScientificWork(id, startTime, endTime);
+    this.GetScientificReport(id, startTime, endTime);
+    this.GetPublishBook(id, startTime, endTime);
+    // this.GetStudyGuide(id);
+    this.GetOtherScientificWork(id, startTime, endTime);
+    this.GetLecturerById(id, startTime, endTime);
+  };
+
   componentDidMount() {
+    const { match = {}, location = {} } = this.props;
+    const { params = {} } = match;
+    const { id } = params;
+    const { startTime, endTime } = location.state;
+
     this.setState({ lecturer: this.props.lecturer });
-    this.GetScientificWork(this.props.lecturer.id);
-    this.GetScientificReport(this.props.lecturer.id);
-    this.GetPublishBook(this.props.lecturer.id);
-    this.GetStudyGuide(this.props.lecturer.id);
-    this.GetOtherScientificWork(this.props.lecturer.id);
+    this.GetScientificWork(id, startTime, endTime);
+    this.GetScientificReport(id, startTime, endTime);
+    this.GetPublishBook(id, startTime, endTime);
+    // this.GetStudyGuide(id);
+    this.GetOtherScientificWork(id, startTime, endTime);
+    this.GetLecturerById(id, startTime, endTime);
   }
 
   render() {
     const {
-      lecturer,
+      lecturer = {},
       scientificWorks,
       scientificReports,
       publishBooks,
       studyGuides,
       otherScientificWorks,
+      params = {},
     } = this.state;
-
+    const { startTime, endTime } = params;
     return (
       <div>
         <Row>
-          <Col md="10">
+          <Col md="4">
             {" "}
             <h4 style={{ color: "#0473b3" }}> Giảng viên: {lecturer.name}</h4>
           </Col>
-
-          <Col md="2">
-            <Button
-              className="fa fa-window-close"
-              style={{ float: "right", backgroundColor: "white" }}
-              onClick={this.backToAdminPage}
-            />
+          <Col md="4">
+            <h4 style={{ color: "#0473b3" }}> Tổng điểm: {lecturer.total}</h4>
+          </Col>
+          <Col md="4">
+            <h4 style={{ color: "#0473b3" }}>
+              {" "}
+              Tổng giờ: {lecturer.totalHour}
+            </h4>
           </Col>
         </Row>
+        <br />
+        <div className="border border-dark">
+          <Row style={{ marginTop: "10px", marginLeft: "10px" }}>
+            <Col xs="5">
+              <Row>
+                <Col xs="3" sm="3" md="3" lg="3">
+                  <FormGroup>
+                    <Label for="examplePassword">
+                      {" "}
+                      <strong>Từ: </strong>
+                    </Label>
+                  </FormGroup>
+                </Col>
+                <Col xs="9" sm="9" md="9" lg="9">
+                  <FormGroup>
+                    <Datetime
+                      dateFormat="YYYY-MM-DD"
+                      timeFormat={false}
+                      isValidDate={(curr) => curr.isBefore(moment())}
+                      value={startTime}
+                      onChange={(date) =>
+                        this.setState({
+                          params: {
+                            ...this.state.params,
+                            startTime: date.format("YYYY-MM-DD"),
+                          },
+                        })
+                      }
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+            </Col>
+
+            {/* End Day */}
+            <Col xs="5">
+              <Row>
+                <Col xs="3" sm="3" md="3" lg="3">
+                  <FormGroup>
+                    <Label for="examplePassword">
+                      <strong>Đến: </strong>{" "}
+                    </Label>
+                  </FormGroup>
+                </Col>
+                <Col xs="9" sm="9" md="9" lg="9">
+                  <FormGroup>
+                    <Datetime
+                      dateFormat="YYYY-MM-DD"
+                      timeFormat={false}
+                      isValidDate={(current) =>
+                        current.isAfter(this.state.params.startTime)
+                      }
+                      value={endTime}
+                      onChange={(date) =>
+                        this.setState({
+                          params: {
+                            ...this.state.params,
+                            endTime: date.format("YYYY-MM-DD"),
+                          },
+                        })
+                      }
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+            </Col>
+            <Col xs="2">
+              <Button
+                className="btn btn-pill btn-success btn-sm"
+                onClick={this.handleFilter}
+              >
+                Xác nhận
+              </Button>
+            </Col>
+          </Row>
+        </div>
 
         <Row className="nckh">
           <Col xs="12">
@@ -114,6 +232,7 @@ class LecturerDetail extends Component {
                   <th>Đề tài NCKH</th>
                   <th style={{ width: "200px" }}>Cấp</th>
                   <th style={{ width: "200px" }}>Thời gian</th>
+                  <th>Điểm</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,6 +247,7 @@ class LecturerDetail extends Component {
                       <td>
                         {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
                       </td>
+                      <td>{item.level.score}</td>
                     </tr>
                   );
                 })}
@@ -151,6 +271,7 @@ class LecturerDetail extends Component {
                   <th>Bài báo - Báo cáo khoa học</th>
                   <th style={{ width: "200px" }}>Loại</th>
                   <th style={{ width: "200px" }}>Thời gian</th>
+                  <th>Điểm</th>
                 </tr>
               </thead>
               <tbody>
@@ -165,6 +286,7 @@ class LecturerDetail extends Component {
                       <td>
                         {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
                       </td>
+                      <td>{item.scientificReportType.score}</td>
                     </tr>
                   );
                 })}
@@ -184,6 +306,7 @@ class LecturerDetail extends Component {
                   <th>Xuất bản sách</th>
                   <th style={{ width: "200px" }}>Loại</th>
                   <th style={{ width: "200px" }}>Thời gian</th>
+                  <th>Điểm</th>
                 </tr>
               </thead>
               <tbody>
@@ -198,6 +321,7 @@ class LecturerDetail extends Component {
                       <td>
                         {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
                       </td>
+                      <td>{item.bookCategory.score}</td>
                     </tr>
                   );
                 })}
@@ -221,6 +345,7 @@ class LecturerDetail extends Component {
                   <th>Họ và tên, tên đề tài</th>
                   <th style={{ width: "200px" }}>Cấp</th>
                   <th style={{ width: "200px" }}>Thời gian</th>
+                  <th>Điểm</th>
                 </tr>
               </thead>
               <tbody>
@@ -235,6 +360,7 @@ class LecturerDetail extends Component {
                       <td>
                         {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
                       </td>
+                      <td>{item.levelStudyGuide.score}</td>
                     </tr>
                   );
                 })}
@@ -253,6 +379,7 @@ class LecturerDetail extends Component {
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Bằng sáng chế</th>
                   <th style={{ width: "200px" }}>Thời gian</th>
+                  <th>Điểm</th>
                 </tr>
               </thead>
               <tbody>
@@ -274,6 +401,7 @@ class LecturerDetail extends Component {
                         <td>
                           {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
                         </td>
+                        <td>{item.classificationOfScientificWork.score}</td>
                       </tr>
                     );
                   })}
@@ -330,4 +458,6 @@ class LecturerDetail extends Component {
   }
 }
 
-export default LecturerDetail;
+export default connect((state) => ({
+  lecturerPagedListReducer: state.lecturerPagedListReducer,
+}))(LecturerDetail);

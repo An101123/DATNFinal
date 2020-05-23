@@ -7,7 +7,6 @@ import {
 import ApiLecturer from "../api/api.lecturer";
 
 function* getLecturerList(action) {
-  console.log("saga action", action);
   try {
     const { payload = {} } = action;
     const res = yield call(ApiLecturer.getLecturers, payload);

@@ -70,6 +70,7 @@ namespace ScientificResearch.Core.Business.Services
             && (string.IsNullOrEmpty(requestListViewModel.Query)
                 || (x.Name.Contains(requestListViewModel.Query)
                 || (x.BookCategory.Name.Contains(requestListViewModel.Query))
+                || (x.LecturerInPublishBooks.FirstOrDefault().Lecturer.Name.Contains(requestListViewModel.Query))
                 )))
             .Select(x => new PublishBookViewModel(x)).ToListAsync();
 
