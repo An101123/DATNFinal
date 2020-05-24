@@ -514,7 +514,7 @@ class ScientificReportListPage extends Component {
                   <tr>
                     <th>STT</th>
                     <th>Bài báo - Báo cáo khoa học</th>
-                    <th>Thời gian</th>
+                    <th style={{ width: "150px" }}>Thời gian</th>
                     <th>Loại</th>
                     <th>Giảng viên</th>
                     <th>Thao tác</th>

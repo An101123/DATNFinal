@@ -14,7 +14,6 @@ using ScientificResearch.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace ScientificResearch.Core.Business.Services
@@ -31,7 +30,7 @@ namespace ScientificResearch.Core.Business.Services
         Task<ResponseModel> GetScientificWorkByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime);
         Task<ResponseModel> GetScientificReportByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime);
         Task<ResponseModel> GetPublishBookByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime);
-        Task<ResponseModel> GetStudyGuideByLecturerIdAsync(Guid? id);
+        Task<ResponseModel> GetStudyGuideByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime);
         Task<ResponseModel> GetOtherScientificWorkByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime);
 
     }
@@ -288,17 +287,17 @@ namespace ScientificResearch.Core.Business.Services
         public async Task<ResponseModel> GetScientificWorkByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime)
         {
             var lecturer = await GetAll().FirstAsync(x => x.Id == id);
-            if (lecturer.LecturerInScientificWorks == null)
+            if (startTime != null && endTime != null)
             {
-                return new ResponseModel
+                if (lecturer.LecturerInScientificWorks == null)
                 {
-                    StatusCode = System.Net.HttpStatusCode.NotFound,
-                    Message = "This lecturer has no scientific work"
-                };
-            }
-            else
-            {
-                if (startTime != null && endTime != null)
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.NotFound,
+                        Message = "This lecturer has no scientific work"
+                    };
+                }
+                else
                 {
 
                     List<ScientificWorkViewModel> scientificWorks = lecturer.LecturerInScientificWorks.Where(x => x.ScientificWork.Time >= startTime && x.ScientificWork.Time <= endTime).Select(x => new ScientificWorkViewModel(x.ScientificWork)).ToList();
@@ -306,6 +305,18 @@ namespace ScientificResearch.Core.Business.Services
                     {
                         StatusCode = System.Net.HttpStatusCode.OK,
                         Data = scientificWorks
+                    };
+                }
+
+            }
+            else
+            {
+                if (lecturer.LecturerInScientificWorks == null)
+                {
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.NotFound,
+                        Message = "This lecturer has no scientific work"
                     };
                 }
                 else
@@ -317,7 +328,12 @@ namespace ScientificResearch.Core.Business.Services
                         Data = scientificWorks
                     };
                 }
+
             }
+                
+            
+                
+            
         }
 
         public async Task<ResponseModel> GetScientificReportByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime)
@@ -391,7 +407,7 @@ namespace ScientificResearch.Core.Business.Services
                 }
             }
         }
-        public async Task<ResponseModel> GetStudyGuideByLecturerIdAsync(Guid? id)
+        public async Task<ResponseModel> GetStudyGuideByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime)
         {
             var lecturer = await GetAll().FirstAsync(x => x.Id == id);
             if (lecturer.StudyGuides == null)
@@ -404,12 +420,25 @@ namespace ScientificResearch.Core.Business.Services
             }
             else
             {
-                List<StudyGuideViewModel> studyGuides = lecturer.StudyGuides.Select(x => new StudyGuideViewModel(x)).ToList();
-                return new ResponseModel
+                if (startTime != null && endTime != null)
                 {
-                    StatusCode = System.Net.HttpStatusCode.OK,
-                    Data = studyGuides
-                };
+
+                    List<StudyGuideViewModel> studyGuides = lecturer.StudyGuides.Where(x => x.InstructionTime >= startTime && x.InstructionTime <= endTime).Select(x => new StudyGuideViewModel(x)).ToList();
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Data = studyGuides
+                    };
+                }
+                else
+                {
+                    List<StudyGuideViewModel> studyGuides = lecturer.StudyGuides.Select(x => new StudyGuideViewModel(x)).ToList();
+                    return new ResponseModel
+                    {
+                        StatusCode = System.Net.HttpStatusCode.OK,
+                        Data = studyGuides
+                    };
+                }
             }
         }
         public async Task<ResponseModel> GetOtherScientificWorkByLecturerIdAsync(Guid? id, DateTime? startTime, DateTime? endTime)

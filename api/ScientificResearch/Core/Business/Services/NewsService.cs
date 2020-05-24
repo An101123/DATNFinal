@@ -20,6 +20,7 @@ namespace ScientificResearch.Core.Business.Services
         Task<PagedList<NewsViewModel>> ListNewsAsync(RequestListViewModel requestListViewModel);
         Task<News> GetNewsByIdAsync(Guid? id);
         Task<ResponseModel> CreateNewsAsync(NewsManageModel newsManageModel);
+        Task<ResponseModel> UpdateNewsAsync(Guid id, NewsManageModel newsManageModel);
         Task<ResponseModel> DeleteNewsAsync(Guid id);
     }
 
@@ -109,6 +110,35 @@ namespace ScientificResearch.Core.Business.Services
                 StatusCode = System.Net.HttpStatusCode.OK,
                 Data = new NewsViewModel(news),
             };
+        }
+        public async Task<ResponseModel> UpdateNewsAsync (Guid id, NewsManageModel newsManageModel)
+        {
+            var news = await _newsRepository.GetByIdAsync(id);
+            if (news == null)
+            {
+                return new ResponseModel()
+                {
+                    StatusCode = System.Net.HttpStatusCode.NotFound,
+                    Message = "This news is not exist"
+                };
+            }
+            else
+            {
+                var existedNewsName = await _newsRepository.FetchFirstAsync(x => x.Title == newsManageModel.Title && x.Id != id);
+                if (existedNewsName != null)
+                {
+                    return new ResponseModel()
+                    {
+                        StatusCode = System.Net.HttpStatusCode.BadRequest,
+                        Message = "Scientific Report Type " + news.Title + " is exist on system. Please try again!",
+                    };
+                }
+                else
+                {
+                    newsManageModel.GetNewsFromModel(news);
+                    return await _newsRepository.UpdateAsync(news);
+                }
+            }
         }
 
         public async Task<ResponseModel> DeleteNewsAsync(Guid id)

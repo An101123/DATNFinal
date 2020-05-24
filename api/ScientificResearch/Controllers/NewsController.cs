@@ -49,6 +49,12 @@ namespace ScientificResearch.Controllers
             var response = await _newsService.CreateNewsAsync(newsManageModel);
             return new CustomActionResult(response);
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] NewsManageModel newsManageModel)
+        {
+            var response = await _newsService.UpdateNewsAsync(id, newsManageModel);
+            return new CustomActionResult(response);
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)

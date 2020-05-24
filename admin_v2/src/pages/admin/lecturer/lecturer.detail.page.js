@@ -126,21 +126,21 @@ class LecturerDetail extends Component {
     return (
       <div>
         <Row>
-          <Col md="4">
+          <Col md="8">
             {" "}
             <h4 style={{ color: "#0473b3" }}> Giảng viên: {lecturer.name}</h4>
           </Col>
-          <Col md="4">
+          <Col md="2">
             <h4 style={{ color: "#0473b3" }}> Tổng điểm: {lecturer.total}</h4>
           </Col>
-          <Col md="4">
+          <Col md="2">
             <h4 style={{ color: "#0473b3" }}>
               {" "}
               Tổng giờ: {lecturer.totalHour}
             </h4>
           </Col>
         </Row>
-        <br />
+        <hr />
         <div className="border border-dark">
           <Row style={{ marginTop: "10px", marginLeft: "10px" }}>
             <Col xs="5">
@@ -216,6 +216,7 @@ class LecturerDetail extends Component {
             </Col>
           </Row>
         </div>
+        <br />
 
         <Row className="nckh">
           <Col xs="12">
@@ -230,9 +231,10 @@ class LecturerDetail extends Component {
                 <tr>
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Đề tài NCKH</th>
-                  <th style={{ width: "200px" }}>Cấp</th>
-                  <th style={{ width: "200px" }}>Thời gian</th>
-                  <th>Điểm</th>
+                  <th style={{ width: "100px" }}>Thời gian</th>
+                  <th style={{ width: "100px" }}>Cấp</th>
+                  <th style={{ width: "100px" }}>Số điểm quy đổi</th>
+                  <th style={{ width: "100px" }}>Số giờ quy đổi</th>
                 </tr>
               </thead>
               <tbody>
@@ -243,11 +245,13 @@ class LecturerDetail extends Component {
                       <td onClick={() => this.toggleDetailWorkPage(item)}>
                         {item.name}
                       </td>
-                      <td>{item.level.name}</td>
+
                       <td>
                         {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
                       </td>
+                      <td>{item.level.name}</td>
                       <td>{item.level.score}</td>
+                      <td>{item.level.hoursConverted}</td>
                     </tr>
                   );
                 })}
@@ -269,9 +273,11 @@ class LecturerDetail extends Component {
                 <tr>
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Bài báo - Báo cáo khoa học</th>
-                  <th style={{ width: "200px" }}>Loại</th>
-                  <th style={{ width: "200px" }}>Thời gian</th>
-                  <th>Điểm</th>
+                  <th style={{ width: "100px" }}>Thời gian</th>
+                  <th style={{ width: "100px" }}>Loại</th>
+
+                  <th style={{ width: "100px" }}>Số điểm quy đổi</th>
+                  <th style={{ width: "100px" }}>Số giờ quy đổi</th>
                 </tr>
               </thead>
               <tbody>
@@ -282,11 +288,13 @@ class LecturerDetail extends Component {
                       <td onClick={() => this.toggleDetailReportPage(item)}>
                         {item.name}
                       </td>
-                      <td>{item.scientificReportType.name}</td>
+
                       <td>
                         {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
                       </td>
+                      <td>{item.scientificReportType.name}</td>
                       <td>{item.scientificReportType.score}</td>
+                      <td>{item.scientificReportType.hoursConverted}</td>
                     </tr>
                   );
                 })}
@@ -304,9 +312,10 @@ class LecturerDetail extends Component {
                 <tr>
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Xuất bản sách</th>
-                  <th style={{ width: "200px" }}>Loại</th>
-                  <th style={{ width: "200px" }}>Thời gian</th>
-                  <th>Điểm</th>
+                  <th style={{ width: "100px" }}>Thời gian</th>
+                  <th style={{ width: "100px" }}>Loại</th>
+                  <th style={{ width: "100px" }}>Số điểm quy đổi</th>
+                  <th style={{ width: "100px" }}>Số giờ quy đổi</th>
                 </tr>
               </thead>
               <tbody>
@@ -317,11 +326,13 @@ class LecturerDetail extends Component {
                       <td onClick={() => this.toggleDetailReportPage(item)}>
                         {item.name}
                       </td>
-                      <td>{item.bookCategory.name}</td>
+
                       <td>
                         {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
                       </td>
+                      <td>{item.bookCategory.name}</td>
                       <td>{item.bookCategory.score}</td>
+                      <td>{item.bookCategory.hoursConverted}</td>
                     </tr>
                   );
                 })}
@@ -343,9 +354,10 @@ class LecturerDetail extends Component {
                 <tr>
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Họ và tên, tên đề tài</th>
-                  <th style={{ width: "200px" }}>Cấp</th>
-                  <th style={{ width: "200px" }}>Thời gian</th>
-                  <th>Điểm</th>
+                  <th style={{ width: "100px" }}>Thời gian</th>
+                  <th style={{ width: "100px" }}>Cấp</th>
+                  <th style={{ width: "100px" }}>Số điểm quy đổi</th>
+                  <th style={{ width: "100px" }}>Số giờ quy đổi</th>
                 </tr>
               </thead>
               <tbody>
@@ -356,11 +368,14 @@ class LecturerDetail extends Component {
                       <td onClick={() => this.toggleDetailReportPage(item)}>
                         {item.name}
                       </td>
-                      <td>{item.levelStudyGuide.name}</td>
                       <td>
-                        {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
+                        {moment(item.instructionTime)
+                          .add(7, "h")
+                          .format("DD-MM-YYYY")}
                       </td>
+                      <td>{item.levelStudyGuide.name}</td>
                       <td>{item.levelStudyGuide.score}</td>
+                      <td>{item.levelStudyGuide.hoursConverted}</td>{" "}
                     </tr>
                   );
                 })}
@@ -379,7 +394,8 @@ class LecturerDetail extends Component {
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Bằng sáng chế</th>
                   <th style={{ width: "200px" }}>Thời gian</th>
-                  <th>Điểm</th>
+                  <th style={{ width: "100px" }}>Số điểm quy đổi</th>
+                  <th style={{ width: "100px" }}>Số giờ quy đổi</th>
                 </tr>
               </thead>
               <tbody>
@@ -402,6 +418,9 @@ class LecturerDetail extends Component {
                           {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
                         </td>
                         <td>{item.classificationOfScientificWork.score}</td>
+                        <td>
+                          {item.classificationOfScientificWork.hoursConverted}
+                        </td>
                       </tr>
                     );
                   })}
@@ -422,8 +441,10 @@ class LecturerDetail extends Component {
                 <tr>
                   <th style={{ width: "50px" }}>STT</th>
                   <th>Công trình khoa học khác</th>
-                  <th>Loại</th>
-                  <th style={{ width: "200px" }}>Thời gian</th>
+                  <th style={{ width: "100px" }}>Thời gian</th>
+                  <th style={{ width: "100px" }}>Loại</th>
+                  <th style={{ width: "100px" }}>Số điểm quy đổi</th>
+                  <th style={{ width: "100px" }}>Số giờ quy đổi</th>
                 </tr>
               </thead>
               <tbody>
@@ -442,9 +463,13 @@ class LecturerDetail extends Component {
                       <tr key={item.id}>
                         <td>{index + 1}</td>
                         <td> {item.name}</td>
-                        <td>{item.classificationOfScientificWork.name}</td>
                         <td>
                           {moment(item.time).add(7, "h").format("DD-MM-YYYY")}
+                        </td>
+                        <td>{item.classificationOfScientificWork.name}</td>
+                        <td>{item.classificationOfScientificWork.score}</td>
+                        <td>
+                          {item.classificationOfScientificWork.hoursConverted}
                         </td>
                       </tr>
                     );

@@ -16,7 +16,6 @@ import ApiLecturer from "../../../api/api.lecturer";
 import { pagination } from "../../../constant/app.constant";
 import faculty from "../../../constant/faculty";
 import "../../../pages/admin/select-custom.css";
-import LecturerDetail from "./lecturer.detail.page";
 
 class LecturerListPage extends Component {
   constructor(props) {
@@ -200,8 +199,7 @@ class LecturerListPage extends Component {
 
   render() {
     const { isShowDeleteModal, isShowInfoModal } = this.state;
-    const { isShowDetail, item, params = {} } = this.state;
-
+    const { item, params = {} } = this.state;
     const { lecturerPagedList } = this.props.lecturerPagedListReducer;
     const { sources, pageIndex, totalPages } = lecturerPagedList;
     const hasResults =

@@ -164,7 +164,7 @@ class ScientificWorkListPage extends Component {
                     <tr>
                       <th>STT</th>
                       <th>Đề tài NCKH</th>
-                      <th>Thời gian</th>
+                      <th style={{ width: "150px" }}>Thời gian</th>
                       <th>Cấp</th>
                       <th>Giảng viên</th>
                     </tr>
