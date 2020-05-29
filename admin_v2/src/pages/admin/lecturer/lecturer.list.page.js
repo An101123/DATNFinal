@@ -26,7 +26,6 @@ class LecturerListPage extends Component {
       isShowDetail: false,
       item: {},
       itemId: null,
-      year: null,
       params: {
         skip: pagination.initialPage,
         take: pagination.defaultTake,
@@ -92,7 +91,7 @@ class LecturerListPage extends Component {
     let item = Object.assign({}, this.state.item);
     item[inputName] = inputValue;
     this.setState({ item });
-    console.log(item);
+    console.log("xxx: ", item);
   };
 
   search = (e) => {

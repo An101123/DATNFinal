@@ -16,8 +16,8 @@ class LecturerDetail extends Component {
       studyGuides: [],
       otherScientificWorks: [],
       params: {
-        startTime: null,
-        endTime: null,
+        startTime: props.location.state.startTime,
+        endTime: props.location.state.endTime,
       },
     };
   }
@@ -102,6 +102,7 @@ class LecturerDetail extends Component {
     const { params = {} } = match;
     const { id } = params;
     const { startTime, endTime } = location.state;
+    console.log(this.props);
 
     this.setState({ lecturer: this.props.lecturer });
     this.GetScientificWork(id, startTime, endTime);
