@@ -518,6 +518,12 @@ namespace ScientificResearch.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AcademicDegree")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AcademicRank")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("CreateBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -536,6 +542,9 @@ namespace ScientificResearch.Migrations
                     b.Property<string>("Faculty")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()

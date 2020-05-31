@@ -10,8 +10,8 @@ using ScientificResearch.Core.DataAccess;
 namespace ScientificResearch.Migrations
 {
     [DbContext(typeof(ScientificResearchDbContext))]
-    [Migration("20200508085041_DB")]
-    partial class DB
+    [Migration("20200530104712_createDB")]
+    partial class createDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -520,6 +520,12 @@ namespace ScientificResearch.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AcademicDegree")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AcademicRank")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid?>("CreateBy")
                         .HasColumnType("uniqueidentifier");
 
@@ -538,6 +544,9 @@ namespace ScientificResearch.Migrations
                     b.Property<string>("Faculty")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Gender")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()

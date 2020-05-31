@@ -389,7 +389,7 @@ class UserListPage extends Component {
 
                     <Row>
                       <Col>
-                        <Label>Giới tính</Label> {console.log(this.state.item)}
+                        <Label>Giới tính</Label>
                         <FormGroup>
                           <div>
                             <select

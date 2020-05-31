@@ -121,6 +121,8 @@ class LecturerListPage extends Component {
                       <th>STT</th>
                       <th>Tên</th>
                       <th>Ngày sinh</th>
+                      <th>Học vị</th>
+                      <th>Học hàm</th>
                       <th>Khoa</th>
                     </tr>
                   </thead>
@@ -138,6 +140,8 @@ class LecturerListPage extends Component {
                                 .add(7, "h")
                                 .format("DD-MM-YYYY")}
                             </td>
+                            <td>{item.academicDegree}</td>
+                            <td>{item.academicRank}</td>
                             <td>{item.faculty}</td>
                           </tr>
                         );

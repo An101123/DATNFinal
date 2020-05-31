@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "UhgnIzruq+4ban/g+sEuFADoa9RW6xpJiAz6hrYgniNK7H5RTct6ovj9dmuS5FpfDSfqAYxpfb3TmHpjLb4JtQ==",
+  "dgSpecHash": "NRdwvZPvJUPaz2WtMN5SyKXe1dtEIoPmgFBVkPnYfFs/VxjeVNJuM8HpFp97mbuYIfOLNRsbcEFEz7mG/968qQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\db\\DATNFinal\\api\\ScientificResearch\\ScientificResearch.csproj",
+  "projectFilePath": "C:\\Users\\Administrator\\Desktop\\LanCuoi\\DATNFinal\\api\\ScientificResearch\\ScientificResearch.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Administrator\\.nuget\\packages\\automapper\\9.0.0\\automapper.9.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\7.0.0\\automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512",

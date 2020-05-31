@@ -16,6 +16,9 @@ import ApiLecturer from "../../../api/api.lecturer";
 import { pagination } from "../../../constant/app.constant";
 import faculty from "../../../constant/faculty";
 import "../../../pages/admin/select-custom.css";
+import gender from "../../../constant/gender";
+import academicDegree from "../../../constant/academicDegree";
+import academicRank from "../../../constant/academicRank";
 
 class LecturerListPage extends Component {
   constructor(props) {
@@ -76,6 +79,9 @@ class LecturerListPage extends Component {
       name: "",
       faculty: "",
       dateOfBirth: null,
+      gender: "",
+      academicDegree: "",
+      academicRank: "",
     };
     this.toggleModalInfo(lecturer, title);
   };
@@ -134,8 +140,22 @@ class LecturerListPage extends Component {
   };
 
   addLecturer = async () => {
-    const { name, faculty, dateOfBirth } = this.state.item;
-    const lecturer = { name, faculty, dateOfBirth };
+    const {
+      name,
+      faculty,
+      dateOfBirth,
+      gender,
+      academicDegree,
+      academicRank,
+    } = this.state.item;
+    const lecturer = {
+      name,
+      faculty,
+      dateOfBirth,
+      gender,
+      academicDegree,
+      academicRank,
+    };
     try {
       await ApiLecturer.postLecturer(lecturer);
       this.toggleModalInfo();
@@ -147,8 +167,24 @@ class LecturerListPage extends Component {
   };
 
   updateLecturer = async () => {
-    const { id, name, faculty, dateOfBirth } = this.state.item;
-    const lecturer = { id, name, faculty, dateOfBirth };
+    const {
+      id,
+      name,
+      faculty,
+      dateOfBirth,
+      gender,
+      academicDegree,
+      academicRank,
+    } = this.state.item;
+    const lecturer = {
+      id,
+      name,
+      faculty,
+      dateOfBirth,
+      gender,
+      academicDegree,
+      academicRank,
+    };
     try {
       await ApiLecturer.updateLecturer(lecturer);
       this.toggleModalInfo();
@@ -238,6 +274,33 @@ class LecturerListPage extends Component {
                     </FormGroup>
                   </Col>
                 </Row>
+                <Row>
+                  <Col>
+                    <Label>Giới tính</Label>
+                    <FormGroup>
+                      <div>
+                        <select
+                          className="select-custom"
+                          name="gender"
+                          required={false}
+                          onChange={this.onModelChange}
+                        >
+                          {gender.GENDER.map((item, i) => {
+                            return (
+                              <option
+                                selected={this.state.item.gender === item.name}
+                                value={item.id}
+                                key={i}
+                              >
+                                {item.name}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </FormGroup>
+                  </Col>
+                </Row>
 
                 <Row>
                   <Col>
@@ -259,6 +322,50 @@ class LecturerListPage extends Component {
                   </Col>
                 </Row>
 
+                <Row>
+                  <Col>
+                    <Label>Học vị</Label>{" "}
+                    <FormGroup>
+                      <div>
+                        <select
+                          className="select-custom"
+                          name="academicDegree"
+                          required={true}
+                          onChange={this.onModelChange}
+                          value={this.state.academicDegree}
+                        >
+                          {academicDegree.ACADEMICDEGREE.map((item) => {
+                            return (
+                              <option value={item.name}>{item.name}</option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Label>Học hàm</Label>{" "}
+                    <FormGroup>
+                      <div>
+                        <select
+                          className="select-custom"
+                          name="academicRank"
+                          required={true}
+                          onChange={this.onModelChange}
+                          value={this.state.academicRank}
+                        >
+                          {academicRank.ACADEMICRANK.map((item) => {
+                            return (
+                              <option value={item.name}>{item.name}</option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </FormGroup>
+                  </Col>
+                </Row>
                 <Row>
                   <Col>
                     <Label>Khoa</Label>{" "}
@@ -397,7 +504,10 @@ class LecturerListPage extends Component {
                   <th>STT</th>
                   <th>Tên</th>
                   <th>Ngày sinh</th>
+                  <th>Giới tính</th>
                   <th>Khoa</th>
+                  <th>Học vị</th>
+                  <th>Học hàm</th>
                   <th>Tổng điểm</th>
                   <th>Số giờ quy đổi</th>
                   <th>Thao tác</th>
@@ -427,7 +537,10 @@ class LecturerListPage extends Component {
                             .add(7, "h")
                             .format("DD-MM-YYYY")}
                         </td>
+                        <td>{item.gender}</td>
                         <td>{item.faculty}</td>
+                        <td>{item.academicDegree}</td>
+                        <td>{item.academicRank}</td>
                         <td>{item.total}</td>
                         <td>{item.totalHour}</td>
                         <td>

@@ -1,4 +1,6 @@
-﻿using ScientificResearch.Entities;
+﻿using ScientificResearch.Core.Common.Utilities;
+using ScientificResearch.Entities;
+using ScientificResearch.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +22,9 @@ namespace ScientificResearch.Core.Business.Models.Lecturers
                 Name = lecturer.Name;
                 Faculty = lecturer.Faculty;
                 DateOfBirth = lecturer.DateOfBirth;
+                AcademicDegree = lecturer.AcademicDegree;
+                AcademicRank = lecturer.AcademicRank;
+                Gender = lecturer.Gender.GetEnumName();
                 Total = lecturer.Total;
                 TotalHour = lecturer.TotalHour;
             }
@@ -32,6 +37,10 @@ namespace ScientificResearch.Core.Business.Models.Lecturers
         public string Faculty { get; set; }
 
         public DateTime DateOfBirth { get; set; }
+        public string AcademicDegree { get; set; }
+        public string AcademicRank { get; set; }
+
+        public string Gender { get; set; }
 
         public float Total { get; set; }
         public int TotalHour { get; set; }

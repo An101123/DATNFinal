@@ -1,4 +1,5 @@
 ﻿using ScientificResearch.Core.Entities;
+using ScientificResearch.Entities.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -23,7 +24,9 @@ namespace ScientificResearch.Entities
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-
+        public string AcademicDegree { get; set; }
+        public string AcademicRank { get; set; }
+        public UserEnums.UserGender? Gender { get; set; }
         [Required]
         public float Total { get; set; }
         public int TotalHour { get; set; }
